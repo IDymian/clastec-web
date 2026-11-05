@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+import { servicios } from '../config/site';
+---
+
+<Base title="Página no encontrada | CLASTEC" description="La página que buscas no existe. Revisa nuestros servicios o solicita una cotización.">
+  <section class="contenedor max-w-3xl py-16">
+    <h1 class="text-3xl font-bold text-marca-900">No encontramos esta página</h1>
+    <p class="mt-4 text-slate-700">Puede que el enlace esté desactualizado. Estos son nuestros servicios:</p>
+    <ul class="mt-6 space-y-2">
+      {servicios.map((s) => <li><a class="font-semibold text-marca-700 underline" href={`/#${s.id}`}>{s.titulo}</a></li>)}
+    </ul>
+    <a href="/#cotizar" class="btn-primario mt-8">Solicitar cotización</a>
+  </section>
+</Base>

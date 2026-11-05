@@ -1,0 +1,30 @@
+---
+import { servicios } from '../config/site';
+---
+
+<section id="servicios" aria-labelledby="servicios-titulo" class="contenedor py-16">
+  <h2 id="servicios-titulo" class="text-3xl font-bold text-marca-900">Nuestros servicios</h2>
+  <p class="mt-3 max-w-2xl text-slate-700">
+    Elige lo que necesitas o combínalos en un solo contrato, con un solo proveedor.
+  </p>
+  <ul class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    {servicios.map((s) => (
+      <li id={s.id} class="flex flex-col rounded-xl border border-slate-200 p-6 shadow-sm">
+        <h3 class="text-xl font-semibold text-marca-900">{s.titulo}</h3>
+        <p class="mt-2 text-slate-700">{s.resumen}</p>
+        <ul class="mt-4 space-y-1 text-sm text-slate-700">
+          {s.puntos.map((p) => (
+            <li><span class="mr-2 text-marca-600" aria-hidden="true">✓</span>{p}</li>
+          ))}
+        </ul>
+        <a
+          href="#cotizar"
+          data-servicio={s.titulo}
+          class="mt-auto pt-5 font-semibold text-marca-700 underline-offset-4 hover:underline"
+        >
+          Cotizar este servicio <span aria-hidden="true">→</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</section>

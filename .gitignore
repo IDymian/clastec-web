@@ -19,3 +19,6 @@ Thumbs.db
 
 # datos crudos extraídos del sitio actual (no versionar)
 data/raw/
+
+# configuración local de herramientas
+.claude/

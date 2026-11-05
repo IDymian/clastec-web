@@ -1,0 +1,143 @@
+---
+import { site, servicios } from '../config/site';
+
+const campo = 'mt-1 block w-full min-h-11 rounded-lg border border-slate-400 px-3 py-2 text-base aria-[invalid=true]:border-red-700';
+const error = 'mt-1 text-sm text-red-700';
+---
+
+<section id="cotizar" aria-labelledby="cotizar-titulo" class="contenedor py-16">
+  <div class="grid gap-12 lg:grid-cols-5">
+    <div class="lg:col-span-2">
+      <h2 id="cotizar-titulo" class="text-3xl font-bold text-marca-900">Solicita tu cotización</h2>
+      <p class="mt-4 text-slate-700">Cuéntanos qué necesitas. Te respondemos en menos de 24 horas hábiles.</p>
+      <ul class="mt-8 space-y-3">
+        {site.telefonos.map((t) => (
+          <li><a class="font-semibold text-marca-700 hover:underline" href={`tel:${t.numero}`}>Llamar al {t.visible}</a></li>
+        ))}
+        <li><a class="font-semibold text-marca-700 hover:underline" href={`mailto:${site.correoVentas}`}>{site.correoVentas}</a></li>
+        <li class="text-slate-700">{site.horario}</li>
+      </ul>
+    </div>
+
+    <form
+      id="form-cotizar"
+      class="rounded-xl border border-slate-200 p-6 shadow-sm lg:col-span-3"
+      novalidate
+      data-whatsapp={site.whatsapp}
+      data-correo={site.correoVentas}
+    >
+      <p class="text-sm text-slate-600">Los campos marcados con * son obligatorios.</p>
+      <div class="mt-4 grid gap-5 sm:grid-cols-2">
+        <div>
+          <label for="nombre" class="font-medium">Nombre *</label>
+          <input id="nombre" name="nombre" type="text" autocomplete="name" maxlength="80" required class={campo} aria-describedby="nombre-error" />
+          <p id="nombre-error" class={error} data-error-de="nombre"></p>
+        </div>
+        <div>
+          <label for="empresa" class="font-medium">Empresa o RUC *</label>
+          <input id="empresa" name="empresa" type="text" autocomplete="organization" maxlength="120" required class={campo} aria-describedby="empresa-error" />
+          <p id="empresa-error" class={error} data-error-de="empresa"></p>
+        </div>
+        <div>
+          <label for="contacto" class="font-medium">Correo o teléfono *</label>
+          <input id="contacto" name="contacto" type="text" autocomplete="email" maxlength="80" required class={campo} aria-describedby="contacto-error" />
+          <p id="contacto-error" class={error} data-error-de="contacto"></p>
+        </div>
+        <div>
+          <label for="servicio" class="font-medium">Servicio *</label>
+          <select id="servicio" name="servicio" required class={campo} aria-describedby="servicio-error">
+            <option value="">Elige una opción</option>
+            {servicios.map((s) => <option value={s.titulo}>{s.titulo}</option>)}
+            <option value="Licitación / sector público">Licitación / sector público</option>
+            <option value="Otro">Otro</option>
+          </select>
+          <p id="servicio-error" class={error} data-error-de="servicio"></p>
+        </div>
+        <div class="sm:col-span-2">
+          <label for="mensaje" class="font-medium">¿Qué necesitas? <span class="font-normal text-slate-600">(opcional)</span></label>
+          <textarea id="mensaje" name="mensaje" rows="4" maxlength="1000" class={campo} aria-describedby="mensaje-error"></textarea>
+          <p id="mensaje-error" class={error} data-error-de="mensaje"></p>
+        </div>
+        <div class="sm:col-span-2">
+          <div class="flex items-start gap-3">
+            <input id="consentimiento" name="consentimiento" type="checkbox" class="mt-1 h-5 w-5" aria-describedby="consentimiento-error" />
+            <label for="consentimiento" class="text-sm text-slate-700">
+              Autorizo a {site.nombreComercial} a usar mis datos solo para responder esta solicitud, según la
+              <a class="underline" href="/privacidad">Política de privacidad</a> (Ley N.° 29733). *
+            </label>
+          </div>
+          <p id="consentimiento-error" class={error} data-error-de="consentimiento"></p>
+        </div>
+      </div>
+
+      <div class="mt-6 flex flex-wrap gap-3">
+        <button type="submit" name="canal" value="whatsapp" class="btn-primario">Enviar por WhatsApp</button>
+        <button type="submit" name="canal" value="correo" class="btn-secundario">Enviar por correo</button>
+      </div>
+      <p id="form-estado" class="mt-4 font-medium" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<script>
+  import { limpiar, validarCotizacion, type Cotizacion } from '../lib/validacion.ts';
+  import { enlaceCorreo, submitQuote } from '../lib/cotizacion.ts';
+
+  const form = document.querySelector<HTMLFormElement>('#form-cotizar');
+  const estado = document.querySelector<HTMLParagraphElement>('#form-estado');
+
+  // Los botones "Cotizar este servicio" preseleccionan el servicio en el formulario.
+  document.querySelectorAll<HTMLAnchorElement>('a[data-servicio]').forEach((a) => {
+    a.addEventListener('click', () => {
+      const select = document.querySelector<HTMLSelectElement>('#servicio');
+      if (select && a.dataset['servicio']) select.value = a.dataset['servicio'];
+    });
+  });
+
+  form?.addEventListener('submit', async (evento) => {
+    evento.preventDefault();
+    if (!estado) return;
+    const datos = new FormData(form);
+    const texto = (k: string) => limpiar(String(datos.get(k) ?? ''));
+    const cotizacion: Cotizacion = {
+      nombre: texto('nombre'),
+      empresa: texto('empresa'),
+      contacto: texto('contacto'),
+      servicio: texto('servicio'),
+      mensaje: texto('mensaje'),
+      consentimiento: datos.get('consentimiento') === 'on',
+    };
+
+    const errores = validarCotizacion(cotizacion);
+    let primero: HTMLElement | null = null;
+    form.querySelectorAll<HTMLElement>('[data-error-de]').forEach((p) => {
+      const nombreCampo = p.dataset['errorDe'] as keyof Cotizacion;
+      const msg = errores[nombreCampo] ?? '';
+      p.textContent = msg;
+      const control = form.elements.namedItem(nombreCampo);
+      if (control instanceof HTMLElement) {
+        control.setAttribute('aria-invalid', msg ? 'true' : 'false');
+        if (msg && !primero) primero = control;
+      }
+    });
+
+    if (primero) {
+      estado.className = 'mt-4 font-medium text-red-700';
+      estado.textContent = 'Revisa los campos marcados para continuar.';
+      (primero as HTMLElement).focus();
+      return;
+    }
+
+    const submitter = (evento as SubmitEvent).submitter as HTMLButtonElement | null;
+    estado.className = 'mt-4 font-medium text-green-800';
+    if (submitter?.value === 'correo') {
+      window.location.href = enlaceCorreo(cotizacion, form.dataset['correo'] ?? '');
+      estado.textContent = 'Abrimos tu programa de correo con la solicitud lista. Solo falta enviarla.';
+      return;
+    }
+    const r = await submitQuote(cotizacion, form.dataset['whatsapp'] ?? '');
+    estado.textContent = r.ok
+      ? `Abrimos ${r.canal} con tu solicitud lista. Envíala y te contactamos en menos de 24 horas hábiles.`
+      : r.error;
+  });
+</script>

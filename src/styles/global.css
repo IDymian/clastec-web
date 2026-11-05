@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+/* Identidad provisional: se reemplaza con los colores oficiales cuando el dueño entregue el manual de marca. */
+@theme {
+  --color-marca-50: #eef5ff;
+  --color-marca-100: #d9e8ff;
+  --color-marca-600: #0b5cad;
+  --color-marca-700: #094a8c;
+  --color-marca-900: #0a2540;
+  --color-acento-500: #e8590c;
+  --color-acento-600: #c2410c;
+  --color-acento-700: #9a3412;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+  :focus-visible { outline: 3px solid var(--color-acento-500); outline-offset: 2px; }
+  section[id] { scroll-margin-top: 5rem; }
+}
+
+@utility btn {
+  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-5 py-3 text-base font-semibold transition-colors;
+}
+@utility btn-primario {
+  @apply btn bg-acento-600 text-white hover:bg-acento-700;
+}
+@utility btn-secundario {
+  @apply btn border-2 border-marca-700 text-marca-700 hover:bg-marca-50;
+}
+@utility contenedor {
+  @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
+}
