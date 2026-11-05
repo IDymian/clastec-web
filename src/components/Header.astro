@@ -1,35 +1,116 @@
 ---
+import { site } from '../config/site';
+import { servicios } from '../content/servicios';
+import Icono from './Icono.astro';
+
+const ruta = Astro.url.pathname.replace(/\/$/, '') || '/';
+const activo = (href: string) => (href === '/' ? ruta === '/' : ruta.startsWith(href.replace(/\/$/, '')));
+
 const enlaces = [
-  { href: '/#servicios', texto: 'Servicios' },
-  { href: '/#sector-publico', texto: 'Sector público' },
-  { href: '/#por-que-clastec', texto: 'Por qué CLASTEC' },
-  { href: '/#preguntas', texto: 'Preguntas' },
-  { href: '/#cotizar', texto: 'Contacto' },
+  { href: '/catalogo/', texto: 'Catálogo' },
+  { href: '/sector-publico/', texto: 'Sector público' },
+  { href: '/nosotros/', texto: 'Nosotros' },
+  { href: '/preguntas-frecuentes/', texto: 'Preguntas' },
+  { href: '/contacto/', texto: 'Contacto' },
 ] as const;
+const enlaceNav = 'block rounded px-3 py-2 font-medium hover:bg-white/10 aria-[current=page]:text-oro-400 aria-[current=page]:underline aria-[current=page]:underline-offset-8';
 ---
 
-<header class="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">
+<div class="hidden bg-marca-950 text-sm text-slate-200 md:block">
+  <div class="contenedor flex h-10 items-center justify-between">
+    <ul class="flex items-center gap-6">
+      <li><a class="inline-flex items-center gap-2 hover:text-white" href={`tel:${site.telefonos[0]?.numero}`}><Icono nombre="telefono" class="h-4 w-4" />{site.telefonos[0]?.visible}</a></li>
+      <li><a class="inline-flex items-center gap-2 hover:text-white" href={`mailto:${site.correoVentas}`}><Icono nombre="correo" class="h-4 w-4" />{site.correoVentas}</a></li>
+    </ul>
+    <p class="inline-flex items-center gap-2"><Icono nombre="reloj" class="h-4 w-4" />{site.horario}</p>
+  </div>
+</div>
+
+<header class="sticky top-0 z-40 bg-marca-900 text-white shadow-md">
   <div class="contenedor flex h-16 items-center justify-between gap-4">
-    <a href="/" class="text-2xl font-extrabold tracking-tight text-marca-900" aria-label="CLASTEC, ir al inicio">
-      CLAS<span class="text-marca-600">TEC</span>
+    <a href="/" class="flex items-center gap-2" aria-label="CLASTEC, ir al inicio">
+      <span class="grid h-9 w-9 grid-cols-2 gap-0.5" aria-hidden="true">
+        <span class="rounded-sm bg-oro-500"></span><span class="rounded-sm bg-oro-400"></span>
+        <span class="rounded-sm bg-oro-400"></span><span class="rounded-sm bg-oro-500"></span>
+      </span>
+      <span class="font-titulo text-2xl font-bold tracking-wide">CLASTEC</span>
     </a>
 
     <nav aria-label="Principal" class="hidden lg:block">
-      <ul class="flex items-center gap-6 text-sm font-medium">
-        {enlaces.map((e) => <li><a class="py-2 hover:text-marca-600" href={e.href}>{e.texto}</a></li>)}
+      <ul class="flex items-center gap-1 text-sm">
+        <li>
+          <details class="relative" data-desplegable>
+            <summary class={`${enlaceNav} flex cursor-pointer list-none items-center gap-1`} aria-current={activo('/servicios') ? 'page' : undefined}>
+              Servicios <span aria-hidden="true">▾</span>
+            </summary>
+            <div class="absolute left-0 mt-2 w-[34rem] rounded-xl bg-white p-3 text-slate-800 shadow-xl ring-1 ring-black/5">
+              <ul class="grid grid-cols-2 gap-1">
+                {servicios.map((s) => (
+                  <li>
+                    <a href={`/servicios/${s.id}/`} class="flex gap-3 rounded-lg p-3 hover:bg-marca-50">
+                      <span class="text-marca-700"><Icono nombre={s.icono} /></span>
+                      <span><span class="block font-semibold text-marca-900">{s.titulo}</span><span class="block text-xs text-slate-600">{s.resumen}</span></span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <a href="/servicios/" class="mt-2 block rounded-lg bg-marca-50 p-3 text-center text-sm font-semibold text-marca-800 hover:bg-marca-100">Ver todos los servicios</a>
+            </div>
+          </details>
+        </li>
+        {enlaces.map((e) => <li><a class={enlaceNav} href={e.href} aria-current={activo(e.href) ? 'page' : undefined}>{e.texto}</a></li>)}
       </ul>
     </nav>
 
     <div class="flex items-center gap-2">
-      <a href="#cotizar" class="btn-primario hidden text-sm sm:inline-flex">Solicitar cotización</a>
-      <details class="relative lg:hidden">
-        <summary class="btn-secundario cursor-pointer list-none px-3 text-sm" aria-label="Abrir menú">Menú</summary>
-        <nav aria-label="Móvil" class="absolute right-0 mt-2 w-60 rounded-lg border border-slate-200 bg-white p-2 shadow-lg">
+      <a href="/contacto/#lista" class="relative inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg hover:bg-white/10" aria-label="Lista de cotización">
+        <Icono nombre="carrito" />
+        <span data-contador-lista class="absolute -right-1 -top-1 hidden min-w-5 rounded-full bg-oro-500 px-1 text-center text-xs font-bold text-marca-950">0</span>
+      </a>
+      <a href="/contacto/" class="btn-primario hidden text-sm sm:inline-flex">Solicitar cotización</a>
+      <details class="relative lg:hidden" data-desplegable>
+        <summary class="btn-claro cursor-pointer list-none px-3 text-sm">Menú</summary>
+        <nav aria-label="Móvil" class="absolute right-0 mt-2 max-h-[80vh] w-72 overflow-auto rounded-xl bg-white p-2 text-slate-800 shadow-xl">
+          <p class="px-3 pt-2 text-xs font-bold uppercase text-slate-600">Servicios</p>
           <ul>
-            {enlaces.map((e) => <li><a class="block rounded px-3 py-3 hover:bg-marca-50" href={e.href}>{e.texto}</a></li>)}
+            {servicios.map((s) => <li><a class="block rounded px-3 py-3 hover:bg-marca-50" href={`/servicios/${s.id}/`}>{s.titulo}</a></li>)}
           </ul>
+          <hr class="my-2 border-slate-200" />
+          <ul>
+            {enlaces.map((e) => <li><a class="block rounded px-3 py-3 hover:bg-marca-50 aria-[current=page]:font-bold" href={e.href} aria-current={activo(e.href) ? 'page' : undefined}>{e.texto}</a></li>)}
+          </ul>
+          <a href="/contacto/" class="btn-primario mt-2 w-full">Solicitar cotización</a>
         </nav>
       </details>
     </div>
   </div>
 </header>
+
+<script>
+  import { contarLista, LISTA_EVENTO } from '../lib/lista.ts';
+
+  // Cierra los menús desplegables con Escape o al hacer clic fuera.
+  const desplegables = document.querySelectorAll<HTMLDetailsElement>('details[data-desplegable]');
+  document.addEventListener('click', (e) => {
+    desplegables.forEach((d) => { if (d.open && !d.contains(e.target as Node)) d.open = false; });
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    desplegables.forEach((d) => {
+      if (d.open) { d.open = false; d.querySelector('summary')?.focus(); }
+    });
+  });
+
+  // Contador de la lista de cotización.
+  const contador = document.querySelector<HTMLElement>('[data-contador-lista]');
+  const pintar = () => {
+    if (!contador) return;
+    const n = contarLista();
+    contador.textContent = String(n);
+    contador.classList.toggle('hidden', n === 0);
+    contador.parentElement?.setAttribute('aria-label', `Lista de cotización: ${n} producto${n === 1 ? '' : 's'}`);
+  };
+  pintar();
+  window.addEventListener(LISTA_EVENTO, pintar);
+  window.addEventListener('storage', pintar);
+</script>

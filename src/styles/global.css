@@ -1,16 +1,28 @@
+@import "@fontsource/rajdhani/latin-600.css";
+@import "@fontsource/rajdhani/latin-700.css";
 @import "tailwindcss";
 
-/* Identidad provisional: se reemplaza con los colores oficiales cuando el dueño entregue el manual de marca. */
+/*
+ * Identidad tomada del sitio actual (docs/hallazgos-extraccion.md):
+ * azul marino #0C244F, dorado #DB972E, títulos en Rajdhani.
+ * El dorado se usa siempre con texto oscuro para cumplir contraste AA.
+ */
 @theme {
-  --color-marca-50: #eef5ff;
-  --color-marca-100: #d9e8ff;
+  --color-marca-50: #eef3fb;
+  --color-marca-100: #d6e2f5;
+  --color-marca-500: #0170b9;
   --color-marca-600: #0b5cad;
-  --color-marca-700: #094a8c;
-  --color-marca-900: #0a2540;
-  --color-acento-500: #e8590c;
-  --color-acento-600: #c2410c;
-  --color-acento-700: #9a3412;
+  --color-marca-700: #133a7a;
+  --color-marca-800: #0f2d63;
+  --color-marca-900: #0c244f;
+  --color-marca-950: #081a3a;
+  --color-oro-100: #fbefdc;
+  --color-oro-400: #e6ac52;
+  --color-oro-500: #db972e;
+  --color-oro-700: #8a5a12;
+  --color-acento-500: #db972e;
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-titulo: "Rajdhani", system-ui, sans-serif;
 }
 
 @layer base {
@@ -19,19 +31,26 @@
     html { scroll-behavior: auto; }
     *, *::before, *::after { animation: none !important; transition: none !important; }
   }
-  :focus-visible { outline: 3px solid var(--color-acento-500); outline-offset: 2px; }
-  section[id] { scroll-margin-top: 5rem; }
+  h1, h2, h3 { font-family: var(--font-titulo); letter-spacing: 0.01em; }
+  :focus-visible { outline: 3px solid var(--color-oro-500); outline-offset: 2px; }
+  [id] { scroll-margin-top: 6rem; }
 }
 
 @utility btn {
   @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-5 py-3 text-base font-semibold transition-colors;
 }
 @utility btn-primario {
-  @apply btn bg-acento-600 text-white hover:bg-acento-700;
+  @apply btn bg-oro-500 text-marca-950 hover:bg-oro-400;
 }
 @utility btn-secundario {
-  @apply btn border-2 border-marca-700 text-marca-700 hover:bg-marca-50;
+  @apply btn border-2 border-marca-800 text-marca-800 hover:bg-marca-50;
+}
+@utility btn-claro {
+  @apply btn border-2 border-white text-white hover:bg-white/10;
 }
 @utility contenedor {
   @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
+}
+@utility eyebrow {
+  @apply text-sm font-bold uppercase tracking-wider text-oro-700;
 }
