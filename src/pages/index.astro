@@ -1,22 +1,41 @@
 ---
 import Base from '../layouts/Base.astro';
-import Hero from '../components/Hero.astro';
-import Cifras from '../components/Cifras.astro';
-import Servicios from '../components/Servicios.astro';
-import SectorPublico from '../components/SectorPublico.astro';
-import PorQue from '../components/PorQue.astro';
-import Preguntas from '../components/Preguntas.astro';
+import Icono from '../components/Icono.astro';
+import Testimonios from '../components/Testimonios.astro';
+import CtaBanda from '../components/CtaBanda.astro';
 import Cotizar from '../components/Cotizar.astro';
-import { preguntas, servicios, site } from '../config/site';
+import { alianzas, certificaciones, entidadesPublicas, preguntas, site } from '../config/site';
+import { servicios } from '../content/servicios';
+import { conteoPorCategoria, destacados } from '../lib/catalogo';
+
+const fmt = new Intl.NumberFormat('es-PE');
+// Cifras estáticas (sin contadores animados): visibles aunque no se ejecute JavaScript.
+const cifras = [
+  { valor: `${site.aniosExperiencia}`, texto: 'años en el mercado' },
+  { valor: `${site.aniosOutsourcing}`, texto: 'años en outsourcing de impresión' },
+  { valor: `+${site.cifras.clientes}`, texto: 'clientes' },
+  { valor: `${site.cifras.contratosActivos}`, texto: 'contratos activos' },
+  { valor: `+${fmt.format(site.cifras.equiposAdministrados)}`, texto: 'equipos administrados' },
+  { valor: `${site.cifras.departamentos}`, texto: `departamentos, ${site.cifras.departamentosConPersonal} con personal propio` },
+];
+const beneficios = [
+  { icono: 'grafico', t: 'Reduce costos operativos', d: 'Sin comprar equipos costosos ni contratar personal adicional. El mantenimiento preventivo evita reparaciones inesperadas.' },
+  { icono: 'usuarios', t: 'Enfócate en tu negocio', d: 'Delega la impresión y el soporte de TI y deja que tu equipo se concentre en lo que genera valor.' },
+  { icono: 'escudo', t: 'Expertos certificados', d: `Técnicos certificados en ${certificaciones.join(', ')}, sin tener que contratarlos.` },
+] as const;
+const categorias = conteoPorCategoria();
+const productos = destacados(4);
+const pasos = [
+  { t: 'Nos cuentas tu necesidad', d: 'Por el formulario, WhatsApp o teléfono.' },
+  { t: 'Evaluamos y proponemos', d: 'Analizamos tu consumo y tus equipos, y te enviamos una propuesta clara.' },
+  { t: 'Implementamos', d: 'Instalamos, configuramos y capacitamos a tus usuarios.' },
+  { t: 'Te acompañamos', d: 'Soporte con niveles de servicio y reportes mensuales.' },
+];
 
 const faq = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
-  mainEntity: preguntas.map((q) => ({
-    '@type': 'Question',
-    name: q.p,
-    acceptedAnswer: { '@type': 'Answer', text: q.r },
-  })),
+  mainEntity: preguntas.map((q) => ({ '@type': 'Question', name: q.p, acceptedAnswer: { '@type': 'Answer', text: q.r } })),
 };
 const listaServicios = {
   '@context': 'https://schema.org',
@@ -34,11 +53,187 @@ const listaServicios = {
   description={`Outsourcing de impresión, alquiler de equipos, mantenimiento, digitalización y mesa de ayuda TI. Partner Platinum de Xerox con ${site.aniosExperiencia} años en el Perú. Solicita tu cotización.`}
   jsonLd={[faq, listaServicios]}
 >
-  <Hero />
-  <Cifras />
-  <Servicios />
-  <SectorPublico />
-  <PorQue />
-  <Preguntas />
-  <Cotizar />
+  <!-- Hero -->
+  <section class="relative overflow-hidden bg-marca-900 text-white">
+    <div class="absolute inset-0 opacity-20" aria-hidden="true">
+      <div class="absolute -right-24 -top-24 h-96 w-96 rounded-full bg-marca-500 blur-3xl"></div>
+      <div class="absolute -bottom-32 left-1/3 h-80 w-80 rounded-full bg-oro-500 blur-3xl"></div>
+    </div>
+    <div class="contenedor relative grid items-center gap-12 py-16 sm:py-24 lg:grid-cols-12">
+      <div class="lg:col-span-7">
+        <p class="text-sm font-bold uppercase tracking-wider text-oro-400">Partner Platinum de Xerox · {site.aniosExperiencia} años en el Perú</p>
+        <h1 class="mt-3 text-4xl font-bold leading-tight sm:text-6xl">
+          Outsourcing de impresión y servicios de TI para empresas y entidades públicas
+        </h1>
+        <p class="mt-5 max-w-2xl text-lg text-slate-200">
+          Reducimos tus costos de impresión y mantenemos tus equipos operativos con alquiler, mantenimiento,
+          digitalización y mesa de ayuda, en {site.cifras.departamentos} departamentos del país.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="/contacto/" class="btn-primario">Solicitar cotización</a>
+          <a href="/servicios/" class="btn-claro">Ver servicios</a>
+        </div>
+        <p class="mt-6 text-sm text-slate-300">Respuesta en menos de 24 horas hábiles · {site.horario}</p>
+      </div>
+      <div class="lg:col-span-5">
+        <div class="rounded-2xl bg-white/10 p-6 ring-1 ring-white/20 backdrop-blur">
+          <p class="font-titulo text-xl font-bold">¿Qué necesitas hoy?</p>
+          <ul class="mt-4 space-y-2">
+            {servicios.map((s) => (
+              <li>
+                <a href={`/servicios/${s.id}/`} class="flex min-h-12 items-center gap-3 rounded-lg bg-white/5 px-4 py-2 hover:bg-white/15">
+                  <span class="text-oro-400"><Icono nombre={s.icono} class="h-5 w-5" /></span>
+                  <span class="flex-1 font-medium">{s.titulo}</span>
+                  <span aria-hidden="true">→</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Confianza -->
+  <section aria-label="Alianzas" class="border-b border-slate-200 bg-white">
+    <div class="contenedor flex flex-wrap items-center justify-center gap-x-10 gap-y-3 py-6 text-slate-600">
+      <span class="text-sm">Respaldo de las marcas líderes:</span>
+      {alianzas.map((a) => <span class="font-titulo text-2xl font-bold text-marca-900">{a.nombre} <span class="font-sans text-xs font-medium text-slate-600">{a.nivel}</span></span>)}
+    </div>
+  </section>
+
+  <!-- Beneficios -->
+  <section class="contenedor py-16" aria-labelledby="beneficios-titulo">
+    <p class="eyebrow">Nuestros beneficios</p>
+    <h2 id="beneficios-titulo" class="mt-2 text-3xl font-bold text-marca-900 sm:text-4xl">Tecnología que funciona, costos bajo control</h2>
+    <ul class="mt-10 grid gap-6 md:grid-cols-3">
+      {beneficios.map((b) => (
+        <li class="rounded-2xl border border-slate-200 p-6">
+          <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-oro-100 text-oro-700"><Icono nombre={b.icono} /></span>
+          <h3 class="mt-4 text-xl font-bold text-marca-900">{b.t}</h3>
+          <p class="mt-2 text-slate-700">{b.d}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- Servicios -->
+  <section id="servicios" class="bg-slate-50" aria-labelledby="servicios-titulo">
+    <div class="contenedor py-16">
+      <p class="eyebrow">Líneas de negocio</p>
+      <h2 id="servicios-titulo" class="mt-2 text-3xl font-bold text-marca-900 sm:text-4xl">Nuestros servicios</h2>
+      <ul class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {servicios.map((s) => (
+          <li id={s.id} class="flex flex-col rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+            <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-marca-900 text-oro-400"><Icono nombre={s.icono} /></span>
+            <h3 class="mt-4 text-xl font-bold text-marca-900">{s.titulo}</h3>
+            <p class="mt-2 text-slate-700">{s.resumen}</p>
+            <a href={`/servicios/${s.id}/`} class="mt-auto pt-5 font-semibold text-marca-800 underline-offset-4 hover:underline">
+              Conocer el servicio<span class="sr-only">: {s.titulo}</span> <span aria-hidden="true">→</span>
+            </a>
+          </li>
+        ))}
+        <li class="flex flex-col justify-center rounded-2xl bg-marca-900 p-6 text-white">
+          <h3 class="text-xl font-bold">¿Necesitas varios?</h3>
+          <p class="mt-2 text-slate-200">Combínalos en un solo contrato con un solo proveedor.</p>
+          <a href="/contacto/" class="btn-primario mt-5 self-start">Armar mi propuesta</a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Cifras -->
+  <section aria-labelledby="cifras-titulo" class="bg-marca-900 text-white">
+    <div class="contenedor py-14">
+      <h2 id="cifras-titulo" class="text-center text-3xl font-bold">Por qué nosotros, en números</h2>
+      <dl class="mt-10 grid grid-cols-2 gap-8 text-center md:grid-cols-3 lg:grid-cols-6">
+        {cifras.map((c) => (
+          <div class="flex flex-col-reverse">
+            <dt class="mt-1 text-sm text-slate-300">{c.texto}</dt>
+            <dd class="font-titulo text-5xl font-bold text-oro-400">{c.valor}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <!-- Catálogo -->
+  <section class="contenedor py-16" aria-labelledby="catalogo-titulo">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <p class="eyebrow">Catálogo</p>
+        <h2 id="catalogo-titulo" class="mt-2 text-3xl font-bold text-marca-900 sm:text-4xl">Equipos, repuestos y suministros</h2>
+        <p class="mt-2 text-slate-700">Arma tu lista con varios productos y pide una sola cotización.</p>
+      </div>
+      <a href="/catalogo/" class="btn-secundario">Ver catálogo completo</a>
+    </div>
+    <ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {productos.map((p) => (
+        <li class="flex flex-col rounded-xl border border-slate-200 p-4">
+          <div class="flex h-36 items-center justify-center rounded-lg bg-slate-50">
+            <img src={`${site.origenImagenes}/wp-content/uploads/${p.img}`} alt={p.n} width="128" height="128" loading="lazy" decoding="async" referrerpolicy="no-referrer" class="max-h-32 w-auto object-contain" />
+          </div>
+          <p class="mt-3 text-xs font-semibold uppercase tracking-wide text-oro-700">{p.m}</p>
+          <h3 class="mt-1 font-sans text-base font-semibold text-marca-900">{p.n}</h3>
+          <a href={`/catalogo/?q=${encodeURIComponent(p.n)}#buscador`} class="mt-auto pt-3 text-sm font-semibold text-marca-800 underline">Cotizar<span class="sr-only"> {p.n}</span></a>
+        </li>
+      ))}
+    </ul>
+    <ul class="mt-6 flex flex-wrap gap-2">
+      {categorias.map((c, i) => (
+        <li><a href={`/catalogo/?cat=${i}#buscador`} class="inline-flex min-h-11 items-center gap-2 rounded-full bg-marca-50 px-4 text-sm font-semibold text-marca-900 hover:bg-marca-100">{c.nombre} <span class="text-slate-600">{fmt.format(c.cantidad)}</span></a></li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- Sector público -->
+  <section class="bg-slate-50" aria-labelledby="sp-titulo">
+    <div class="contenedor grid gap-10 py-16 lg:grid-cols-2">
+      <div>
+        <p class="eyebrow">Sector público</p>
+        <h2 id="sp-titulo" class="mt-2 text-3xl font-bold text-marca-900 sm:text-4xl">Experiencia en contratación con el Estado</h2>
+        <p class="mt-4 text-slate-700">
+          Participamos en procesos de contratación pública y cumplimos los requisitos técnicos y documentarios.
+          Atendemos sedes en Lima y regiones con personal propio.
+        </p>
+        <a href="/sector-publico/" class="btn-secundario mt-8">Conocer nuestra experiencia</a>
+      </div>
+      <ul class="grid content-center gap-3 sm:grid-cols-2">
+        {entidadesPublicas.map((e) => <li class="flex min-h-16 items-center gap-3 rounded-xl bg-white px-4 py-3 font-semibold text-marca-900 ring-1 ring-slate-200"><span class="text-oro-700"><Icono nombre="escudo" class="h-5 w-5" /></span>{e}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <!-- Cómo trabajamos -->
+  <section class="contenedor py-16" aria-labelledby="pasos-titulo">
+    <h2 id="pasos-titulo" class="text-3xl font-bold text-marca-900 sm:text-4xl">Cómo trabajamos</h2>
+    <ol class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {pasos.map((p, i) => (
+        <li class="rounded-xl border border-slate-200 p-5">
+          <span class="font-titulo text-4xl font-bold text-oro-500" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+          <h3 class="mt-2 text-lg font-bold text-marca-900"><span class="sr-only">Paso {i + 1}: </span>{p.t}</h3>
+          <p class="mt-1 text-sm text-slate-700">{p.d}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <Testimonios />
+
+  <!-- Preguntas -->
+  <section id="preguntas" class="contenedor py-16" aria-labelledby="faq-titulo">
+    <h2 id="faq-titulo" class="text-3xl font-bold text-marca-900 sm:text-4xl">Preguntas frecuentes</h2>
+    <div class="mt-8 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white">
+      {preguntas.map((q) => (
+        <details class="group p-5">
+          <summary class="flex min-h-11 cursor-pointer list-none items-center justify-between font-semibold">{q.p}<span class="ml-4 text-xl text-marca-600 group-open:rotate-45" aria-hidden="true">+</span></summary>
+          <p class="mt-3 text-slate-700">{q.r}</p>
+        </details>
+      ))}
+    </div>
+    <p class="mt-4"><a class="font-semibold text-marca-800 underline" href="/preguntas-frecuentes/">Ver todas las preguntas</a></p>
+  </section>
+
+  <CtaBanda />
+  <Cotizar conLista={false} />
 </Base>

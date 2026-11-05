@@ -1,0 +1,96 @@
+---
+import Base from '../layouts/Base.astro';
+import Cabecera from '../components/Cabecera.astro';
+import Icono from '../components/Icono.astro';
+import CtaBanda from '../components/CtaBanda.astro';
+import { alianzas, certificaciones, documentosReglamentarios, historia, site } from '../config/site';
+
+const fmt = new Intl.NumberFormat('es-PE');
+const diferenciadores = [
+  { icono: 'reloj', t: 'Experiencia', d: `${site.aniosExperiencia} años brindando productos y servicios informáticos a empresas y entidades públicas.` },
+  { icono: 'mapa', t: 'Cobertura y presencia', d: `${site.cifras.departamentos} departamentos del Perú, ${site.cifras.departamentosConPersonal} con personal propio.` },
+  { icono: 'escudo', t: 'Certificaciones', d: `Colaboradores en capacitación constante y certificados en ${certificaciones.join(', ')}.` },
+] as const;
+---
+
+<Base title="Nosotros: más de 20 años en servicios de TI | CLASTEC" description={`Desde ${site.fundacion.anio} brindamos soluciones de impresión y TI. Partner Platinum de Xerox con presencia en ${site.cifras.departamentos} departamentos del Perú.`}>
+  <Cabecera
+    titulo="Soluciones informáticas integrales desde 2004"
+    bajada="Nuestro compromiso es superar las expectativas de nuestros clientes en cada servicio que brindamos."
+    eyebrow="Nosotros"
+    migas={[{ texto: 'Nosotros' }]}
+  >
+    <a href="/contacto/" class="btn-primario">Hablar con un especialista</a>
+  </Cabecera>
+
+  <section class="contenedor grid gap-12 py-16 lg:grid-cols-2" aria-labelledby="historia-titulo">
+    <div>
+      <h2 id="historia-titulo" class="text-3xl font-bold text-marca-900">Nuestra historia</h2>
+      <p class="mt-4 text-lg text-slate-700">
+        Nuestros socios fundadores, con experiencia gerenciando empresas del mercado informático, crearon CLASTEC en
+        febrero de {site.fundacion.anio} para ofrecer soluciones a un mercado en crecimiento.
+      </p>
+      <p class="mt-4 text-slate-700">
+        Empezamos comercializando repuestos y suministros. Con los años integramos nuevas líneas de servicio para dar a
+        nuestros clientes soluciones completas: mantenimiento, outsourcing de impresión, digitalización, alquiler de
+        equipos y mesa de ayuda de TI.
+      </p>
+      <dl class="mt-8 grid grid-cols-2 gap-4">
+        <div class="rounded-xl bg-marca-50 p-4"><dt class="text-sm text-slate-700">Contratos activos</dt><dd class="font-titulo text-4xl font-bold text-marca-900">{site.cifras.contratosActivos}</dd></div>
+        <div class="rounded-xl bg-marca-50 p-4"><dt class="text-sm text-slate-700">Equipos administrados</dt><dd class="font-titulo text-4xl font-bold text-marca-900">+{fmt.format(site.cifras.equiposAdministrados)}</dd></div>
+      </dl>
+    </div>
+    <ol class="relative border-l-2 border-oro-500 pl-8">
+      {historia.map((h) => (
+        <li class="relative mb-8 last:mb-0">
+          <span class="absolute -left-[2.6rem] top-1 h-4 w-4 rounded-full border-4 border-white bg-oro-500 ring-2 ring-oro-500" aria-hidden="true"></span>
+          <p class="text-sm font-bold uppercase tracking-wider text-oro-700">{h.anio}</p>
+          <h3 class="text-xl font-bold text-marca-900">{h.t}</h3>
+          <p class="mt-1 text-slate-700">{h.d}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="bg-slate-50" aria-labelledby="dif-titulo">
+    <div class="contenedor py-16">
+      <h2 id="dif-titulo" class="text-3xl font-bold text-marca-900">Nuestros diferenciadores</h2>
+      <ul class="mt-8 grid gap-6 md:grid-cols-3">
+        {diferenciadores.map((d) => (
+          <li class="rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+            <span class="flex h-12 w-12 items-center justify-center rounded-xl bg-oro-100 text-oro-700"><Icono nombre={d.icono} /></span>
+            <h3 class="mt-4 text-xl font-bold text-marca-900">{d.t}</h3>
+            <p class="mt-2 text-slate-700">{d.d}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="contenedor grid gap-12 py-16 lg:grid-cols-2" aria-labelledby="alianzas-titulo">
+    <div>
+      <h2 id="alianzas-titulo" class="text-3xl font-bold text-marca-900">Alianzas con fabricantes</h2>
+      <ul class="mt-6 space-y-3">
+        {alianzas.map((a) => (
+          <li class="rounded-xl border border-slate-200 p-5">
+            <p><span class="font-titulo text-2xl font-bold text-marca-900">{a.nombre}</span> <span class="ml-2 rounded-full bg-oro-100 px-3 py-1 text-xs font-bold text-oro-700">{a.nivel}</span></p>
+            <p class="mt-1 text-sm text-slate-700">{a.detalle}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div>
+      <h2 class="text-3xl font-bold text-marca-900">Certificaciones del equipo</h2>
+      <ul class="mt-6 flex flex-wrap gap-2">
+        {certificaciones.map((c) => <li class="rounded-full bg-marca-900 px-4 py-2 font-semibold text-white">{c}</li>)}
+      </ul>
+      <h2 class="mt-10 text-2xl font-bold text-marca-900">Documentos reglamentarios</h2>
+      <ul class="mt-4 space-y-2">
+        {documentosReglamentarios.map((d) => <li class="flex items-center gap-3 text-slate-700"><span class="text-marca-700"><Icono nombre="documento" class="h-5 w-5" /></span>{d}</li>)}
+      </ul>
+      <p class="mt-3 text-sm text-slate-600">Disponibles a solicitud en {site.correoVentas}.</p>
+    </div>
+  </section>
+
+  <CtaBanda />
+</Base>

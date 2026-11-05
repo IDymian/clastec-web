@@ -1,15 +1,23 @@
 ---
 import Base from '../layouts/Base.astro';
-import { servicios } from '../config/site';
+import Icono from '../components/Icono.astro';
+import { servicios } from '../content/servicios';
 ---
 
-<Base title="Página no encontrada | CLASTEC" description="La página que buscas no existe. Revisa nuestros servicios o solicita una cotización.">
+<Base title="Página no encontrada | CLASTEC" description="La página que buscas no existe. Revisa nuestros servicios, busca en el catálogo o solicita una cotización.">
   <section class="contenedor max-w-3xl py-16">
-    <h1 class="text-3xl font-bold text-marca-900">No encontramos esta página</h1>
-    <p class="mt-4 text-slate-700">Puede que el enlace esté desactualizado. Estos son nuestros servicios:</p>
-    <ul class="mt-6 space-y-2">
-      {servicios.map((s) => <li><a class="font-semibold text-marca-700 underline" href={`/#${s.id}`}>{s.titulo}</a></li>)}
+    <p class="eyebrow">Error 404</p>
+    <h1 class="mt-2 text-4xl font-bold text-marca-900">No encontramos esta página</h1>
+    <p class="mt-4 text-slate-700">Puede que el enlace esté desactualizado. Busca el producto que necesitas o revisa nuestros servicios.</p>
+    <form action="/catalogo/" method="get" role="search" class="mt-8 flex flex-wrap gap-3">
+      <label for="q404" class="sr-only">Buscar en el catálogo</label>
+      <input id="q404" name="q" type="search" maxlength="80" placeholder="Modelo o número de parte" class="min-h-11 flex-1 rounded-lg border border-slate-400 px-3" />
+      <button type="submit" class="btn-primario"><Icono nombre="buscar" class="h-5 w-5" />Buscar</button>
+    </form>
+    <h2 class="mt-10 text-xl font-bold text-marca-900">Nuestros servicios</h2>
+    <ul class="mt-4 space-y-2">
+      {servicios.map((s) => <li><a class="font-semibold text-marca-800 underline" href={`/servicios/${s.id}/`}>{s.titulo}</a></li>)}
     </ul>
-    <a href="/#cotizar" class="btn-primario mt-8">Solicitar cotización</a>
+    <a href="/contacto/" class="btn-secundario mt-8">Solicitar cotización</a>
   </section>
 </Base>

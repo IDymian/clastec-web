@@ -1,31 +1,50 @@
 ---
-import { site, servicios } from '../config/site';
+import { site } from '../config/site';
+import { servicios } from '../content/servicios';
+import Icono from './Icono.astro';
 
-const campo = 'mt-1 block w-full min-h-11 rounded-lg border border-slate-400 px-3 py-2 text-base aria-[invalid=true]:border-red-700';
+interface Props { servicioInicial?: string; titulo?: string; conLista?: boolean }
+const { servicioInicial = '', titulo = 'Solicita tu cotización', conLista = true } = Astro.props;
+
+const campo = 'mt-1 block w-full min-h-11 rounded-lg border border-slate-400 bg-white px-3 py-2 text-base aria-[invalid=true]:border-red-700';
 const error = 'mt-1 text-sm text-red-700';
+const opciones = [...servicios.map((s) => s.titulo), 'Compra de equipos, repuestos o suministros', 'Licitación / sector público', 'Otro'];
 ---
 
 <section id="cotizar" aria-labelledby="cotizar-titulo" class="contenedor py-16">
   <div class="grid gap-12 lg:grid-cols-5">
     <div class="lg:col-span-2">
-      <h2 id="cotizar-titulo" class="text-3xl font-bold text-marca-900">Solicita tu cotización</h2>
+      <p class="eyebrow">Contacto</p>
+      <h2 id="cotizar-titulo" class="mt-2 text-3xl font-bold text-marca-900 sm:text-4xl">{titulo}</h2>
       <p class="mt-4 text-slate-700">Cuéntanos qué necesitas. Te respondemos en menos de 24 horas hábiles.</p>
-      <ul class="mt-8 space-y-3">
+      <ul class="mt-8 space-y-4">
         {site.telefonos.map((t) => (
-          <li><a class="font-semibold text-marca-700 hover:underline" href={`tel:${t.numero}`}>Llamar al {t.visible}</a></li>
+          <li><a class="inline-flex min-h-11 items-center gap-3 font-semibold text-marca-800 hover:underline" href={`tel:${t.numero}`}><Icono nombre="telefono" class="h-5 w-5" />{t.visible}</a></li>
         ))}
-        <li><a class="font-semibold text-marca-700 hover:underline" href={`mailto:${site.correoVentas}`}>{site.correoVentas}</a></li>
-        <li class="text-slate-700">{site.horario}</li>
+        <li><a class="inline-flex min-h-11 items-center gap-3 font-semibold text-marca-800 hover:underline" href={`mailto:${site.correoVentas}`}><Icono nombre="correo" class="h-5 w-5" />{site.correoVentas}</a></li>
+        <li class="inline-flex items-center gap-3 text-slate-700"><Icono nombre="reloj" class="h-5 w-5" />{site.horario}</li>
+        <li class="flex items-center gap-3 text-slate-700"><Icono nombre="mapa" class="h-5 w-5" />{site.direccion ?? site.ubicacion}</li>
       </ul>
     </div>
 
     <form
       id="form-cotizar"
-      class="rounded-xl border border-slate-200 p-6 shadow-sm lg:col-span-3"
+      class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm lg:col-span-3"
       novalidate
       data-whatsapp={site.whatsapp}
       data-correo={site.correoVentas}
     >
+      {conLista && (
+        <div id="lista" class="mb-6 hidden rounded-lg bg-marca-50 p-4" data-lista>
+          <div class="flex items-center justify-between gap-4">
+            <h3 class="text-lg font-bold text-marca-900">Productos en tu lista</h3>
+            <button type="button" class="min-h-11 text-sm font-semibold text-marca-800 underline" data-vaciar>Vaciar lista</button>
+          </div>
+          <ul class="mt-3 divide-y divide-marca-100" data-lista-items></ul>
+          <p class="mt-3 text-sm"><a class="font-semibold text-marca-800 underline" href="/catalogo/">Agregar más productos</a></p>
+        </div>
+      )}
+
       <p class="text-sm text-slate-600">Los campos marcados con * son obligatorios.</p>
       <div class="mt-4 grid gap-5 sm:grid-cols-2">
         <div>
@@ -44,18 +63,16 @@ const error = 'mt-1 text-sm text-red-700';
           <p id="contacto-error" class={error} data-error-de="contacto"></p>
         </div>
         <div>
-          <label for="servicio" class="font-medium">Servicio *</label>
+          <label for="servicio" class="font-medium">¿Qué te interesa? *</label>
           <select id="servicio" name="servicio" required class={campo} aria-describedby="servicio-error">
             <option value="">Elige una opción</option>
-            {servicios.map((s) => <option value={s.titulo}>{s.titulo}</option>)}
-            <option value="Licitación / sector público">Licitación / sector público</option>
-            <option value="Otro">Otro</option>
+            {opciones.map((o) => <option value={o} selected={o === servicioInicial}>{o}</option>)}
           </select>
           <p id="servicio-error" class={error} data-error-de="servicio"></p>
         </div>
         <div class="sm:col-span-2">
-          <label for="mensaje" class="font-medium">¿Qué necesitas? <span class="font-normal text-slate-600">(opcional)</span></label>
-          <textarea id="mensaje" name="mensaje" rows="4" maxlength="1000" class={campo} aria-describedby="mensaje-error"></textarea>
+          <label for="mensaje" class="font-medium">Cuéntanos más <span class="font-normal text-slate-600">(opcional)</span></label>
+          <textarea id="mensaje" name="mensaje" rows="4" maxlength="1000" class={campo} aria-describedby="mensaje-error" placeholder="Por ejemplo: 20 laptops por 6 meses para un proyecto en Arequipa."></textarea>
           <p id="mensaje-error" class={error} data-error-de="mensaje"></p>
         </div>
         <div class="sm:col-span-2">
@@ -63,7 +80,7 @@ const error = 'mt-1 text-sm text-red-700';
             <input id="consentimiento" name="consentimiento" type="checkbox" class="mt-1 h-5 w-5" aria-describedby="consentimiento-error" />
             <label for="consentimiento" class="text-sm text-slate-700">
               Autorizo a {site.nombreComercial} a usar mis datos solo para responder esta solicitud, según la
-              <a class="underline" href="/privacidad">Política de privacidad</a> (Ley N.° 29733). *
+              <a class="underline" href="/privacidad/">Política de privacidad</a> (Ley N.° 29733). *
             </label>
           </div>
           <p id="consentimiento-error" class={error} data-error-de="consentimiento"></p>
@@ -82,17 +99,63 @@ const error = 'mt-1 text-sm text-red-700';
 <script>
   import { limpiar, validarCotizacion, type Cotizacion } from '../lib/validacion.ts';
   import { enlaceCorreo, submitQuote } from '../lib/cotizacion.ts';
+  import { cambiarCantidad, leerLista, LISTA_EVENTO, quitar, vaciar } from '../lib/lista.ts';
 
   const form = document.querySelector<HTMLFormElement>('#form-cotizar');
   const estado = document.querySelector<HTMLParagraphElement>('#form-estado');
+  const select = document.querySelector<HTMLSelectElement>('#servicio');
 
-  // Los botones "Cotizar este servicio" preseleccionan el servicio en el formulario.
+  // Preselección del servicio: ?servicio=… en la URL o enlaces con data-servicio.
+  const desdeUrl = new URLSearchParams(location.search).get('servicio');
+  const elegir = (valor: string) => {
+    if (select && [...select.options].some((o) => o.value === valor)) select.value = valor;
+  };
+  if (desdeUrl) elegir(desdeUrl);
   document.querySelectorAll<HTMLAnchorElement>('a[data-servicio]').forEach((a) => {
-    a.addEventListener('click', () => {
-      const select = document.querySelector<HTMLSelectElement>('#servicio');
-      if (select && a.dataset['servicio']) select.value = a.dataset['servicio'];
-    });
+    a.addEventListener('click', () => elegir(a.dataset['servicio'] ?? ''));
   });
+
+  // Lista de cotización editable (construida con nodos DOM, sin innerHTML).
+  const caja = document.querySelector<HTMLElement>('[data-lista]');
+  const ul = document.querySelector<HTMLUListElement>('[data-lista-items]');
+  const pintarLista = () => {
+    if (!caja || !ul) return;
+    const items = leerLista();
+    caja.classList.toggle('hidden', items.length === 0);
+    ul.replaceChildren(
+      ...items.map((i) => {
+        const li = document.createElement('li');
+        li.className = 'flex flex-wrap items-center gap-3 py-3';
+        const nombre = document.createElement('span');
+        nombre.className = 'min-w-0 flex-1 text-sm';
+        nombre.textContent = i.parte ? `${i.nombre} · N.° ${i.parte}` : i.nombre;
+        const etiqueta = document.createElement('label');
+        etiqueta.className = 'sr-only';
+        etiqueta.htmlFor = `cant-${i.id}`;
+        etiqueta.textContent = `Cantidad de ${i.nombre}`;
+        const cantidad = document.createElement('input');
+        cantidad.id = `cant-${i.id}`;
+        cantidad.type = 'number';
+        cantidad.min = '1';
+        cantidad.max = '999';
+        cantidad.value = String(i.cantidad);
+        cantidad.className = 'min-h-11 w-20 rounded border border-slate-400 px-2';
+        cantidad.addEventListener('change', () => cambiarCantidad(i.id, Number(cantidad.value)));
+        const quitarBtn = document.createElement('button');
+        quitarBtn.type = 'button';
+        quitarBtn.className = 'min-h-11 px-2 text-sm font-semibold text-red-700 underline';
+        quitarBtn.textContent = 'Quitar';
+        quitarBtn.setAttribute('aria-label', `Quitar ${i.nombre}`);
+        quitarBtn.addEventListener('click', () => quitar(i.id));
+        li.append(nombre, etiqueta, cantidad, quitarBtn);
+        return li;
+      }),
+    );
+    if (items.length && select && !select.value) elegir('Compra de equipos, repuestos o suministros');
+  };
+  pintarLista();
+  window.addEventListener(LISTA_EVENTO, pintarLista);
+  document.querySelector('[data-vaciar]')?.addEventListener('click', () => vaciar());
 
   form?.addEventListener('submit', async (evento) => {
     evento.preventDefault();
@@ -128,14 +191,15 @@ const error = 'mt-1 text-sm text-red-700';
       return;
     }
 
+    const productos = leerLista();
     const submitter = (evento as SubmitEvent).submitter as HTMLButtonElement | null;
     estado.className = 'mt-4 font-medium text-green-800';
     if (submitter?.value === 'correo') {
-      window.location.href = enlaceCorreo(cotizacion, form.dataset['correo'] ?? '');
+      window.location.href = enlaceCorreo(cotizacion, form.dataset['correo'] ?? '', productos);
       estado.textContent = 'Abrimos tu programa de correo con la solicitud lista. Solo falta enviarla.';
       return;
     }
-    const r = await submitQuote(cotizacion, form.dataset['whatsapp'] ?? '');
+    const r = await submitQuote(cotizacion, form.dataset['whatsapp'] ?? '', productos);
     estado.textContent = r.ok
       ? `Abrimos ${r.canal} con tu solicitud lista. Envíala y te contactamos en menos de 24 horas hábiles.`
       : r.error;

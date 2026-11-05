@@ -1,0 +1,147 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import Cabecera from '../../components/Cabecera.astro';
+import Icono from '../../components/Icono.astro';
+import CtaBanda from '../../components/CtaBanda.astro';
+import Cotizar from '../../components/Cotizar.astro';
+import { servicios, equiposAlquiler, type Servicio } from '../../content/servicios';
+import { site } from '../../config/site';
+
+export const getStaticPaths = (() => servicios.map((s) => ({ params: { id: s.id }, props: { s } }))) satisfies GetStaticPaths;
+
+interface Props { s: Servicio }
+const { s } = Astro.props;
+const otros = servicios.filter((o) => o.id !== s.id);
+
+const ldServicio = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: s.titulo,
+  description: s.seo.descripcion,
+  serviceType: s.titulo,
+  areaServed: { '@type': 'Country', name: 'Perú' },
+  provider: { '@type': 'Organization', name: site.nombreComercial, legalName: site.razonSocial },
+};
+const ldFaq = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: s.preguntas.map((q) => ({ '@type': 'Question', name: q.p, acceptedAnswer: { '@type': 'Answer', text: q.r } })),
+};
+---
+
+<Base title={s.seo.titulo} description={s.seo.descripcion} jsonLd={[ldServicio, ldFaq]}>
+  <Cabecera titulo={s.titulo} bajada={s.resumen} eyebrow={s.gancho} migas={[{ texto: 'Servicios', href: '/servicios/' }, { texto: s.tituloCorto }]}>
+    <a href="#cotizar" data-servicio={s.titulo} class="btn-primario">Cotizar {s.tituloCorto.toLowerCase()}</a>
+    <a href="#incluye" class="btn-claro">Qué incluye</a>
+  </Cabecera>
+
+  <section class="contenedor grid gap-12 py-16 lg:grid-cols-2" aria-labelledby="intro-titulo">
+    <div>
+      <h2 id="intro-titulo" class="text-3xl font-bold text-marca-900">En qué consiste</h2>
+      {s.intro.map((p) => <p class="mt-4 text-lg text-slate-700">{p}</p>)}
+      <ul class="mt-6 space-y-2">
+        {s.caracteristicas.map((c) => (
+          <li class="flex gap-3 text-slate-700"><span class="mt-0.5 text-marca-600"><Icono nombre="check" class="h-5 w-5" /></span>{c}</li>
+        ))}
+      </ul>
+    </div>
+    <div>
+      <h2 class="text-3xl font-bold text-marca-900">Beneficios para tu empresa</h2>
+      <ul class="mt-6 grid gap-4 sm:grid-cols-2">
+        {s.beneficios.map((b) => (
+          <li class="rounded-xl border-l-4 border-oro-500 bg-marca-50 p-5">
+            <h3 class="text-lg font-bold text-marca-900">{b.t}</h3>
+            <p class="mt-1 text-sm text-slate-700">{b.d}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  {s.id === 'alquiler-de-equipos' && (
+    <section class="bg-slate-50" aria-labelledby="equipos-titulo">
+      <div class="contenedor py-16">
+        <p class="eyebrow">Equipos disponibles</p>
+        <h2 id="equipos-titulo" class="mt-2 text-3xl font-bold text-marca-900">¿Qué necesitas alquilar?</h2>
+        <nav aria-label="Tipos de equipo" class="mt-6">
+          <ul class="flex flex-wrap gap-2">
+            {equiposAlquiler.map((e) => <li><a href={`#${e.id}`} class="inline-flex min-h-11 items-center rounded-full bg-white px-4 text-sm font-semibold text-marca-800 ring-1 ring-slate-300 hover:bg-marca-50">{e.t}</a></li>)}
+          </ul>
+        </nav>
+        <ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {equiposAlquiler.map((e) => (
+            <li id={e.id} class="flex flex-col rounded-xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
+              <h3 class="text-xl font-bold text-marca-900">{e.t}</h3>
+              <p class="mt-2 flex-1 text-sm text-slate-700">{e.d}</p>
+              <a href="#cotizar" data-servicio={s.titulo} class="mt-4 font-semibold text-marca-800 underline-offset-4 hover:underline">Cotizar alquiler <span aria-hidden="true">→</span></a>
+            </li>
+          ))}
+        </ul>
+        <div class="mt-10 grid gap-4 md:grid-cols-3">
+          <div class="rounded-xl bg-marca-900 p-6 text-white"><p class="font-titulo text-4xl font-bold text-oro-400">1 día</p><p class="mt-1 text-slate-200">Equipos para eventos y ferias.</p></div>
+          <div class="rounded-xl bg-marca-900 p-6 text-white"><p class="font-titulo text-4xl font-bold text-oro-400">1 equipo</p><p class="mt-1 text-slate-200">Desde una unidad por un mes.</p></div>
+          <div class="rounded-xl bg-marca-900 p-6 text-white"><p class="font-titulo text-4xl font-bold text-oro-400">3 años</p><p class="mt-1 text-slate-200">Flotas completas con renovación.</p></div>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section id="incluye" class={s.id === 'alquiler-de-equipos' ? '' : 'bg-slate-50'} aria-labelledby="incluye-titulo">
+    <div class="contenedor py-16">
+      <p class="eyebrow">Todo en un solo contrato</p>
+      <h2 id="incluye-titulo" class="mt-2 text-3xl font-bold text-marca-900">Qué incluye el servicio</h2>
+      <ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {s.incluye.map((i) => (
+          <li class="flex gap-4 rounded-xl bg-white p-5 shadow-sm ring-1 ring-slate-200">
+            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-marca-900 text-oro-400"><Icono nombre="check" class="h-5 w-5" /></span>
+            <div><h3 class="text-lg font-bold text-marca-900">{i.t}</h3><p class="mt-1 text-sm text-slate-700">{i.d}</p></div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  {s.proceso && (
+    <section class="contenedor py-16" aria-labelledby="proceso-titulo">
+      <h2 id="proceso-titulo" class="text-3xl font-bold text-marca-900">{s.proceso.titulo}</h2>
+      <ol class={`mt-8 grid gap-6 sm:grid-cols-2 ${s.proceso.pasos.length === 3 ? 'lg:grid-cols-3' : 'lg:grid-cols-4'}`}>
+        {s.proceso.pasos.map((p, i) => (
+          <li class="relative rounded-xl border border-slate-200 p-5">
+            <span class="font-titulo text-4xl font-bold text-oro-500" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <h3 class="mt-2 text-lg font-bold text-marca-900"><span class="sr-only">Paso {i + 1}: </span>{p.t}</h3>
+            <p class="mt-1 text-sm text-slate-700">{p.d}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+  )}
+
+  <section class="bg-marca-50" aria-labelledby="faq-servicio">
+    <div class="contenedor py-16">
+      <h2 id="faq-servicio" class="text-3xl font-bold text-marca-900">Preguntas sobre {s.tituloCorto.toLowerCase()}</h2>
+      <div class="mt-8 divide-y divide-slate-200 rounded-xl bg-white ring-1 ring-slate-200">
+        {s.preguntas.map((q) => (
+          <details class="group p-5">
+            <summary class="flex min-h-11 cursor-pointer list-none items-center justify-between font-semibold">{q.p}<span class="ml-4 text-xl text-marca-600 group-open:rotate-45" aria-hidden="true">+</span></summary>
+            <p class="mt-3 text-slate-700">{q.r}</p>
+          </details>
+        ))}
+      </div>
+      <p class="mt-4 text-sm"><a class="font-semibold text-marca-800 underline" href="/preguntas-frecuentes/">Ver todas las preguntas frecuentes</a></p>
+    </div>
+  </section>
+
+  <Cotizar servicioInicial={s.titulo} titulo={`Cotiza ${s.tituloCorto.toLowerCase()}`} conLista={false} />
+
+  <section class="contenedor pb-16" aria-labelledby="otros-titulo">
+    <h2 id="otros-titulo" class="text-2xl font-bold text-marca-900">Otros servicios</h2>
+    <ul class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {otros.map((o) => (
+        <li><a href={`/servicios/${o.id}/`} class="flex h-full items-center gap-3 rounded-xl border border-slate-200 p-4 font-semibold text-marca-900 hover:border-marca-500 hover:bg-marca-50"><span class="text-marca-700"><Icono nombre={o.icono} /></span>{o.titulo}</a></li>
+      ))}
+    </ul>
+  </section>
+
+  <CtaBanda servicio={s.titulo} />
+</Base>

@@ -72,13 +72,19 @@ export function validarCotizacion(c: Cotizacion): Errores {
   return e;
 }
 
-export function armarMensaje(c: Cotizacion): string {
+export type ProductoMensaje = { nombre: string; parte?: string; cantidad: number };
+
+export function armarMensaje(c: Cotizacion, productos: readonly ProductoMensaje[] = []): string {
+  const lineasProductos = productos.length
+    ? ['Productos:', ...productos.map((p) => `- ${p.cantidad} × ${p.nombre}${p.parte ? ` (N.° de parte ${p.parte})` : ''}`)]
+    : [];
   return [
     'Hola CLASTEC, quisiera una cotización.',
     `Nombre: ${c.nombre}`,
     `Empresa / RUC: ${c.empresa}`,
     `Contacto: ${c.contacto}`,
     `Servicio: ${c.servicio}`,
+    ...lineasProductos,
     c.mensaje ? `Detalle: ${c.mensaje}` : '',
   ]
     .filter(Boolean)
