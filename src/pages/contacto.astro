@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+import Cabecera from '../components/Cabecera.astro';
+import Cotizar from '../components/Cotizar.astro';
+import { site } from '../config/site';
+---
+
+<Base title="Contacto y cotizaciones | CLASTEC" description={`Solicita una cotización de outsourcing de impresión, alquiler, mantenimiento o productos. Llámanos al ${site.telefonos[0]?.visible} o escríbenos a ${site.correoVentas}.`}>
+  <Cabecera
+    titulo="Solicita tu cotización"
+    bajada="Completa el formulario, escríbenos por WhatsApp o llámanos. Respondemos en menos de 24 horas hábiles."
+    migas={[{ texto: 'Contacto' }]}
+  />
+  <Cotizar titulo="Cuéntanos qué necesitas" />
+</Base>

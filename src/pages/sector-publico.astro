@@ -1,0 +1,87 @@
+---
+import Base from '../layouts/Base.astro';
+import Cabecera from '../components/Cabecera.astro';
+import Icono from '../components/Icono.astro';
+import Testimonios from '../components/Testimonios.astro';
+import Cotizar from '../components/Cotizar.astro';
+import { entidadesPublicas, site } from '../config/site';
+import { servicios } from '../content/servicios';
+
+// Contenido nuevo (el sitio actual no tiene esta página). Validar con la empresa: RNP y documentación.
+const ventajas = [
+  { icono: 'mapa', t: 'Cobertura nacional', d: `Presencia en ${site.cifras.departamentos} departamentos y personal propio en ${site.cifras.departamentosConPersonal}, para atender sedes en Lima y regiones bajo un mismo contrato.` },
+  { icono: 'escudo', t: 'Respaldo de fabricantes', d: 'Partner Platinum, Centro Autorizado de Servicios y canal CMPS de Xerox; partner de HP y aliado de Epson.' },
+  { icono: 'reloj', t: 'Niveles de servicio por contrato', d: 'Tiempos de respuesta, reparación y cambio de equipo definidos y medibles, con reportes mensuales.' },
+  { icono: 'documento', t: 'Documentación técnica', d: 'Te apoyamos con fichas técnicas, cartas de respaldo y certificaciones del personal que piden las bases.' },
+] as const;
+const etapas = [
+  { t: 'Requerimiento', d: 'Te ayudamos a definir especificaciones técnicas y volúmenes realistas para el expediente.' },
+  { t: 'Indagación de mercado', d: 'Enviamos cotizaciones formales en los plazos que requiere tu área usuaria.' },
+  { t: 'Procedimiento', d: 'Presentamos nuestra propuesta técnica y económica según las bases.' },
+  { t: 'Ejecución', d: 'Implementamos en todas las sedes y reportamos el cumplimiento del contrato.' },
+];
+---
+
+<Base title="Proveedor del Estado: impresión y TI para entidades públicas | CLASTEC" description="Experiencia atendiendo a Cortes Superiores de Justicia, ministerios y entidades públicas en outsourcing de impresión, alquiler y mantenimiento de equipos.">
+  <Cabecera
+    titulo="Soluciones de impresión y TI para el sector público"
+    bajada="Atendemos a Cortes Superiores de Justicia, ministerios y otras entidades con contratos que cumplen lo que exigen las bases."
+    eyebrow="Sector público"
+    migas={[{ texto: 'Sector público' }]}
+  >
+    <a href="#cotizar" class="btn-primario" data-servicio="Licitación / sector público">Solicitar cotización formal</a>
+    <a href={`tel:${site.telefonos[0]?.numero}`} class="btn-claro">Hablar con un asesor</a>
+  </Cabecera>
+
+  <section class="contenedor py-16" aria-labelledby="entidades-titulo">
+    <h2 id="entidades-titulo" class="text-3xl font-bold text-marca-900">Entidades que han confiado en nosotros</h2>
+    <ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {entidadesPublicas.map((e) => (
+        <li class="flex min-h-24 items-center gap-3 rounded-xl border border-slate-200 p-5 font-semibold text-marca-900">
+          <span class="text-oro-700"><Icono nombre="escudo" /></span>{e}
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="bg-slate-50" aria-labelledby="ventajas-titulo">
+    <div class="contenedor py-16">
+      <h2 id="ventajas-titulo" class="text-3xl font-bold text-marca-900">Por qué somos un proveedor confiable</h2>
+      <ul class="mt-8 grid gap-6 md:grid-cols-2">
+        {ventajas.map((v) => (
+          <li class="flex gap-4 rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+            <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-marca-900 text-oro-400"><Icono nombre={v.icono} /></span>
+            <div><h3 class="text-xl font-bold text-marca-900">{v.t}</h3><p class="mt-1 text-slate-700">{v.d}</p></div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="contenedor py-16" aria-labelledby="etapas-titulo">
+    <h2 id="etapas-titulo" class="text-3xl font-bold text-marca-900">Te acompañamos en cada etapa</h2>
+    <ol class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      {etapas.map((p, i) => (
+        <li class="rounded-xl border border-slate-200 p-5">
+          <span class="font-titulo text-4xl font-bold text-oro-500" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+          <h3 class="mt-2 text-lg font-bold text-marca-900"><span class="sr-only">Etapa {i + 1}: </span>{p.t}</h3>
+          <p class="mt-1 text-sm text-slate-700">{p.d}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="bg-marca-900 text-white" aria-labelledby="sp-servicios">
+    <div class="contenedor py-16">
+      <h2 id="sp-servicios" class="text-3xl font-bold">Servicios que contratan las entidades</h2>
+      <ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        {servicios.map((s) => (
+          <li><a href={`/servicios/${s.id}/`} class="flex h-full flex-col gap-3 rounded-xl bg-white/5 p-5 ring-1 ring-white/15 hover:bg-white/10"><span class="text-oro-400"><Icono nombre={s.icono} /></span><span class="font-semibold">{s.titulo}</span></a></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <Testimonios limite={2} />
+  <Cotizar servicioInicial="Licitación / sector público" titulo="Solicita una cotización formal" conLista={false} />
+</Base>
