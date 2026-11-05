@@ -1,0 +1,258 @@
+---
+import Base from '../../layouts/Base.astro';
+import Cabecera from '../../components/Cabecera.astro';
+import Icono from '../../components/Icono.astro';
+import CtaBanda from '../../components/CtaBanda.astro';
+import { conteoPorCategoria, marcas, fechaCaptura } from '../../lib/catalogo';
+import { site } from '../../config/site';
+
+const categorias = conteoPorCategoria();
+const total = categorias.reduce((n, c) => n + c.cantidad, 0);
+const listaMarcas = marcas();
+const formato = new Intl.NumberFormat('es-PE');
+const captura = new Date(fechaCaptura).toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' });
+const control = 'mt-1 block min-h-11 w-full rounded-lg border border-slate-400 bg-white px-3 py-2';
+---
+
+<Base
+  title="Catálogo de equipos, repuestos y suministros | CLASTEC"
+  description={`Explora ${formato.format(total)} productos: impresoras, multifuncionales, laptops, escáneres, repuestos y suministros. Arma tu lista y pide una cotización.`}
+>
+  <Cabecera
+    titulo="Catálogo de equipos, repuestos y suministros"
+    bajada={`${formato.format(total)} productos de Xerox, HP, Epson, Lenovo y más. Arma tu lista y te enviamos precio y disponibilidad.`}
+    migas={[{ texto: 'Catálogo' }]}
+  >
+    <a href="#buscador" class="btn-primario">Buscar productos</a>
+    <a href="/contacto/" class="btn-claro">¿No lo encuentras? Cotízalo igual</a>
+  </Cabecera>
+
+  <section class="contenedor py-10" aria-labelledby="categorias-titulo">
+    <h2 id="categorias-titulo" class="text-2xl font-bold text-marca-900">Categorías</h2>
+    <ul class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {categorias.map((c, i) => (
+        <li>
+          <a href={`?cat=${i}#buscador`} data-cat={i} class="flex min-h-16 items-center justify-between rounded-xl border border-slate-200 p-4 hover:border-marca-500 hover:bg-marca-50">
+            <span>
+              <span class="block font-semibold text-marca-900">{c.nombre}</span>
+              <span class="text-xs text-slate-600">{c.grupo}</span>
+            </span>
+            <span class="rounded-full bg-marca-100 px-3 py-1 text-sm font-bold text-marca-900">{formato.format(c.cantidad)}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section id="buscador" class="bg-slate-50" aria-labelledby="buscador-titulo">
+    <div class="contenedor py-10">
+      <h2 id="buscador-titulo" class="text-2xl font-bold text-marca-900">Buscar en el catálogo</h2>
+      <form class="mt-6 grid gap-4 rounded-xl bg-white p-4 shadow-sm ring-1 ring-slate-200 md:grid-cols-12" role="search" data-filtros>
+        <div class="md:col-span-6">
+          <label for="q" class="text-sm font-medium">Nombre, modelo o número de parte</label>
+          <div class="relative">
+            <span class="pointer-events-none absolute left-3 top-1/2 mt-0.5 -translate-y-1/2 text-slate-500"><Icono nombre="buscar" class="h-5 w-5" /></span>
+            <input id="q" name="q" type="search" maxlength="80" autocomplete="off" placeholder="Ej.: VersaLink B405, 106R03583, tóner" class={`${control} pl-10`} />
+          </div>
+        </div>
+        <div class="md:col-span-3">
+          <label for="cat" class="text-sm font-medium">Categoría</label>
+          <select id="cat" name="cat" class={control}>
+            <option value="">Todas</option>
+            {categorias.map((c, i) => <option value={i}>{c.nombre}</option>)}
+          </select>
+        </div>
+        <div class="md:col-span-3">
+          <label for="marca" class="text-sm font-medium">Marca</label>
+          <select id="marca" name="marca" class={control}>
+            <option value="">Todas</option>
+            {listaMarcas.map((m) => <option value={m}>{m}</option>)}
+          </select>
+        </div>
+        <div class="flex flex-wrap items-center justify-between gap-3 md:col-span-12">
+          <p class="font-medium text-marca-900" role="status" aria-live="polite" data-conteo>Cargando catálogo…</p>
+          <button type="reset" class="min-h-11 font-semibold text-marca-800 underline">Limpiar filtros</button>
+        </div>
+      </form>
+
+      <noscript>
+        <p class="mt-6 rounded-lg bg-amber-100 p-4">La búsqueda necesita JavaScript. Puedes escribirnos a {site.correoVentas} con el número de parte que buscas.</p>
+      </noscript>
+
+      <ul class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" data-resultados aria-label="Resultados"></ul>
+
+      <div class="mt-6 hidden rounded-xl bg-white p-8 text-center ring-1 ring-slate-200" data-vacio>
+        <p class="text-lg font-semibold text-marca-900">No encontramos “<span data-vacio-q></span>”.</p>
+        <p class="mt-2 text-slate-700">Trabajamos con muchos más modelos de los que aparecen aquí. Cotízalo igual y lo buscamos por ti.</p>
+        <a href="/contacto/" class="btn-primario mt-6" data-vacio-enlace>Cotizar este producto</a>
+      </div>
+
+      <div class="mt-8 text-center">
+        <button type="button" class="btn-secundario hidden" data-mas>Mostrar más productos</button>
+      </div>
+      <p class="mt-8 text-xs text-slate-600">
+        Catálogo de referencia capturado el {captura}. Precios, stock y especificaciones se confirman en la cotización.
+        Imágenes: {site.origenImagenes.replace('https://', '')}.
+      </p>
+    </div>
+  </section>
+
+  <CtaBanda titulo="¿Necesitas muchos equipos o un contrato?" texto="Para flotas, alquiler o outsourcing te preparamos una propuesta a medida." />
+</Base>
+
+<script>
+  import { agregar, estaEnLista, LISTA_EVENTO } from '../../lib/lista.ts';
+
+  type Item = { i: number; n: string; c: number; m?: string; p?: string; f?: string[]; img?: string };
+  type Indice = { categorias: string[]; productos: Item[] };
+
+  const POR_PAGINA = 24;
+  const ORIGEN_IMG = 'https://clastec.com/wp-content/uploads/';
+
+  const form = document.querySelector<HTMLFormElement>('[data-filtros]');
+  const q = document.querySelector<HTMLInputElement>('#q');
+  const cat = document.querySelector<HTMLSelectElement>('#cat');
+  const marca = document.querySelector<HTMLSelectElement>('#marca');
+  const ul = document.querySelector<HTMLUListElement>('[data-resultados]');
+  const conteo = document.querySelector<HTMLElement>('[data-conteo]');
+  const vacio = document.querySelector<HTMLElement>('[data-vacio]');
+  const vacioQ = document.querySelector<HTMLElement>('[data-vacio-q]');
+  const vacioEnlace = document.querySelector<HTMLAnchorElement>('[data-vacio-enlace]');
+  const mas = document.querySelector<HTMLButtonElement>('[data-mas]');
+
+  let datos: Indice = { categorias: [], productos: [] };
+  let filtrados: Item[] = [];
+  let mostrados = POR_PAGINA;
+  const fmt = new Intl.NumberFormat('es-PE');
+
+  /** Normaliza para buscar sin tildes, mayúsculas ni signos. */
+  const norm = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+  let textos = new Map<number, string>();
+
+  function el<K extends keyof HTMLElementTagNameMap>(tag: K, clase = '', texto?: string): HTMLElementTagNameMap[K] {
+    const e = document.createElement(tag);
+    if (clase) e.className = clase;
+    if (texto !== undefined) e.textContent = texto;
+    return e;
+  }
+
+  function botonLista(p: Item): HTMLButtonElement {
+    const b = el('button', 'btn-secundario mt-4 w-full text-sm');
+    b.type = 'button';
+    const pintar = () => {
+      const en = estaEnLista(p.i);
+      b.className = `${en ? 'btn-primario' : 'btn-secundario'} mt-4 w-full text-sm`;
+      b.textContent = en ? '✓ En tu lista (agregar otro)' : 'Agregar a cotización';
+      b.setAttribute('aria-label', `${en ? 'Agregar otra unidad de' : 'Agregar a la cotización'}: ${p.n}`);
+    };
+    pintar();
+    b.addEventListener('click', () => {
+      agregar({ id: p.i, nombre: p.n, ...(p.p ? { parte: p.p } : {}) });
+      pintar();
+    });
+    return b;
+  }
+
+  function tarjeta(p: Item): HTMLLIElement {
+    const li = el('li', 'flex flex-col rounded-xl bg-white p-4 shadow-sm ring-1 ring-slate-200');
+    const fig = el('div', 'flex h-40 items-center justify-center rounded-lg bg-slate-50');
+    if (p.img && /^[\w/.-]+\.(png|jpe?g|webp)$/i.test(p.img)) {
+      const img = el('img', 'max-h-36 w-auto object-contain');
+      img.src = ORIGEN_IMG + p.img;
+      img.alt = p.n;
+      img.width = 144;
+      img.height = 144;
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.referrerPolicy = 'no-referrer';
+      img.addEventListener('error', () => img.replaceWith(el('span', 'text-sm text-slate-500', 'Imagen no disponible')));
+      fig.append(img);
+    } else {
+      fig.append(el('span', 'text-sm text-slate-500', 'Sin imagen'));
+    }
+    const meta = el('p', 'mt-3 text-xs font-semibold uppercase tracking-wide text-oro-700', [datos.categorias[p.c], p.m].filter(Boolean).join(' · '));
+    const titulo = el('h3', 'mt-1 font-sans text-base font-semibold leading-snug text-marca-900', p.n);
+    li.append(fig, meta, titulo);
+    if (p.p) li.append(el('p', 'mt-1 text-sm text-slate-700', `N.° de parte: ${p.p}`));
+    if (p.f?.length) {
+      const lista = el('ul', 'mt-2 space-y-1 text-sm text-slate-700');
+      p.f.forEach((f) => lista.append(el('li', '', `• ${f}`)));
+      li.append(lista);
+    }
+    const pie = el('div', 'mt-auto');
+    pie.append(botonLista(p));
+    li.append(pie);
+    return li;
+  }
+
+  function pintar() {
+    if (!ul || !conteo || !vacio || !mas) return;
+    const visibles = filtrados.slice(0, mostrados);
+    ul.replaceChildren(...visibles.map(tarjeta));
+    const termino = q?.value.trim() ?? '';
+    conteo.textContent = filtrados.length
+      ? `Mostrando ${fmt.format(visibles.length)} de ${fmt.format(filtrados.length)} productos`
+      : 'Sin resultados';
+    vacio.classList.toggle('hidden', filtrados.length > 0);
+    if (vacioQ) vacioQ.textContent = termino || 'ese producto';
+    if (vacioEnlace) vacioEnlace.href = `/contacto/?servicio=${encodeURIComponent('Compra de equipos, repuestos o suministros')}`;
+    mas.classList.toggle('hidden', visibles.length >= filtrados.length);
+  }
+
+  function filtrar(reiniciar = true) {
+    const terminos = norm(q?.value ?? '').split(' ').filter(Boolean);
+    const c = cat?.value ?? '';
+    const m = marca?.value ?? '';
+    filtrados = datos.productos.filter(
+      (p) =>
+        (c === '' || p.c === Number(c)) &&
+        (m === '' || p.m === m) &&
+        terminos.every((t) => textos.get(p.i)?.includes(t)),
+    );
+    if (reiniciar) mostrados = POR_PAGINA;
+    // Filtros en la URL para poder compartir la búsqueda.
+    const url = new URL(location.href);
+    for (const [k, v] of [['q', q?.value.trim() ?? ''], ['cat', c], ['marca', m]] as const) {
+      if (v) url.searchParams.set(k, v); else url.searchParams.delete(k);
+    }
+    history.replaceState(null, '', url);
+    pintar();
+  }
+
+  let espera: number | undefined;
+  q?.addEventListener('input', () => { clearTimeout(espera); espera = window.setTimeout(() => filtrar(), 150); });
+  cat?.addEventListener('change', () => filtrar());
+  marca?.addEventListener('change', () => filtrar());
+  form?.addEventListener('submit', (e) => { e.preventDefault(); filtrar(); });
+  form?.addEventListener('reset', () => setTimeout(() => filtrar(), 0));
+  mas?.addEventListener('click', () => { mostrados += POR_PAGINA; pintar(); });
+  window.addEventListener(LISTA_EVENTO, () => pintar());
+
+  document.querySelectorAll<HTMLAnchorElement>('a[data-cat]').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (cat) cat.value = a.dataset['cat'] ?? '';
+      filtrar();
+      document.querySelector('#buscador')?.scrollIntoView();
+      q?.focus({ preventScroll: true });
+    });
+  });
+
+  async function iniciar() {
+    try {
+      const r = await fetch('/catalogo/indice.json');
+      if (!r.ok) throw new Error(String(r.status));
+      datos = (await r.json()) as Indice;
+      textos = new Map(datos.productos.map((p) => [p.i, norm([p.n, p.m, p.p, ...(p.f ?? [])].join(' '))]));
+      const params = new URLSearchParams(location.search);
+      if (q) q.value = (params.get('q') ?? '').slice(0, 80);
+      if (cat) cat.value = params.get('cat') ?? '';
+      if (marca) marca.value = params.get('marca') ?? '';
+      filtrar();
+      if (location.hash === '#buscador') document.querySelector('#buscador')?.scrollIntoView();
+    } catch {
+      if (conteo) conteo.textContent = 'No pudimos cargar el catálogo. Recarga la página o escríbenos con el producto que buscas.';
+    }
+  }
+  iniciar();
+</script>
