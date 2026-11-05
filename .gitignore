@@ -1,0 +1,21 @@
+# dependencias y build
+node_modules/
+dist/
+.astro/
+
+# variables de entorno (nunca subir credenciales)
+.env
+.env.*
+!.env.example
+
+# logs y sistema
+npm-debug.log*
+*.log
+.DS_Store
+Thumbs.db
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# datos crudos extraídos del sitio actual (no versionar)
+data/raw/
