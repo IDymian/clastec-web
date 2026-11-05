@@ -49,7 +49,7 @@ function archivos(dir: string): string[] {
 }
 
 const existeDist = existsSync(DIST);
-const todos = existeDist ? archivos(DIST).filter((f) => ['.html', '.js', '.css', '.txt', '.xml'].includes(extname(f))) : [];
+const todos = existeDist ? archivos(DIST).filter((f) => ['.html', '.js', '.css', '.txt', '.xml', '.json'].includes(extname(f))) : [];
 const html = todos.filter((f) => f.endsWith('.html'));
 const leer = (f: string) => readFileSync(f, 'utf8');
 
@@ -119,4 +119,43 @@ test('las imágenes tienen alt', () => {
   for (const f of html) {
     for (const [img] of leer(f).matchAll(/<img\b[^>]*>/g)) assert.match(img, /\balt=/, `${f}: ${img}`);
   }
+});
+
+test('no hay IDs duplicados en ninguna página', () => {
+  for (const f of html) {
+    const ids = [...leer(f).matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
+    const repetidos = ids.filter((id, i) => ids.indexOf(id) !== i);
+    assert.deepEqual(repetidos, [], `${f}: IDs duplicados`);
+  }
+});
+
+test('todos los enlaces internos apuntan a páginas existentes', () => {
+  for (const f of html) {
+    for (const [, href] of leer(f).matchAll(/<a\s[^>]*href="(\/[^"#?]*)/g)) {
+      const ruta = href ?? '/';
+      const candidatos = [join(DIST, ruta), join(DIST, ruta, 'index.html'), join(DIST, `${ruta}.html`)];
+      assert.ok(candidatos.some((c) => existsSync(c) && (statSync(c).isFile() || existsSync(join(c, 'index.html')))), `${f}: enlace roto ${ruta}`);
+    }
+  }
+});
+
+test('el índice del catálogo no tiene precios, HTML ni imágenes externas inesperadas', () => {
+  const ruta = join(DIST, 'catalogo', 'indice.json');
+  assert.ok(existsSync(ruta), 'falta catalogo/indice.json');
+  const datos = JSON.parse(leer(ruta)) as { productos: { n: string; img?: string; f?: string[] }[] };
+  assert.ok(datos.productos.length > 1000, 'el catálogo debería tener más de 1,000 productos');
+  const crudo = leer(ruta);
+  assert.doesNotMatch(crudo, /"(price|prices|precio)"/i, 'el índice no debe incluir precios');
+  for (const p of datos.productos) {
+    assert.doesNotMatch(`${p.n} ${(p.f ?? []).join(' ')}`, /<[a-z/!]/i, `HTML en producto: ${p.n}`);
+    if (p.img) assert.match(p.img, /^[\w/.-]+\.(png|jpe?g|webp)$/i, `imagen sospechosa: ${p.img}`);
+  }
+});
+
+test('la CSP solo permite imágenes externas de clastec.com', () => {
+  const cabeceras = readFileSync(join(import.meta.dirname, '..', 'public', '_headers'), 'utf8');
+  const csp = cabeceras.match(/Content-Security-Policy: (.+)/)?.[1] ?? '';
+  assert.match(csp, /script-src 'self';/);
+  assert.doesNotMatch(csp, /unsafe-inline|unsafe-eval/);
+  assert.match(csp, /img-src 'self' data: https:\/\/clastec\.com;/);
 });

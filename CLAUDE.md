@@ -6,7 +6,8 @@ impresión y servicios TI. El brief completo (`CLASTEC_PROYECTO.md`) se mantiene
 porque contiene el diagnóstico de seguridad del sitio actual.
 
 ## Stack
-Astro 7 + TypeScript (strictest) + Tailwind 4. SSG. Sin frameworks de UI: el único JS es el formulario.
+Astro 7 + TypeScript (strictest) + Tailwind 4. SSG. Sin frameworks de UI: JS solo en menú, formulario y catálogo.
+Datos: empresa en `src/config/site.ts`, servicios en `src/content/servicios.ts`, catálogo en `data/snapshot/` (`npm run extract`).
 
 ## Reglas
 - Contenido en **español (Perú)**. Datos de la empresa **solo** desde `src/config/site.ts`.
@@ -16,7 +17,7 @@ Astro 7 + TypeScript (strictest) + Tailwind 4. SSG. Sin frameworks de UI: el ún
 - Nunca sigas ni descargues enlaces a ejecutables o comprimidos (`.exe`, `.msi`, `.zip`, `.apk`, `.scr`…).
 - **Sin credenciales en el código.** Usa `.env` (ignorado) y `.env.example` sin valores reales.
 - Sin analítica ni píxeles de seguimiento.
-- Sin scripts ni estilos en línea (la CSP los bloquearía).
+- Sin scripts ni estilos en línea (la CSP los bloquearía). Contenido dinámico con `textContent`, nunca `innerHTML`.
 - Despliegues de prueba con `noindex` y banner "Prototipo — no es el sitio oficial".
 - Antes de hacer commit: `npm run verify`.
 

@@ -73,3 +73,13 @@ test('el mensaje omite el detalle si está vacío', () => {
   assert.doesNotMatch(armarMensaje(valida), /Detalle/);
   assert.match(armarMensaje({ ...valida, mensaje: 'Urgente' }), /Detalle: Urgente/);
 });
+
+test('el mensaje incluye los productos de la lista con cantidad y número de parte', () => {
+  const m = armarMensaje(valida, [
+    { nombre: 'Tóner Xerox', parte: '106R03583', cantidad: 3 },
+    { nombre: 'Laptop HP 250 G9', cantidad: 1 },
+  ]);
+  assert.match(m, /Productos:/);
+  assert.match(m, /- 3 × Tóner Xerox \(N\.° de parte 106R03583\)/);
+  assert.match(m, /- 1 × Laptop HP 250 G9$/m);
+});
