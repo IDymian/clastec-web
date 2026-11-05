@@ -1,0 +1,66 @@
+---
+import '../styles/global.css';
+import { site } from '../config/site';
+import PrototipoBanner from '../components/PrototipoBanner.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppFlotante from '../components/WhatsAppFlotante.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  jsonLd?: readonly object[];
+}
+
+const { title, description, jsonLd = [] } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+
+const organizacion = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: site.nombreComercial,
+  legalName: site.razonSocial,
+  taxID: site.ruc,
+  foundingDate: `${site.fundacion.anio}-0${site.fundacion.mes}`,
+  email: site.correoVentas,
+  telephone: site.telefonos[0]?.numero,
+  areaServed: 'PE',
+  address: { '@type': 'PostalAddress', addressLocality: 'La Victoria', addressRegion: 'Lima', addressCountry: 'PE' },
+  url: site.sitioOficial,
+};
+const datosEstructurados = [organizacion, ...jsonLd];
+---
+
+<!doctype html>
+<html lang="es-PE">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <!-- Prototipo: no indexar para no competir con el sitio oficial. -->
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#0a2540" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_PE" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {datosEstructurados.map((d) => <script type="application/ld+json" set:html={JSON.stringify(d).replaceAll('<', String.raw`\u003c`)} />)}
+  </head>
+  <body class="bg-white font-sans text-slate-800 antialiased">
+    <a href="#contenido" class="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50 focus:rounded focus:bg-white focus:px-4 focus:py-2">
+      Saltar al contenido
+    </a>
+    <PrototipoBanner />
+    <Header />
+    <main id="contenido">
+      <slot />
+    </main>
+    <Footer />
+    <WhatsAppFlotante />
+  </body>
+</html>

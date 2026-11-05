@@ -1,0 +1,44 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Cifras from '../components/Cifras.astro';
+import Servicios from '../components/Servicios.astro';
+import SectorPublico from '../components/SectorPublico.astro';
+import PorQue from '../components/PorQue.astro';
+import Preguntas from '../components/Preguntas.astro';
+import Cotizar from '../components/Cotizar.astro';
+import { preguntas, servicios, site } from '../config/site';
+
+const faq = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: preguntas.map((q) => ({
+    '@type': 'Question',
+    name: q.p,
+    acceptedAnswer: { '@type': 'Answer', text: q.r },
+  })),
+};
+const listaServicios = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  itemListElement: servicios.map((s, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    item: { '@type': 'Service', name: s.titulo, description: s.resumen, provider: { '@type': 'Organization', name: site.nombreComercial } },
+  })),
+};
+---
+
+<Base
+  title="CLASTEC | Outsourcing de impresión y servicios de TI en Perú"
+  description={`Outsourcing de impresión, alquiler de equipos, mantenimiento, digitalización y mesa de ayuda TI. Partner Platinum de Xerox con ${site.aniosExperiencia} años en el Perú. Solicita tu cotización.`}
+  jsonLd={[faq, listaServicios]}
+>
+  <Hero />
+  <Cifras />
+  <Servicios />
+  <SectorPublico />
+  <PorQue />
+  <Preguntas />
+  <Cotizar />
+</Base>

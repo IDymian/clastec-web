@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../config/site';
+---
+
+<Base title="Política de privacidad | CLASTEC" description="Cómo CLASTEC trata los datos personales que nos envías por el formulario de cotización.">
+  <article class="contenedor max-w-3xl py-16">
+    <nav aria-label="Migas de pan" class="text-sm text-slate-600"><a class="underline" href="/">Inicio</a> / Política de privacidad</nav>
+    <h1 class="mt-4 text-3xl font-bold text-marca-900">Política de privacidad</h1>
+    <p class="mt-2 rounded bg-amber-100 p-3 text-sm">Texto provisional del prototipo. Debe ser revisado y aprobado por {site.razonSocial} antes de publicarse.</p>
+    <div class="mt-8 space-y-4 text-slate-700">
+      <p><strong>Responsable:</strong> {site.razonSocial}, RUC {site.ruc}.</p>
+      <p><strong>Datos que recogemos:</strong> nombre, empresa o RUC, correo o teléfono, servicio de interés y el mensaje que nos escribas.</p>
+      <p><strong>Finalidad:</strong> responder tu solicitud de cotización. No usamos tus datos para otros fines sin tu autorización.</p>
+      <p><strong>Cómo se envían:</strong> este prototipo no guarda datos en ningún servidor. Al enviar, se abre WhatsApp o tu programa de correo con el mensaje listo y tú decides si lo envías.</p>
+      <p><strong>Cookies y analítica:</strong> este sitio no usa cookies de seguimiento ni herramientas de analítica.</p>
+      <p><strong>Tus derechos:</strong> conforme a la Ley N.° 29733 puedes ejercer tus derechos de acceso, rectificación, cancelación y oposición escribiendo a <a class="underline" href={`mailto:${site.correoVentas}`}>{site.correoVentas}</a>.</p>
+    </div>
+  </article>
+</Base>

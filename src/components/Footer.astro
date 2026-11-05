@@ -1,0 +1,41 @@
+---
+import { site, servicios } from '../config/site';
+const anio = new Date().getFullYear();
+---
+
+<footer class="mt-16 bg-marca-900 text-slate-200">
+  <div class="contenedor grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-4">
+    <div>
+      <p class="text-xl font-extrabold text-white">CLASTEC</p>
+      <p class="mt-2 text-sm">Outsourcing de impresión y servicios de TI desde {site.fundacion.anio}.</p>
+    </div>
+    <div>
+      <h2 class="font-semibold text-white">Servicios</h2>
+      <ul class="mt-3 space-y-2 text-sm">
+        {servicios.map((s) => <li><a class="hover:underline" href={`/#${s.id}`}>{s.titulo}</a></li>)}
+      </ul>
+    </div>
+    <div>
+      <h2 class="font-semibold text-white">Contacto</h2>
+      <ul class="mt-3 space-y-2 text-sm">
+        {site.telefonos.map((t) => <li><a class="hover:underline" href={`tel:${t.numero}`}>{t.visible}</a></li>)}
+        <li><a class="hover:underline" href={`mailto:${site.correoVentas}`}>{site.correoVentas}</a></li>
+        <li>{site.horario}</li>
+        <li>{site.direccion ?? site.ubicacion}</li>
+      </ul>
+    </div>
+    <div>
+      <h2 class="font-semibold text-white">Legal</h2>
+      <ul class="mt-3 space-y-2 text-sm">
+        <li><a class="hover:underline" href="/privacidad">Política de privacidad</a></li>
+        <li><a class="hover:underline" href="/libro-de-reclamaciones">Libro de Reclamaciones</a></li>
+        <li><a class="hover:underline" href={site.redes.facebook} rel="noopener noreferrer">Facebook</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="border-t border-white/15">
+    <p class="contenedor py-5 pb-20 text-xs sm:pb-5">
+      © {anio} {site.razonSocial} · RUC {site.ruc}
+    </p>
+  </div>
+</footer>

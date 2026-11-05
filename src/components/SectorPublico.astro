@@ -1,0 +1,24 @@
+---
+import { entidadesPublicas } from '../config/site';
+---
+
+<section id="sector-publico" aria-labelledby="sp-titulo" class="bg-marca-900 text-white">
+  <div class="contenedor grid gap-10 py-16 lg:grid-cols-2">
+    <div>
+      <h2 id="sp-titulo" class="text-3xl font-bold">Experiencia con el sector público</h2>
+      <p class="mt-4 text-slate-200">
+        Participamos en procesos de contratación del Estado y cumplimos los requisitos técnicos y
+        documentarios que exigen las entidades. Atendemos sedes en Lima y regiones con personal propio.
+      </p>
+      <a href="#cotizar" data-servicio="Licitación / sector público" class="btn-primario mt-8">
+        Consultar por una licitación
+      </a>
+    </div>
+    <div>
+      <h3 class="font-semibold text-slate-200">Entidades que han confiado en nosotros</h3>
+      <ul class="mt-4 grid gap-3 sm:grid-cols-2">
+        {entidadesPublicas.map((e) => <li class="rounded-lg bg-white/10 px-4 py-3">{e}</li>)}
+      </ul>
+    </div>
+  </div>
+</section>
