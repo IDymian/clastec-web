@@ -22,3 +22,6 @@ data/raw/
 
 # configuración local de herramientas
 .claude/
+
+# Vercel
+.vercel/
