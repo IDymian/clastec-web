@@ -1,0 +1,118 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../../layouts/Base.astro';
+import Cabecera from '../../../components/Cabecera.astro';
+import Icono from '../../../components/Icono.astro';
+import { equipos, RUTA_IMAGENES, type Equipo } from '../../../lib/catalogo';
+import { site } from '../../../config/site';
+
+export const getStaticPaths = (() => {
+  const todos = equipos();
+  return todos.map((e) => ({
+    params: { slug: e.slug },
+    props: { e, relacionados: todos.filter((o) => o.categoriaSlug === e.categoriaSlug && o.id !== e.id && o.img).slice(0, 3) },
+  }));
+}) satisfies GetStaticPaths;
+
+interface Props { e: Equipo; relacionados: Equipo[] }
+const { e, relacionados } = Astro.props;
+const ficha = [
+  ['Marca', e.marca],
+  ['Modelo', e.modelo],
+  ['Familia', e.familia],
+  ['Color', e.color],
+  ['Tipo', e.funcion],
+  ['N.° de parte', e.parte],
+].filter((f): f is [string, string] => Boolean(f[1]));
+const cotizar = `/cotizar/?servicio=${encodeURIComponent('Compra de equipos, repuestos o suministros')}&detalle=${encodeURIComponent(`Me interesa: ${e.nombre}`)}`;
+const alquilar = `/cotizar/?servicio=${encodeURIComponent('Alquiler de equipos informáticos')}&detalle=${encodeURIComponent(`Quisiera alquilar: ${e.nombre}`)}`;
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: e.nombre,
+  category: e.categoriaNombre,
+  ...(e.marca ? { brand: { '@type': 'Brand', name: e.marca } } : {}),
+  ...(e.parte ? { mpn: e.parte } : {}),
+  ...(e.caracteristicas.length ? { description: e.caracteristicas.join('. ') } : {}),
+};
+---
+
+<Base title={`${e.nombre} | Catálogo CLASTEC`} description={`${e.nombre}. ${e.caracteristicas.slice(0, 3).join('. ')}. Solicita precio y disponibilidad.`} jsonLd={[ld]}>
+  <Cabecera
+    titulo={e.nombre}
+    eyebrow={[e.categoriaNombre, e.marca].filter(Boolean).join(' · ')}
+    migas={[{ texto: 'Catálogo', href: '/catalogo/' }, { texto: e.categoriaNombre, href: `/catalogo/${e.categoriaSlug}/` }, { texto: e.modelo ?? 'Detalle' }]}
+  />
+
+  <section class="contenedor grid gap-10 py-14 lg:grid-cols-2">
+    <div class="flex min-h-80 items-center justify-center rounded-2xl bg-slate-50 p-6 ring-2 ring-slate-200">
+      {e.img
+        ? <img src={`${RUTA_IMAGENES}${e.img}`} alt={e.nombre} width="288" height="288" class="h-auto w-full max-w-sm object-contain" />
+        : <p class="text-xl text-slate-700">Foto no disponible</p>}
+    </div>
+    <div>
+      <h2 class="text-3xl font-bold text-marca-900">Características</h2>
+      {e.caracteristicas.length
+        ? <ul class="mt-4 space-y-3">{e.caracteristicas.map((c) => <li class="flex gap-3 text-xl text-slate-800"><span class="mt-1 text-marca-600"><Icono nombre="check" class="h-6 w-6" /></span>{c}</li>)}</ul>
+        : <p class="mt-4 text-xl text-slate-800">Consúltanos por las características de este equipo.</p>}
+
+      {ficha.length > 0 && (
+        <>
+          <h2 class="mt-10 text-2xl font-bold text-marca-900">Ficha</h2>
+          <dl class="mt-4 divide-y-2 divide-slate-200 rounded-2xl border-2 border-slate-200">
+            {ficha.map(([k, v]) => <div class="flex flex-wrap justify-between gap-2 px-5 py-3 text-lg"><dt class="font-bold">{k}</dt><dd>{v}</dd></div>)}
+          </dl>
+        </>
+      )}
+
+      <div class="mt-10 rounded-2xl bg-marca-50 p-6">
+        <h2 class="text-2xl font-bold text-marca-900">¿Te interesa este equipo?</h2>
+        <p class="mt-2 text-lg text-slate-800">Te enviamos precio, disponibilidad y plazo de entrega. También puedes alquilarlo.</p>
+        <div class="mt-5 grid gap-3">
+          <button type="button" class="btn-primario w-full" data-agregar={e.id} data-nombre={e.nombre} data-parte={e.parte ?? ''}>Agregar a mi cotización</button>
+          <a href={cotizar} class="btn-secundario w-full">Pedir precio solo de este equipo</a>
+          <a href={alquilar} class="btn-secundario w-full">Quiero alquilarlo</a>
+          <a href={`tel:${site.telefonos[0]?.numero}`} class="btn-secundario w-full"><Icono nombre="telefono" class="h-6 w-6" />Llamar al {site.telefonos[0]?.visible}</a>
+        </div>
+        <p class="mt-4 text-lg font-bold text-green-900 empty:hidden" role="status" aria-live="polite" data-agregado></p>
+      </div>
+    </div>
+  </section>
+
+  {relacionados.length > 0 && (
+    <section class="bg-slate-100" aria-labelledby="similares">
+      <div class="contenedor py-14">
+        <h2 id="similares" class="text-3xl font-bold text-marca-900">Equipos similares</h2>
+        <ul class="mt-8 grid gap-6 sm:grid-cols-3">
+          {relacionados.map((r) => (
+            <li>
+              <a href={`/catalogo/equipo/${r.slug}/`} class="flex h-full flex-col rounded-2xl border-2 border-slate-300 bg-white p-5 hover:border-marca-600">
+                <img src={`${RUTA_IMAGENES}${r.img}`} alt="" width="160" height="160" loading="lazy" decoding="async" class="mx-auto h-40 w-auto object-contain" />
+                <span class="mt-4 text-xl font-bold text-marca-900 underline decoration-2 underline-offset-4">{r.nombre}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  )}
+</Base>
+
+<script>
+  import { agregar } from '../../../lib/lista.ts';
+  const boton = document.querySelector<HTMLButtonElement>('[data-agregar]');
+  const aviso = document.querySelector<HTMLElement>('[data-agregado]');
+  boton?.addEventListener('click', () => {
+    const id = Number(boton.dataset['agregar']);
+    const parte = boton.dataset['parte'] ?? '';
+    agregar({ id, nombre: boton.dataset['nombre'] ?? '', ...(parte ? { parte } : {}) });
+    if (aviso) {
+      aviso.replaceChildren('✓ Agregado a tu cotización. ');
+      const ver = document.createElement('a');
+      ver.href = '/cotizar/#lista';
+      ver.className = 'underline';
+      ver.textContent = 'Ver mi cotización';
+      aviso.append(ver);
+    }
+  });
+</script>

@@ -1,0 +1,39 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import Cabecera from '../../components/Cabecera.astro';
+import Mosaico from '../../components/Mosaico.astro';
+import BuscadorCatalogo from '../../components/BuscadorCatalogo.astro';
+import { CATEGORIAS, conteoPorCategoria } from '../../lib/catalogo';
+
+export const getStaticPaths = (() =>
+  CATEGORIAS.map((c, indice) => ({ params: { categoria: c.slug }, props: { indice } }))) satisfies GetStaticPaths;
+
+interface Props { indice: number }
+const { indice } = Astro.props;
+const conteos = conteoPorCategoria();
+const cat = conteos[indice]!;
+const otras = conteos.filter((_, i) => i !== indice);
+const fmt = new Intl.NumberFormat('es-PE');
+---
+
+<Base title={`${cat.nombre} | Catálogo CLASTEC`} description={`${cat.descripcion} ${fmt.format(cat.cantidad)} productos. Pide tu cotización.`}>
+  <Cabecera
+    titulo={cat.nombre}
+    bajada={`${cat.descripcion} ${fmt.format(cat.cantidad)} productos disponibles para cotizar.`}
+    eyebrow={cat.grupo}
+    migas={[{ texto: 'Catálogo', href: '/catalogo/' }, { texto: cat.nombre }]}
+  >
+    <a href="#buscador" class="btn-primario">Buscar en esta categoría</a>
+    <a href="/cotizar/#lista" class="btn-claro">Ver mi cotización</a>
+  </Cabecera>
+
+  <BuscadorCatalogo categoria={indice} titulo={`Productos de ${cat.nombre.toLowerCase()}`} />
+
+  <section class="contenedor py-12" aria-labelledby="otras">
+    <h2 id="otras" class="text-3xl font-bold text-marca-900">Otras categorías</h2>
+    <ul class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {otras.map((c) => <li><Mosaico href={`/catalogo/${c.slug}/`} titulo={c.nombre} texto={`${fmt.format(c.cantidad)} productos`} icono={c.icono} accion="Ver productos" /></li>)}
+    </ul>
+  </section>
+</Base>
