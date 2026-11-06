@@ -54,6 +54,7 @@ npm test          # tests (ejecutar después del build)
 npm run verify    # check de tipos + build + tests
 npm run extract   # vuelve a capturar el catálogo de clastec.com (solo GET)
 npm run imagenes  # descarga y convierte a WebP las imágenes nuevas del catálogo
+npm run informe   # regenera docs/informe/informe-gerencia.pdf desde el .md (requiere Edge o Chrome)
 ```
 
 ## Catálogo
@@ -105,6 +106,12 @@ seguridad, `noindex`, sin analítica ni píxeles, sin secretos en el código, CI
 
 Vercel o Netlify detectan el proyecto automáticamente (`npm run build`, carpeta `dist`). Las cabeceras de
 seguridad ya están configuradas. Recomendado: proteger el despliegue con contraseña.
+
+## Informe para la gerencia
+
+[`docs/informe/informe-gerencia.md`](docs/informe/informe-gerencia.md) (y su PDF): problemas de seguridad del sitio
+actual con evidencia, prioridades, pasos de limpieza, comparativa Lighthouse antes/después y las decisiones de
+diseño de cada vista frente al sitio actual.
 
 ## Pendiente de confirmar con la empresa
 
