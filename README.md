@@ -6,23 +6,35 @@ Sitio B2B para CLASTEC S.A.C. (outsourcing de impresión y servicios de TI, Lima
 Objetivo: que un jefe de TI, logística o compras entienda en segundos qué hace la empresa, por qué
 confiar en ella y cómo **solicitar una cotización**.
 
-## Páginas
+## Páginas (125 vistas)
 
 | Ruta | Contenido |
 |---|---|
-| `/` | Hero, beneficios, 5 servicios, cifras, catálogo destacado, sector público, proceso, testimonios, FAQ y formulario |
-| `/servicios/` y `/servicios/{id}/` | Índice y 5 páginas: qué incluye, beneficios, proceso, FAQ propia y cotización con el servicio preseleccionado |
-| `/servicios/alquiler-de-equipos/` | Además: 8 tipos de equipo con anclas, plazos y SLA |
-| `/catalogo/` | 1,952 productos con búsqueda (sin tildes, por número de parte), filtros por categoría y marca, filtros en la URL y lista de cotización |
-| `/sector-publico/` | Página nueva: entidades atendidas, ventajas y etapas de contratación |
-| `/nosotros/` | Historia (línea de tiempo), diferenciadores, alianzas, certificaciones |
-| `/preguntas-frecuentes/` | FAQ por tema y por servicio (datos estructurados FAQPage) |
-| `/contacto/` | Formulario con la lista de productos editable |
-| `/privacidad/`, `/libro-de-reclamaciones/`, `/404` | Legales y página de error útil con búsqueda |
+| `/` | Inicio corto: qué hacemos, cifras y tarjetas grandes hacia cada sección |
+| `/servicios/` y `/servicios/{id}/` | Índice y 5 servicios: en qué consiste, qué incluye, proceso y preguntas |
+| `/servicios/alquiler-de-equipos/{equipo}/` | 8 páginas: laptops, PCs, impresoras, escáneres, servidores, switches, UPS, proyectores |
+| `/catalogo/`, `/catalogo/{categoria}/` | Catálogo con 6 categorías y buscador (1,952 productos) |
+| `/catalogo/equipo/{slug}/` | 90 fichas de equipo con foto, características y botones de cotizar o alquilar |
+| `/cotizar/` | Formulario de 5 campos y lista de productos editable |
+| `/contacto/` | Teléfono, WhatsApp, correo y formulario como tarjetas grandes; horario y cobertura |
+| `/sector-publico/`, `/nosotros/`, `/clientes/`, `/como-trabajamos/` | Empresa, experiencia, testimonios, pasos y tiempos de atención |
+| `/preguntas-frecuentes/`, `/guias/comprar-o-alquilar/` | Ayuda con respuestas siempre visibles y guía comparativa |
+| `/trabaja-con-nosotros/`, `/mapa-del-sitio/`, legales, `/404` | Postulaciones, índice de todas las páginas y páginas legales |
+
+## Diseño para personas mayores
+
+- Letra base de 18 px y control **A / A+ / A++** en la barra superior (se recuerda en el navegador).
+- **Menú siempre visible, sin desplegables**; en celular, además, barra inferior fija con Inicio, Servicios,
+  Catálogo, Cotizar y Llamar.
+- Botón **"Volver a…"** y migas de pan en todas las páginas internas; mapa del sitio.
+- Botones de al menos 48 px, enlaces siempre subrayados, foco muy visible, contraste AA.
+- Preguntas frecuentes con la respuesta a la vista (sin acordeones). Una idea por página.
+- Teléfono visible en todas las páginas: muchas personas prefieren llamar.
+- Tests que fallan si aparece un desplegable o si falta el menú, la barra inferior o el control de letra.
 
 ## Stack
 
-- [Astro](https://astro.build) 7 (generación estática, cero JS salvo el formulario)
+- [Astro](https://astro.build) 7 (generación estática; JS solo para letra, formulario y catálogo)
 - TypeScript en modo `strictest`
 - Tailwind CSS 4
 - Tests con el runner nativo de Node (`node --test`)
@@ -65,7 +77,7 @@ src/
 ├─ components/         # Header, Cabecera, Migas, Cotizar, Testimonios, CtaBanda…
 ├─ layouts/Base.astro  # <head>, SEO, noindex, banner de prototipo
 ├─ lib/                # Validación, envío (submitQuote), lista de cotización y catálogo
-├─ pages/              # 16 páginas + catalogo/indice.json
+├─ pages/              # 125 páginas + catalogo/indice.json
 └─ styles/global.css   # Tema de Tailwind (identidad provisional)
 public/
 ├─ _headers            # Cabeceras de seguridad (Netlify / Cloudflare Pages)

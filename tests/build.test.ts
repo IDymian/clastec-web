@@ -166,3 +166,25 @@ test('la CSP no permite orígenes externos', () => {
 test('las páginas no cargan imágenes de clastec.com', () => {
   for (const f of todos) assert.doesNotMatch(leer(f), /clastec\.com\/wp-content/, f);
 });
+
+test('navegación accesible: menú visible sin desplegables, con las 7 secciones y la barra inferior', () => {
+  for (const f of html) {
+    const c = leer(f);
+    assert.doesNotMatch(c, /<details[\s>]/, `${f}: no usar desplegables ni acordeones`);
+    const menu = c.match(/<nav aria-label="Menú principal"[\s\S]*?<\/nav>/)?.[0] ?? '';
+    assert.equal((menu.match(/<a\s/g) ?? []).length, 7, `${f}: el menú principal debe mostrar 7 enlaces`);
+    assert.match(c, /<nav aria-label="Accesos rápidos"/, `${f}: falta la barra inferior`);
+    assert.match(c, /data-tamano="texto-muy-grande"/, `${f}: falta el control de tamaño de letra`);
+  }
+});
+
+test('el sitio tiene vistas separadas (no todo en una página)', () => {
+  const rutas = [
+    'index.html', 'servicios/index.html', 'cotizar/index.html', 'contacto/index.html', 'clientes/index.html',
+    'como-trabajamos/index.html', 'guias/comprar-o-alquilar/index.html', 'trabaja-con-nosotros/index.html',
+    'mapa-del-sitio/index.html', 'catalogo/repuestos/index.html', 'servicios/alquiler-de-equipos/laptops/index.html',
+  ];
+  for (const r of rutas) assert.ok(existsSync(join(DIST, r)), `falta la página ${r}`);
+  assert.ok(html.length >= 100, `se esperaban más de 100 páginas, hay ${html.length}`);
+  assert.doesNotMatch(leer(join(DIST, 'index.html')), /id="form-cotizar"/, 'el formulario va en /cotizar/, no en el inicio');
+});
