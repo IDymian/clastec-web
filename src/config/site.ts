@@ -42,8 +42,6 @@ export const site = {
     facebook: 'https://www.facebook.com/ClastecPeru',
   },
   sitioOficial: 'https://clastec.com',
-  /** Origen de las imágenes del catálogo mientras no se descarguen localmente. */
-  origenImagenes: 'https://clastec.com',
 } as const;
 
 export const alianzas = [

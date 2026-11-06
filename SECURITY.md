@@ -10,7 +10,7 @@ No abras un issue público. Escribe al mantenedor del repositorio por mensaje pr
 | Área | Medida |
 |---|---|
 | Navegador | `Content-Security-Policy` estricta (`script-src 'self'`, sin `unsafe-inline`), `frame-ancestors 'none'`, HSTS, `nosniff`, `Referrer-Policy`, `Permissions-Policy`, COOP. Configuradas en `public/_headers` y `vercel.json`. |
-| Imágenes externas | Única excepción a `'self'`: `img-src https://clastec.com` para las fotos del catálogo, con `referrerpolicy="no-referrer"` y rutas validadas por patrón. Temporal hasta alojarlas localmente. |
+| Imágenes | Todas locales (`img-src 'self'`). El script de descarga valida la URL, el tipo de contenido, el tamaño máximo (3 MB) y la firma del archivo antes de convertirlo a WebP sin metadatos. Test: la CSP no admite orígenes externos y toda imagen referenciada existe. |
 | Catálogo | El extractor guarda solo texto plano. Las tarjetas se construyen con nodos DOM y `textContent` (sin `innerHTML`). Test que verifica que el índice no tiene HTML ni precios. |
 | Lista de cotización | Solo en `localStorage` del navegador, validada al leer y con límites (50 ítems, 999 unidades). |
 | Código | Sin scripts, estilos ni manejadores de eventos en línea (verificado por test). JSON-LD escapado. Enlaces externos con `rel="noopener noreferrer"`. |

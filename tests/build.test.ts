@@ -148,14 +148,21 @@ test('el índice del catálogo no tiene precios, HTML ni imágenes externas ines
   assert.doesNotMatch(crudo, /"(price|prices|precio)"/i, 'el índice no debe incluir precios');
   for (const p of datos.productos) {
     assert.doesNotMatch(`${p.n} ${(p.f ?? []).join(' ')}`, /<[a-z/!]/i, `HTML en producto: ${p.n}`);
-    if (p.img) assert.match(p.img, /^[\w/.-]+\.(png|jpe?g|webp)$/i, `imagen sospechosa: ${p.img}`);
+    if (p.img) {
+      assert.match(p.img, /^[a-f0-9]{16}\.webp$/, `imagen sospechosa: ${p.img}`);
+      assert.ok(existsSync(join(DIST, 'img', 'catalogo', p.img)), `falta la imagen local ${p.img}`);
+    }
   }
 });
 
-test('la CSP solo permite imágenes externas de clastec.com', () => {
+test('la CSP no permite orígenes externos', () => {
   const cabeceras = readFileSync(join(import.meta.dirname, '..', 'public', '_headers'), 'utf8');
   const csp = cabeceras.match(/Content-Security-Policy: (.+)/)?.[1] ?? '';
   assert.match(csp, /script-src 'self';/);
-  assert.doesNotMatch(csp, /unsafe-inline|unsafe-eval/);
-  assert.match(csp, /img-src 'self' data: https:\/\/clastec\.com;/);
+  assert.match(csp, /img-src 'self' data:;/);
+  assert.doesNotMatch(csp, /unsafe-inline|unsafe-eval|https?:\/\//);
+});
+
+test('las páginas no cargan imágenes de clastec.com', () => {
+  for (const f of todos) assert.doesNotMatch(leer(f), /clastec\.com\/wp-content/, f);
 });
