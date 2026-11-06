@@ -92,7 +92,6 @@ const control = 'mt-1 block min-h-11 w-full rounded-lg border border-slate-400 b
       </div>
       <p class="mt-8 text-xs text-slate-600">
         Catálogo de referencia capturado el {captura}. Precios, stock y especificaciones se confirman en la cotización.
-        Imágenes: {site.origenImagenes.replace('https://', '')}.
       </p>
     </div>
   </section>
@@ -104,10 +103,10 @@ const control = 'mt-1 block min-h-11 w-full rounded-lg border border-slate-400 b
   import { agregar, estaEnLista, LISTA_EVENTO } from '../../lib/lista.ts';
 
   type Item = { i: number; n: string; c: number; m?: string; p?: string; f?: string[]; img?: string };
-  type Indice = { categorias: string[]; productos: Item[] };
+  type Indice = { rutaImagenes: string; categorias: string[]; productos: Item[] };
 
   const POR_PAGINA = 24;
-  const ORIGEN_IMG = 'https://clastec.com/wp-content/uploads/';
+  const ARCHIVO_IMG = /^[a-f0-9]{16}\.webp$/;
 
   const form = document.querySelector<HTMLFormElement>('[data-filtros]');
   const q = document.querySelector<HTMLInputElement>('#q');
@@ -120,7 +119,7 @@ const control = 'mt-1 block min-h-11 w-full rounded-lg border border-slate-400 b
   const vacioEnlace = document.querySelector<HTMLAnchorElement>('[data-vacio-enlace]');
   const mas = document.querySelector<HTMLButtonElement>('[data-mas]');
 
-  let datos: Indice = { categorias: [], productos: [] };
+  let datos: Indice = { rutaImagenes: '/img/catalogo/', categorias: [], productos: [] };
   let filtrados: Item[] = [];
   let mostrados = POR_PAGINA;
   const fmt = new Intl.NumberFormat('es-PE');
@@ -156,15 +155,14 @@ const control = 'mt-1 block min-h-11 w-full rounded-lg border border-slate-400 b
   function tarjeta(p: Item): HTMLLIElement {
     const li = el('li', 'flex flex-col rounded-xl bg-white p-4 shadow-sm ring-1 ring-slate-200');
     const fig = el('div', 'flex h-40 items-center justify-center rounded-lg bg-slate-50');
-    if (p.img && /^[\w/.-]+\.(png|jpe?g|webp)$/i.test(p.img)) {
+    if (p.img && ARCHIVO_IMG.test(p.img)) {
       const img = el('img', 'max-h-36 w-auto object-contain');
-      img.src = ORIGEN_IMG + p.img;
+      img.src = datos.rutaImagenes + p.img;
       img.alt = p.n;
       img.width = 144;
       img.height = 144;
       img.loading = 'lazy';
       img.decoding = 'async';
-      img.referrerPolicy = 'no-referrer';
       img.addEventListener('error', () => img.replaceWith(el('span', 'text-sm text-slate-500', 'Imagen no disponible')));
       fig.append(img);
     } else {

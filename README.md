@@ -41,6 +41,7 @@ npm run preview   # sirve dist/ localmente
 npm test          # tests (ejecutar después del build)
 npm run verify    # check de tipos + build + tests
 npm run extract   # vuelve a capturar el catálogo de clastec.com (solo GET)
+npm run imagenes  # descarga y convierte a WebP las imágenes nuevas del catálogo
 ```
 
 ## Catálogo
@@ -48,8 +49,9 @@ npm run extract   # vuelve a capturar el catálogo de clastec.com (solo GET)
 `scripts/extract.ts` descarga el catálogo público de la Store API de WooCommerce a
 `data/snapshot/catalogo.json` (solo texto plano, sin HTML ni precios). El build lee ese snapshot,
 no la API en vivo, y genera `/catalogo/indice.json` (≈50 KB comprimido) para la búsqueda en el navegador.
-Las imágenes se cargan temporalmente desde clastec.com con `loading="lazy"`; antes de producción
-deben descargarse y optimizarse a WebP/AVIF.
+`scripts/imagenes.ts` descarga las fotos del catálogo (1,291 imágenes) y las convierte a WebP de 288×288
+en `public/img/catalogo/` (≈5.7 MB en total, ≈4.5 KB por imagen). El sitio no depende de clastec.com
+para mostrar nada. Ambos scripts son incrementales y respetan los mismos límites de peticiones.
 
 Variables de entorno: copia `.env.example` a `.env`. Hoy solo existe `SITE_URL` (URL del despliegue,
 para canonical y Open Graph). **Nunca** subas `.env` al repositorio.

@@ -6,7 +6,7 @@ import CtaBanda from '../components/CtaBanda.astro';
 import Cotizar from '../components/Cotizar.astro';
 import { alianzas, certificaciones, entidadesPublicas, preguntas, site } from '../config/site';
 import { servicios } from '../content/servicios';
-import { conteoPorCategoria, destacados } from '../lib/catalogo';
+import { conteoPorCategoria, destacados, RUTA_IMAGENES } from '../lib/catalogo';
 
 const fmt = new Intl.NumberFormat('es-PE');
 // Cifras estáticas (sin contadores animados): visibles aunque no se ejecute JavaScript.
@@ -171,7 +171,7 @@ const listaServicios = {
       {productos.map((p) => (
         <li class="flex flex-col rounded-xl border border-slate-200 p-4">
           <div class="flex h-36 items-center justify-center rounded-lg bg-slate-50">
-            <img src={`${site.origenImagenes}/wp-content/uploads/${p.img}`} alt={p.n} width="128" height="128" loading="lazy" decoding="async" referrerpolicy="no-referrer" class="max-h-32 w-auto object-contain" />
+            <img src={`${RUTA_IMAGENES}${p.img}`} alt={p.n} width="128" height="128" loading="lazy" decoding="async" class="max-h-32 w-auto object-contain" />
           </div>
           <p class="mt-3 text-xs font-semibold uppercase tracking-wide text-oro-700">{p.m}</p>
           <h3 class="mt-1 font-sans text-base font-semibold text-marca-900">{p.n}</h3>

@@ -3,6 +3,11 @@
  * para la búsqueda en el navegador. Sin precios ni carrito: todo termina en una cotización.
  */
 import snapshot from '../../data/snapshot/catalogo.json';
+import manifiestoImagenes from '../../data/snapshot/imagenes.json';
+
+/** URL original → archivo WebP local en /img/catalogo/ (generado por npm run imagenes). */
+const imagenesLocales = (manifiestoImagenes as { imagenes: Record<string, string> }).imagenes;
+export const RUTA_IMAGENES = '/img/catalogo/';
 
 type ProductoSnapshot = {
   id: number;
@@ -37,7 +42,7 @@ export type ItemIndice = {
   m?: string; // marca
   p?: string; // número de parte
   f?: string[]; // características (solo equipos)
-  img?: string; // ruta de imagen relativa a /wp-content/uploads/
+  img?: string; // archivo WebP local en RUTA_IMAGENES
 };
 
 const productos = (snapshot as { productos: ProductoSnapshot[] }).productos;
@@ -76,7 +81,7 @@ export function indice(): ItemIndice[] {
       } else if (p.modelo) {
         item.f = [`Compatible: ${p.modelo.length > 90 ? `${p.modelo.slice(0, 87)}…` : p.modelo}`];
       }
-      const img = p.imagen?.split('/wp-content/uploads/')[1];
+      const img = p.imagen ? imagenesLocales[p.imagen] : undefined;
       if (img) item.img = img;
       return item;
     })
