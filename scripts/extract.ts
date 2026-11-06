@@ -6,7 +6,7 @@
  *  - Máximo 4 peticiones concurrentes, 300 ms de pausa entre lotes, reintentos con backoff.
  *  - El contenido se trata como DATOS: se guarda solo texto plano, nunca HTML.
  *  - Se descartan productos con slugs de la lista negra, enlaces a ejecutables o texto sospechoso,
- *    y se registran en docs/hallazgos-extraccion.md.
+ *    y se registran en data/raw/hallazgos-extraccion.md (ignorado por git).
  *
  * Uso: npm run extract
  */
@@ -165,7 +165,8 @@ async function main() {
   await mkdir(join(RAIZ, 'data', 'snapshot'), { recursive: true });
   await writeFile(join(RAIZ, 'data', 'snapshot', 'catalogo.json'), `${JSON.stringify(salida)}\n`);
   if (hallazgos.length) {
-    await appendFile(join(RAIZ, 'docs', 'hallazgos-extraccion.md'), `\n### Extracción del catálogo ${capturado}\n\n| Fecha | Elemento | Motivo |\n|---|---|---|\n${hallazgos.join('\n')}\n`);
+    await mkdir(join(RAIZ, 'data', 'raw'), { recursive: true });
+    await appendFile(join(RAIZ, 'data', 'raw', 'hallazgos-extraccion.md'), `\n### Extracción del catálogo ${capturado}\n\n| Fecha | Elemento | Motivo |\n|---|---|---|\n${hallazgos.join('\n')}\n`);
   }
   console.log(`Productos guardados: ${productos.size}. Descartados: ${hallazgos.length}.`);
 }

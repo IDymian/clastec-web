@@ -26,5 +26,3 @@ data/raw/
 # Vercel
 .vercel/
 
-# HTML intermedio del informe
-docs/informe/.informe-gerencia.html

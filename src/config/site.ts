@@ -2,7 +2,7 @@
  * ÚNICA fuente de datos de la empresa.
  * Cualquier dato visible (años, teléfonos, cifras, correo, clientes) debe salir de aquí.
  * Los campos marcados como pendientes deben validarse con el dueño antes de producción
- * (ver docs/hallazgos-extraccion.md).
+ * (ver "Pendiente de confirmar" en el README).
  */
 
 const FUNDACION = { anio: 2004, mes: 2 } as const; // febrero de 2004
