@@ -4,16 +4,16 @@ interface Props { limite?: number }
 const { limite = testimonios.length } = Astro.props;
 ---
 
-<section aria-labelledby="testimonios-titulo" class="bg-marca-50">
-  <div class="contenedor py-16">
+<section aria-labelledby="testimonios-titulo" class="bg-slate-50">
+  <div class="contenedor py-20">
     <p class="eyebrow">Testimonios</p>
-    <h2 id="testimonios-titulo" class="mt-2 text-3xl font-bold text-marca-900 sm:text-4xl">Lo que dicen nuestros clientes</h2>
+    <h2 id="testimonios-titulo" class="mt-2 text-3xl font-bold text-marca-900 sm:text-5xl">Lo que dicen nuestros clientes</h2>
     <ul class="mt-10 grid gap-6 md:grid-cols-2">
       {testimonios.slice(0, limite).map((t) => (
         <li>
-          <figure class="flex h-full flex-col rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
+          <figure class="flex h-full flex-col rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-200">
             <span class="font-titulo text-5xl leading-none text-oro-500" aria-hidden="true">“</span>
-            <blockquote class="mt-1 flex-1 text-lg text-slate-800">{t.texto}</blockquote>
+            <blockquote class="mt-1 flex-1 text-slate-700">{t.texto}</blockquote>
             <figcaption class="mt-5 border-t border-slate-200 pt-4 text-base">
               <span class="block font-semibold text-marca-900">{t.autor}</span>
               <span class="text-slate-700">{t.cargo} · {t.entidad}</span>

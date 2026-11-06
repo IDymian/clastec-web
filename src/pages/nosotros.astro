@@ -25,8 +25,8 @@ const diferenciadores = [
 
   <section class="contenedor grid gap-12 py-16 lg:grid-cols-2" aria-labelledby="historia-titulo">
     <div>
-      <h2 id="historia-titulo" class="text-3xl font-bold text-marca-900">Nuestra historia</h2>
-      <p class="mt-4 text-lg text-slate-700">
+      <h2 id="historia-titulo" class="text-3xl font-bold text-marca-900 sm:text-4xl">Nuestra historia</h2>
+      <p class="mt-4 text-slate-600">
         Nuestros socios fundadores, con experiencia gerenciando empresas del mercado informático, crearon CLASTEC en
         febrero de {site.fundacion.anio} para ofrecer soluciones a un mercado en crecimiento.
       </p>
@@ -54,7 +54,7 @@ const diferenciadores = [
 
   <section class="bg-slate-50" aria-labelledby="dif-titulo">
     <div class="contenedor py-16">
-      <h2 id="dif-titulo" class="text-3xl font-bold text-marca-900">Nuestros diferenciadores</h2>
+      <h2 id="dif-titulo" class="text-3xl font-bold text-marca-900 sm:text-4xl">Nuestros diferenciadores</h2>
       <ul class="mt-8 grid gap-6 md:grid-cols-3">
         {diferenciadores.map((d) => (
           <li class="rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
@@ -69,7 +69,7 @@ const diferenciadores = [
 
   <section class="contenedor grid gap-12 py-16 lg:grid-cols-2" aria-labelledby="alianzas-titulo">
     <div>
-      <h2 id="alianzas-titulo" class="text-3xl font-bold text-marca-900">Alianzas con fabricantes</h2>
+      <h2 id="alianzas-titulo" class="text-3xl font-bold text-marca-900 sm:text-4xl">Alianzas con fabricantes</h2>
       <ul class="mt-6 space-y-3">
         {alianzas.map((a) => (
           <li class="rounded-xl border border-slate-200 p-5">
@@ -80,7 +80,7 @@ const diferenciadores = [
       </ul>
     </div>
     <div>
-      <h2 class="text-3xl font-bold text-marca-900">Certificaciones del equipo</h2>
+      <h2 class="text-3xl font-bold text-marca-900 sm:text-4xl">Certificaciones del equipo</h2>
       <ul class="mt-6 flex flex-wrap gap-2">
         {certificaciones.map((c) => <li class="rounded-full bg-marca-900 px-4 py-2 font-semibold text-white">{c}</li>)}
       </ul>

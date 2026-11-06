@@ -15,8 +15,8 @@ import { servicios } from '../../content/servicios';
     <a href="/cotizar/" class="btn-primario">Solicitar cotización</a>
   </Cabecera>
 
-  <section class="contenedor py-14">
-    <h2 class="text-3xl font-bold text-marca-900">Elige un servicio para ver el detalle</h2>
+  <section class="contenedor py-16 sm:py-20">
+    <h2 class="text-3xl font-bold text-marca-900 sm:text-4xl">Elige un servicio para ver el detalle</h2>
     <ul class="mt-8 grid gap-6 md:grid-cols-2">
       {servicios.map((s) => (
         <li><Mosaico href={`/servicios/${s.id}/`} titulo={s.titulo} texto={s.resumen} icono={s.icono} accion="Ver este servicio" /></li>

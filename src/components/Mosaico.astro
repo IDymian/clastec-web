@@ -1,5 +1,5 @@
 ---
-/** Tarjeta grande y fácil de tocar: toda la tarjeta es un enlace con un texto de acción explícito. */
+/** Tarjeta enlazada: toda la tarjeta es un enlace con un texto de acción explícito. */
 import Icono from './Icono.astro';
 import type { NombreIcono } from '../lib/iconos';
 
@@ -19,18 +19,18 @@ const Titulo = nivel;
 <a
   href={href}
   class:list={[
-    'group flex h-full flex-col rounded-2xl border-2 p-6 transition-colors',
-    oscuro ? 'border-marca-900 bg-marca-900 text-white hover:bg-marca-800' : 'border-slate-300 bg-white hover:border-marca-600 hover:bg-marca-50',
+    'group flex h-full flex-col rounded-3xl p-7 transition',
+    oscuro ? 'bg-marca-900 text-white hover:bg-marca-800' : 'border border-slate-200 bg-white hover:-translate-y-1 hover:border-marca-600 hover:shadow-xl',
   ]}
 >
   {icono && (
-    <span class:list={['flex h-14 w-14 items-center justify-center rounded-xl', oscuro ? 'bg-white/10 text-oro-400' : 'bg-marca-900 text-oro-400']}>
-      <Icono nombre={icono} class="h-7 w-7" />
+    <span class:list={['flex h-12 w-12 items-center justify-center rounded-2xl transition-colors', oscuro ? 'bg-white/10 text-oro-400' : 'bg-marca-50 text-marca-800 group-hover:bg-marca-900 group-hover:text-oro-400']}>
+      <Icono nombre={icono} class="h-6 w-6" />
     </span>
   )}
-  <Titulo class:list={['mt-4 text-2xl font-bold', oscuro ? 'text-white' : 'text-marca-900']}>{titulo}</Titulo>
-  {texto && <p class:list={['mt-2 text-lg', oscuro ? 'text-slate-200' : 'text-slate-700']}>{texto}</p>}
-  <span class:list={['mt-auto inline-flex items-center gap-2 pt-5 text-lg font-bold underline decoration-2 underline-offset-4', oscuro ? 'text-oro-400' : 'text-marca-800']}>
+  <Titulo class:list={['mt-5 text-2xl font-bold', oscuro ? 'text-white' : 'text-marca-900']}>{titulo}</Titulo>
+  {texto && <p class:list={['mt-2', oscuro ? 'text-slate-300' : 'text-slate-600']}>{texto}</p>}
+  <span class:list={['mt-auto inline-flex items-center gap-2 pt-6 font-bold transition-all group-hover:gap-3', oscuro ? 'text-oro-400' : 'text-marca-800']}>
     {accion}<Icono nombre="flecha" class="h-5 w-5" />
   </span>
 </a>

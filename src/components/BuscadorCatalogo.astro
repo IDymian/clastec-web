@@ -14,10 +14,10 @@ const listaMarcas = marcas();
 const control = 'mt-2 block min-h-12 w-full rounded-xl border-2 border-slate-500 bg-white px-4 py-3 text-lg';
 ---
 
-<section id="buscador" class="bg-slate-100" aria-labelledby="buscador-titulo" data-buscador data-categoria-fija={fija ? String(categoria) : ''}>
+<section id="buscador" class="bg-slate-50" aria-labelledby="buscador-titulo" data-buscador data-categoria-fija={fija ? String(categoria) : ''}>
   <div class="contenedor py-12">
-    <h2 id="buscador-titulo" class="text-3xl font-bold text-marca-900">{titulo}</h2>
-    <form class="mt-6 grid gap-5 rounded-2xl bg-white p-6 ring-2 ring-slate-200 md:grid-cols-12" role="search" data-filtros>
+    <h2 id="buscador-titulo" class="text-3xl font-bold text-marca-900 sm:text-4xl">{titulo}</h2>
+    <form class="mt-6 grid gap-5 rounded-3xl bg-white p-6 ring-1 ring-slate-200 md:grid-cols-12" role="search" data-filtros>
       <div class:list={[fija ? 'md:col-span-8' : 'md:col-span-6']}>
         <label for="q" class="text-lg font-bold text-marca-900">Escribe el nombre, modelo o número de parte</label>
         <div class="relative">
@@ -54,9 +54,9 @@ const control = 'mt-2 block min-h-12 w-full rounded-xl border-2 border-slate-500
 
     <ul class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-resultados aria-label="Productos encontrados"></ul>
 
-    <div class="mt-8 hidden rounded-2xl bg-white p-8 text-center ring-2 ring-slate-200" data-vacio>
+    <div class="mt-8 hidden rounded-3xl bg-white p-8 text-center ring-1 ring-slate-200" data-vacio>
       <p class="text-2xl font-bold text-marca-900">No encontramos «<span data-vacio-q></span>».</p>
-      <p class="mt-2 text-lg text-slate-800">Trabajamos con muchos más modelos. Cuéntanos qué buscas y lo conseguimos por ti.</p>
+      <p class="mt-2 text-slate-600">Trabajamos con muchos más modelos. Cuéntanos qué buscas y lo conseguimos por ti.</p>
       <div class="mt-6 flex flex-wrap justify-center gap-4">
         <a href="/cotizar/" class="btn-primario" data-vacio-enlace>Pedir este producto</a>
         <a href={`tel:${site.telefonos[0]?.numero}`} class="btn-secundario">Llamar al {site.telefonos[0]?.visible}</a>
@@ -125,7 +125,7 @@ const control = 'mt-2 block min-h-12 w-full rounded-xl border-2 border-slate-500
   }
 
   function tarjeta(p: Item): HTMLLIElement {
-    const li = el('li', 'flex flex-col rounded-2xl bg-white p-5 ring-2 ring-slate-200');
+    const li = el('li', 'flex flex-col rounded-3xl bg-white p-5 ring-1 ring-slate-200');
     const fig = el('div', 'flex h-44 items-center justify-center rounded-xl bg-slate-50');
     if (p.img && ARCHIVO_IMG.test(p.img)) {
       const img = el('img', 'max-h-40 w-auto object-contain');
@@ -137,7 +137,7 @@ const control = 'mt-2 block min-h-12 w-full rounded-xl border-2 border-slate-500
       img.decoding = 'async';
       fig.append(img);
     } else {
-      fig.append(el('span', 'text-lg text-slate-700', 'Sin foto'));
+      fig.append(el('span', 'text-slate-600', 'Sin foto'));
     }
     const meta = el('p', 'mt-4 text-base font-bold uppercase tracking-wide text-oro-700', [datos.categorias[p.c], p.m].filter(Boolean).join(' · '));
     const titulo = el('h3', 'mt-1 font-sans text-xl font-bold leading-snug text-marca-900');
@@ -149,9 +149,9 @@ const control = 'mt-2 block min-h-12 w-full rounded-xl border-2 border-slate-500
       titulo.textContent = p.n;
     }
     li.append(fig, meta, titulo);
-    if (p.p) li.append(el('p', 'mt-2 text-lg text-slate-800', `N.° de parte: ${p.p}`));
+    if (p.p) li.append(el('p', 'mt-2 text-slate-600', `N.° de parte: ${p.p}`));
     if (p.f?.length) {
-      const lista = el('ul', 'mt-2 space-y-1 text-lg text-slate-800');
+      const lista = el('ul', 'mt-2 space-y-1 text-slate-600');
       p.f.slice(0, 3).forEach((f) => lista.append(el('li', '', `• ${f}`)));
       li.append(lista);
     }

@@ -40,9 +40,9 @@ const ldFaq = {
   </Cabecera>
 
   <!-- Índice de la página: lo que el usuario encontrará, sin tener que adivinar -->
-  <nav aria-label="En esta página" class="border-b-2 border-slate-200 bg-slate-50">
+  <nav aria-label="En esta página" class="border-b border-slate-200 bg-slate-50">
     <ul class="contenedor flex flex-wrap gap-3 py-4 text-lg">
-      <li class="font-bold text-slate-800">En esta página:</li>
+      <li class="font-bold text-slate-700">En esta página:</li>
       {s.id === 'alquiler-de-equipos' && <li><a class="enlace" href="#equipos">Equipos</a></li>}
       <li><a class="enlace" href="#consiste">En qué consiste</a></li>
       <li><a class="enlace" href="#incluye">Qué incluye</a></li>
@@ -52,9 +52,9 @@ const ldFaq = {
   </nav>
 
   {s.id === 'alquiler-de-equipos' && (
-    <section id="equipos" class="contenedor py-14" aria-labelledby="equipos-titulo">
-      <h2 id="equipos-titulo" class="text-3xl font-bold text-marca-900">¿Qué equipo necesitas alquilar?</h2>
-      <p class="mt-2 text-xl text-slate-800">Elige un tipo de equipo para ver para qué sirve y qué incluye.</p>
+    <section id="equipos" class="contenedor py-16 sm:py-20" aria-labelledby="equipos-titulo">
+      <h2 id="equipos-titulo" class="text-3xl font-bold text-marca-900 sm:text-4xl">¿Qué equipo necesitas alquilar?</h2>
+      <p class="mt-2 text-lg text-slate-600">Elige un tipo de equipo para ver para qué sirve y qué incluye.</p>
       <ul class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {equiposAlquiler.map((e) => (
           <li><Mosaico href={`/servicios/alquiler-de-equipos/${e.id}/`} titulo={e.t} texto={e.d} icono={e.icono} accion="Ver detalle" /></li>
@@ -63,37 +63,37 @@ const ldFaq = {
     </section>
   )}
 
-  <section id="consiste" class="contenedor grid gap-12 py-14 lg:grid-cols-2" aria-labelledby="consiste-titulo">
+  <section id="consiste" class="contenedor grid gap-12 py-16 sm:py-20 lg:grid-cols-2" aria-labelledby="consiste-titulo">
     <div>
-      <h2 id="consiste-titulo" class="text-3xl font-bold text-marca-900">En qué consiste</h2>
-      {s.intro.map((p) => <p class="mt-4 text-xl text-slate-800">{p}</p>)}
+      <h2 id="consiste-titulo" class="text-3xl font-bold text-marca-900 sm:text-4xl">En qué consiste</h2>
+      {s.intro.map((p) => <p class="mt-4 text-lg text-slate-600">{p}</p>)}
       <ul class="mt-6 space-y-3">
         {s.caracteristicas.map((c) => (
-          <li class="flex gap-3 text-lg text-slate-800"><span class="mt-1 text-marca-600"><Icono nombre="check" class="h-6 w-6" /></span>{c}</li>
+          <li class="flex gap-3 text-slate-600"><span class="mt-1 text-marca-600"><Icono nombre="check" class="h-6 w-6" /></span>{c}</li>
         ))}
       </ul>
     </div>
     <div>
-      <h2 class="text-3xl font-bold text-marca-900">Beneficios para ti</h2>
+      <h2 class="text-3xl font-bold text-marca-900 sm:text-4xl">Beneficios para ti</h2>
       <ul class="mt-6 grid gap-4">
         {s.beneficios.map((b) => (
-          <li class="rounded-2xl border-l-8 border-oro-500 bg-marca-50 p-5">
+          <li class="rounded-r-3xl rounded-l-md border-l-4 border-oro-500 bg-marca-50 p-5">
             <h3 class="text-xl font-bold text-marca-900">{b.t}</h3>
-            <p class="mt-1 text-lg text-slate-800">{b.d}</p>
+            <p class="mt-1 text-slate-600">{b.d}</p>
           </li>
         ))}
       </ul>
     </div>
   </section>
 
-  <section id="incluye" class="bg-slate-100" aria-labelledby="incluye-titulo">
-    <div class="contenedor py-14">
-      <h2 id="incluye-titulo" class="text-3xl font-bold text-marca-900">Qué incluye el servicio</h2>
+  <section id="incluye" class="bg-slate-50" aria-labelledby="incluye-titulo">
+    <div class="contenedor py-16 sm:py-20">
+      <h2 id="incluye-titulo" class="text-3xl font-bold text-marca-900 sm:text-4xl">Qué incluye el servicio</h2>
       <ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {s.incluye.map((i) => (
-          <li class="flex gap-4 rounded-2xl bg-white p-5 ring-2 ring-slate-200">
+          <li class="flex gap-4 rounded-3xl bg-white p-5 ring-1 ring-slate-200">
             <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-marca-900 text-oro-400"><Icono nombre="check" class="h-6 w-6" /></span>
-            <div><h3 class="text-xl font-bold text-marca-900">{i.t}</h3><p class="mt-1 text-lg text-slate-800">{i.d}</p></div>
+            <div><h3 class="text-xl font-bold text-marca-900">{i.t}</h3><p class="mt-1 text-slate-600">{i.d}</p></div>
           </li>
         ))}
       </ul>
@@ -101,15 +101,15 @@ const ldFaq = {
   </section>
 
   {s.proceso && (
-    <section id="proceso" class="contenedor py-14" aria-labelledby="proceso-titulo">
-      <h2 id="proceso-titulo" class="text-3xl font-bold text-marca-900">{s.proceso.titulo}</h2>
+    <section id="proceso" class="contenedor py-16 sm:py-20" aria-labelledby="proceso-titulo">
+      <h2 id="proceso-titulo" class="text-3xl font-bold text-marca-900 sm:text-4xl">{s.proceso.titulo}</h2>
       <div class="mt-8"><Pasos pasos={s.proceso.pasos} /></div>
     </section>
   )}
 
   <section id="preguntas" class="bg-marca-50" aria-labelledby="faq-servicio">
-    <div class="contenedor py-14">
-      <h2 id="faq-servicio" class="text-3xl font-bold text-marca-900">Preguntas sobre este servicio</h2>
+    <div class="contenedor py-16 sm:py-20">
+      <h2 id="faq-servicio" class="text-3xl font-bold text-marca-900 sm:text-4xl">Preguntas sobre este servicio</h2>
       <div class="mt-8"><ListaPreguntas preguntas={s.preguntas} /></div>
       <p class="mt-6 text-lg"><a class="enlace" href="/preguntas-frecuentes/">Ver todas las preguntas frecuentes</a></p>
     </div>
@@ -117,8 +117,8 @@ const ldFaq = {
 
   <CtaBanda servicio={s.titulo} titulo={`¿Te interesa ${s.tituloCorto.toLowerCase()}?`} />
 
-  <section class="contenedor py-14" aria-labelledby="otros-titulo">
-    <h2 id="otros-titulo" class="text-3xl font-bold text-marca-900">Otros servicios</h2>
+  <section class="contenedor py-16 sm:py-20" aria-labelledby="otros-titulo">
+    <h2 id="otros-titulo" class="text-3xl font-bold text-marca-900 sm:text-4xl">Otros servicios</h2>
     <ul class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
       {otros.map((o) => <li><Mosaico href={`/servicios/${o.id}/`} titulo={o.titulo} icono={o.icono} accion="Ver servicio" /></li>)}
     </ul>

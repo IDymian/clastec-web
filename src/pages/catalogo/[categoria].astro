@@ -31,7 +31,7 @@ const fmt = new Intl.NumberFormat('es-PE');
   <BuscadorCatalogo categoria={indice} titulo={`Productos de ${cat.nombre.toLowerCase()}`} />
 
   <section class="contenedor py-12" aria-labelledby="otras">
-    <h2 id="otras" class="text-3xl font-bold text-marca-900">Otras categorías</h2>
+    <h2 id="otras" class="text-3xl font-bold text-marca-900 sm:text-4xl">Otras categorías</h2>
     <ul class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {otras.map((c) => <li><Mosaico href={`/catalogo/${c.slug}/`} titulo={c.nombre} texto={`${fmt.format(c.cantidad)} productos`} icono={c.icono} accion="Ver productos" /></li>)}
     </ul>

@@ -18,8 +18,8 @@ const opciones = [...servicios.map((s) => s.titulo), 'Compra de equipos, repuest
     <div class="lg:col-span-2">
       <p class="eyebrow">Contacto</p>
       <h2 id="cotizar-titulo" class="mt-2 text-3xl font-bold text-marca-900 sm:text-4xl">{titulo}</h2>
-      <p class="mt-4 text-xl text-slate-800">Cuéntanos qué necesitas. Te respondemos en menos de 24 horas hábiles.</p>
-      <p class="mt-4 text-lg text-slate-800">¿Prefieres hablar con una persona? Llámanos, te atendemos con gusto.</p>
+      <p class="mt-4 text-lg text-slate-600">Cuéntanos qué necesitas. Te respondemos en menos de 24 horas hábiles.</p>
+      <p class="mt-4 text-slate-600">¿Prefieres hablar con una persona? Llámanos, te atendemos con gusto.</p>
       <ul class="mt-8 space-y-4">
         {site.telefonos.map((t) => (
           <li><a class="inline-flex min-h-11 items-center gap-3 font-semibold text-marca-800 hover:underline" href={`tel:${t.numero}`}><Icono nombre="telefono" class="h-5 w-5" />{t.visible}</a></li>
@@ -48,7 +48,7 @@ const opciones = [...servicios.map((s) => s.titulo), 'Compra de equipos, repuest
         </div>
       )}
 
-      <p class="text-lg text-slate-800">Los campos con <strong>*</strong> son obligatorios. Solo te tomará un minuto.</p>
+      <p class="text-slate-600">Los campos con <strong>*</strong> son obligatorios. Solo te tomará un minuto.</p>
       <div class="mt-6 grid gap-6">
         <div>
           <label for="nombre" class={etiqueta}>Tu nombre *</label>
@@ -84,7 +84,7 @@ const opciones = [...servicios.map((s) => s.titulo), 'Compra de equipos, repuest
         <div>
           <div class="flex items-start gap-3">
             <input id="consentimiento" name="consentimiento" type="checkbox" class="mt-1 h-7 w-7 shrink-0 accent-marca-800" aria-describedby="consentimiento-error" />
-            <label for="consentimiento" class="text-lg text-slate-800">
+            <label for="consentimiento" class="text-slate-600">
               Autorizo a {site.nombreComercial} a usar mis datos solo para responder esta solicitud, según la
               <a class="underline" href="/privacidad/">Política de privacidad</a> (Ley N.° 29733). *
             </label>

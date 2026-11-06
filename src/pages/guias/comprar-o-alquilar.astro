@@ -33,15 +33,15 @@ const comprarSi = [
     migas={[{ texto: 'Guía: comprar o alquilar' }]}
   />
 
-  <section class="contenedor py-14" aria-labelledby="comparacion">
-    <h2 id="comparacion" class="text-3xl font-bold text-marca-900">Comparación rápida</h2>
-    <div class="mt-8 overflow-x-auto rounded-2xl border-2 border-slate-200">
+  <section class="contenedor py-16 sm:py-20" aria-labelledby="comparacion">
+    <h2 id="comparacion" class="text-3xl font-bold text-marca-900 sm:text-4xl">Comparación rápida</h2>
+    <div class="mt-8 overflow-x-auto rounded-3xl border border-slate-200">
       <table class="w-full min-w-[40rem] text-left text-lg">
         <caption class="sr-only">Diferencias entre comprar y alquilar equipos</caption>
         <thead class="bg-marca-900 text-white">
           <tr><th scope="col" class="p-4">Aspecto</th><th scope="col" class="p-4">Comprar</th><th scope="col" class="p-4">Alquilar</th></tr>
         </thead>
-        <tbody class="divide-y-2 divide-slate-200">
+        <tbody class="divide-y divide-slate-200">
           {comparacion.map((f) => (
             <tr>
               <th scope="row" class="p-4 font-bold text-marca-900">{f.aspecto}</th>
@@ -54,16 +54,16 @@ const comprarSi = [
     </div>
   </section>
 
-  <section class="bg-slate-100" aria-labelledby="decidir">
-    <div class="contenedor grid gap-6 py-14 md:grid-cols-2">
-      <div class="rounded-2xl bg-white p-6 ring-2 ring-oro-500">
+  <section class="bg-slate-50" aria-labelledby="decidir">
+    <div class="contenedor grid gap-6 py-16 sm:py-20 md:grid-cols-2">
+      <div class="rounded-3xl bg-white p-6 ring-2 ring-oro-500">
         <h2 id="decidir" class="text-2xl font-bold text-marca-900">Te conviene alquilar si…</h2>
         <ul class="mt-4 space-y-3">
           {alquilarSi.map((t) => <li class="flex gap-3 text-xl"><span class="mt-1 text-oro-700"><Icono nombre="check" class="h-6 w-6" /></span>{t}</li>)}
         </ul>
         <a href="/servicios/alquiler-de-equipos/" class="btn-primario mt-6">Ver alquiler de equipos</a>
       </div>
-      <div class="rounded-2xl bg-white p-6 ring-2 ring-slate-200">
+      <div class="rounded-3xl bg-white p-6 ring-1 ring-slate-200">
         <h2 class="text-2xl font-bold text-marca-900">Te conviene comprar si…</h2>
         <ul class="mt-4 space-y-3">
           {comprarSi.map((t) => <li class="flex gap-3 text-xl"><span class="mt-1 text-marca-600"><Icono nombre="check" class="h-6 w-6" /></span>{t}</li>)}
@@ -73,10 +73,10 @@ const comprarSi = [
     </div>
   </section>
 
-  <section class="contenedor py-14">
-    <div class="rounded-2xl bg-marca-50 p-6">
+  <section class="contenedor py-16 sm:py-20">
+    <div class="rounded-3xl bg-marca-50 p-6">
       <h2 class="text-2xl font-bold text-marca-900">¿Y para impresoras?</h2>
-      <p class="mt-2 text-xl text-slate-800">
+      <p class="mt-2 text-lg text-slate-600">
         Si tu empresa imprime mucho, existe una tercera opción: el <strong>outsourcing de impresión</strong>. Pagas solo por las páginas que imprimes
         y nosotros ponemos los equipos, el tóner y el soporte.
       </p>

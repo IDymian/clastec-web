@@ -18,22 +18,22 @@ const sectores = ['Justicia', 'Cultura', 'Comercio exterior y turismo', 'Organis
     migas={[{ texto: 'Clientes y testimonios' }]}
   />
 
-  <section class="contenedor grid gap-10 py-14 lg:grid-cols-2" aria-labelledby="entidades">
+  <section class="contenedor grid gap-10 py-16 sm:py-20 lg:grid-cols-2" aria-labelledby="entidades">
     <div>
-      <h2 id="entidades" class="text-3xl font-bold text-marca-900">Entidades públicas</h2>
+      <h2 id="entidades" class="text-3xl font-bold text-marca-900 sm:text-4xl">Entidades públicas</h2>
       <ul class="mt-6 space-y-3">
         {entidadesPublicas.map((e) => (
-          <li class="flex min-h-16 items-center gap-4 rounded-2xl border-2 border-slate-200 px-5 text-xl font-semibold text-marca-900">
+          <li class="flex min-h-16 items-center gap-4 rounded-3xl border border-slate-200 px-5 text-xl font-semibold text-marca-900">
             <span class="text-oro-700"><Icono nombre="escudo" class="h-7 w-7" /></span>{e}
           </li>
         ))}
       </ul>
     </div>
     <div>
-      <h2 class="text-3xl font-bold text-marca-900">Empresas privadas</h2>
+      <h2 class="text-3xl font-bold text-marca-900 sm:text-4xl">Empresas privadas</h2>
       <ul class="mt-6 space-y-3">
         {privadas.map((e) => (
-          <li class="flex min-h-16 items-center gap-4 rounded-2xl border-2 border-slate-200 px-5 text-xl font-semibold text-marca-900">
+          <li class="flex min-h-16 items-center gap-4 rounded-3xl border border-slate-200 px-5 text-xl font-semibold text-marca-900">
             <span class="text-oro-700"><Icono nombre="trabajo" class="h-7 w-7" /></span>{e}
           </li>
         ))}
