@@ -1,0 +1,11 @@
+# Nunca subir credenciales ni archivos locales al despliegue
+.env
+.env.*
+!.env.example
+.vercel/
+.claude/
+node_modules/
+dist/
+.astro/
+data/raw/
+docs/informe/.informe-gerencia.html
