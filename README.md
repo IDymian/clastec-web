@@ -10,7 +10,7 @@ confiar en ella y cómo **solicitar una cotización**.
 
 | Ruta | Contenido |
 |---|---|
-| `/` | Inicio corto: qué hacemos, cifras y tarjetas grandes hacia cada sección |
+| `/` | Landing comercial: hero con productos, confianza, servicios, cifras, catálogo, proceso, testimonios y CTA |
 | `/servicios/` y `/servicios/{id}/` | Índice y 5 servicios: en qué consiste, qué incluye, proceso y preguntas |
 | `/servicios/alquiler-de-equipos/{equipo}/` | 8 páginas: laptops, PCs, impresoras, escáneres, servidores, switches, UPS, proyectores |
 | `/catalogo/`, `/catalogo/{categoria}/` | Catálogo con 6 categorías y buscador (1,952 productos) |
@@ -27,7 +27,7 @@ confiar en ella y cómo **solicitar una cotización**.
 - **Menú siempre visible, sin desplegables**; en celular, además, barra inferior fija con Inicio, Servicios,
   Catálogo, Cotizar y Llamar.
 - Botón **"Volver a…"** y migas de pan en todas las páginas internas; mapa del sitio.
-- Botones de al menos 48 px, enlaces siempre subrayados, foco muy visible, contraste AA.
+- Botones de al menos 44 px, foco muy visible, contraste AA (Lighthouse: 100 en accesibilidad).
 - Preguntas frecuentes con la respuesta a la vista (sin acordeones). Una idea por página.
 - Teléfono visible en todas las páginas: muchas personas prefieren llamar.
 - Tests que fallan si aparece un desplegable o si falta el menú o la barra inferior.
@@ -66,8 +66,8 @@ no la API en vivo, y genera `/catalogo/indice.json` (≈50 KB comprimido) para l
 en `public/img/catalogo/` (≈5.7 MB en total, ≈4.5 KB por imagen). El sitio no depende de clastec.com
 para mostrar nada. Ambos scripts son incrementales y respetan los mismos límites de peticiones.
 
-Variables de entorno: copia `.env.example` a `.env`. Hoy solo existe `SITE_URL` (URL del despliegue,
-para canonical y Open Graph). **Nunca** subas `.env` al repositorio.
+Variables de entorno: copia `.env.example` a `.env`. `SITE_URL` es la URL del despliegue (canonical y
+Open Graph). `PROTOTIPO_USUARIO` y `PROTOTIPO_CLAVE` se configuran **solo en Vercel**. **Nunca** subas `.env`.
 
 ## Estructura
 
@@ -84,6 +84,7 @@ public/
 ├─ _headers            # Cabeceras de seguridad (Netlify / Cloudflare Pages)
 └─ robots.txt          # Disallow: / (prototipo)
 vercel.json            # Cabeceras de seguridad (Vercel)
+middleware.ts          # Contraseña del despliegue de prueba (Vercel)
 tests/                 # Validaciones + verificaciones de seguridad del build
 ```
 
@@ -104,8 +105,12 @@ seguridad, `noindex`, sin analítica ni píxeles, sin secretos en el código, CI
 
 ## Despliegue de prueba
 
-Vercel o Netlify detectan el proyecto automáticamente (`npm run build`, carpeta `dist`). Las cabeceras de
-seguridad ya están configuradas. Recomendado: proteger el despliegue con contraseña.
+Publicado en Vercel (<https://clastec-prototipo.vercel.app>), protegido con usuario y contraseña por
+`middleware.ts`. Si faltan las variables `PROTOTIPO_USUARIO` / `PROTOTIPO_CLAVE`, responde 503 (falla cerrado).
+Despliegue manual: `npx vercel deploy --prod --scope dt-eam12`.
+
+**¿Vas a continuar o reemplazar el proyecto?** Lee [`docs/TRASPASO.md`](docs/TRASPASO.md): estado, despliegue,
+dónde personalizar, cómo quitar las marcas de prototipo y qué conviene rescatar.
 
 ## Informe para la gerencia
 
