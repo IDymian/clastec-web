@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { verificarAcceso } from '../src/lib/acceso.ts';
+import { verificarAcceso } from '../middleware.ts';
 
 const USUARIO = 'clastec';
 const CLAVE = 'una-clave-de-prueba-larga';
