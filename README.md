@@ -54,7 +54,6 @@ npm test          # tests (ejecutar después del build)
 npm run verify    # check de tipos + build + tests
 npm run extract   # vuelve a capturar el catálogo de clastec.com (solo GET)
 npm run imagenes  # descarga y convierte a WebP las imágenes nuevas del catálogo
-npm run informe   # regenera docs/informe/informe-gerencia.pdf desde el .md (requiere Edge o Chrome)
 ```
 
 ## Catálogo
@@ -111,12 +110,6 @@ Despliegue manual: `npx vercel deploy --prod --scope dt-eam12`.
 
 **¿Vas a continuar o reemplazar el proyecto?** Lee [`docs/TRASPASO.md`](docs/TRASPASO.md): estado, despliegue,
 dónde personalizar, cómo quitar las marcas de prototipo y qué conviene rescatar.
-
-## Informe para la gerencia
-
-[`docs/informe/informe-gerencia.md`](docs/informe/informe-gerencia.md) (y su PDF): problemas de seguridad del sitio
-actual con evidencia, prioridades, pasos de limpieza, comparativa Lighthouse antes/después y las decisiones de
-diseño de cada vista frente al sitio actual.
 
 ## Pendiente de confirmar con la empresa
 
