@@ -174,7 +174,6 @@ test('navegación accesible: menú visible sin desplegables, con las 7 secciones
     const menu = c.match(/<nav aria-label="Menú principal"[\s\S]*?<\/nav>/)?.[0] ?? '';
     assert.equal((menu.match(/<a\s/g) ?? []).length, 7, `${f}: el menú principal debe mostrar 7 enlaces`);
     assert.match(c, /<nav aria-label="Accesos rápidos"/, `${f}: falta la barra inferior`);
-    assert.match(c, /data-tamano="texto-muy-grande"/, `${f}: falta el control de tamaño de letra`);
   }
 });
 

@@ -26,10 +26,7 @@
 }
 
 @layer base {
-  /* Pensado para personas mayores: letra base de 18 px y ampliable desde la barra superior. */
-  html { font-size: 112.5%; scroll-behavior: smooth; }
-  html.texto-grande { font-size: 125%; }
-  html.texto-muy-grande { font-size: 140%; }
+  html { scroll-behavior: smooth; }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -61,4 +58,10 @@
 }
 @utility enlace {
   @apply font-semibold text-marca-800 underline decoration-2 underline-offset-4 hover:text-marca-600;
+}
+@utility hero-fondo {
+  background:
+    radial-gradient(60rem 30rem at 85% 10%, rgb(219 151 46 / 0.18), transparent 60%),
+    radial-gradient(50rem 30rem at 0% 100%, rgb(1 112 185 / 0.35), transparent 60%),
+    linear-gradient(135deg, var(--color-marca-950), var(--color-marca-900));
 }

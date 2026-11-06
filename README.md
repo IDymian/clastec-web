@@ -21,20 +21,20 @@ confiar en ella y cómo **solicitar una cotización**.
 | `/preguntas-frecuentes/`, `/guias/comprar-o-alquilar/` | Ayuda con respuestas siempre visibles y guía comparativa |
 | `/trabaja-con-nosotros/`, `/mapa-del-sitio/`, legales, `/404` | Postulaciones, índice de todas las páginas y páginas legales |
 
-## Diseño para personas mayores
+## Diseño claro y accesible
 
-- Letra base de 18 px y control **A / A+ / A++** en la barra superior (se recuerda en el navegador).
+- Landing comercial moderna (hero con productos reales, prueba social, servicios, catálogo y cierre con CTA).
 - **Menú siempre visible, sin desplegables**; en celular, además, barra inferior fija con Inicio, Servicios,
   Catálogo, Cotizar y Llamar.
 - Botón **"Volver a…"** y migas de pan en todas las páginas internas; mapa del sitio.
 - Botones de al menos 48 px, enlaces siempre subrayados, foco muy visible, contraste AA.
 - Preguntas frecuentes con la respuesta a la vista (sin acordeones). Una idea por página.
 - Teléfono visible en todas las páginas: muchas personas prefieren llamar.
-- Tests que fallan si aparece un desplegable o si falta el menú, la barra inferior o el control de letra.
+- Tests que fallan si aparece un desplegable o si falta el menú o la barra inferior.
 
 ## Stack
 
-- [Astro](https://astro.build) 7 (generación estática; JS solo para letra, formulario y catálogo)
+- [Astro](https://astro.build) 7 (generación estática; JS solo para formulario, lista de cotización y catálogo)
 - TypeScript en modo `strictest`
 - Tailwind CSS 4
 - Tests con el runner nativo de Node (`node --test`)
