@@ -1,0 +1,78 @@
+---
+import Base from '../layouts/Base.astro';
+import Cabecera from '../components/Cabecera.astro';
+import Icono from '../components/Icono.astro';
+import Pasos from '../components/Pasos.astro';
+import CtaBanda from '../components/CtaBanda.astro';
+import { site } from '../config/site';
+
+const pasos = [
+  { t: 'Nos cuentas tu necesidad', d: 'Por teléfono, WhatsApp, correo o el formulario.' },
+  { t: 'Evaluamos', d: 'Revisamos tus equipos, tu consumo y tus sedes. Si hace falta, te visitamos.' },
+  { t: 'Te proponemos', d: 'Recibes una propuesta clara, con equipos, plazos y niveles de servicio.' },
+  { t: 'Implementamos y acompañamos', d: 'Instalamos, capacitamos a tu personal y damos soporte durante todo el contrato.' },
+];
+const sla = [
+  { t: 'Tiempo de respuesta', d: 'Cuánto tarda el técnico en llegar a tu sede.' },
+  { t: 'Tiempo de reparación', d: 'Cuánto tarda en dejar el equipo funcionando.' },
+  { t: 'Cambio de equipo', d: 'Si no se puede reparar a tiempo, lo reemplazamos por uno igual o superior.' },
+];
+const soporte = [
+  { icono: 'telefono', t: 'Primero, atención remota', d: 'Muchos problemas se resuelven por teléfono o con acceso remoto, sin esperar una visita.' },
+  { icono: 'herramienta', t: 'Si hace falta, visita técnica', d: 'Coordinamos la visita en el tiempo acordado: desde 30 minutos hasta 24 horas.' },
+  { icono: 'documento', t: 'Informe de cada atención', d: 'El técnico deja un informe y cada mes recibes un reporte del servicio.' },
+  { icono: 'usuarios', t: 'Un administrador de cuenta', d: 'Una persona que conoce tu contrato y atiende tus consultas.' },
+] as const;
+---
+
+<Base title="Cómo trabajamos | CLASTEC" description="Conoce paso a paso cómo trabajamos, nuestros niveles de servicio (SLA), el soporte técnico y la cobertura en 17 departamentos del Perú.">
+  <Cabecera
+    titulo="Cómo trabajamos"
+    bajada="Un proceso sencillo, tiempos de atención por contrato y una persona que te acompaña siempre."
+    migas={[{ texto: 'Cómo trabajamos' }]}
+  />
+
+  <section class="contenedor py-14" aria-labelledby="pasos">
+    <h2 id="pasos" class="text-3xl font-bold text-marca-900">Paso a paso</h2>
+    <div class="mt-8"><Pasos pasos={pasos} /></div>
+  </section>
+
+  <section class="bg-slate-100" aria-labelledby="sla">
+    <div class="contenedor py-14">
+      <h2 id="sla" class="text-3xl font-bold text-marca-900">Tiempos de atención garantizados</h2>
+      <p class="mt-3 max-w-3xl text-xl text-slate-800">
+        En cada contrato fijamos por escrito los <strong>acuerdos de nivel de servicio (SLA)</strong>: tres tiempos que nos comprometemos a cumplir.
+      </p>
+      <div class="mt-8"><Pasos pasos={sla} etiqueta="Compromiso" /></div>
+    </div>
+  </section>
+
+  <section class="contenedor py-14" aria-labelledby="soporte">
+    <h2 id="soporte" class="text-3xl font-bold text-marca-900">Cuando algo falla</h2>
+    <ul class="mt-8 grid gap-6 md:grid-cols-2">
+      {soporte.map((s) => (
+        <li class="flex gap-5 rounded-2xl border-2 border-slate-200 p-6">
+          <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-marca-900 text-oro-400"><Icono nombre={s.icono} class="h-7 w-7" /></span>
+          <div><h3 class="text-2xl font-bold text-marca-900">{s.t}</h3><p class="mt-1 text-lg text-slate-800">{s.d}</p></div>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="bg-marca-900 text-white" aria-labelledby="cobertura">
+    <div class="contenedor grid items-center gap-8 py-14 md:grid-cols-2">
+      <div>
+        <h2 id="cobertura" class="text-3xl font-bold">Cobertura nacional</h2>
+        <p class="mt-3 text-xl text-slate-100">
+          Atendemos sedes en Lima y regiones bajo un mismo contrato, con personal propio en {site.cifras.departamentosConPersonal} departamentos.
+        </p>
+      </div>
+      <dl class="grid grid-cols-2 gap-4 text-center">
+        <div class="flex flex-col-reverse rounded-2xl bg-white/10 p-6"><dt class="text-lg">departamentos atendidos</dt><dd class="font-titulo text-6xl font-bold text-oro-400">{site.cifras.departamentos}</dd></div>
+        <div class="flex flex-col-reverse rounded-2xl bg-white/10 p-6"><dt class="text-lg">con personal propio</dt><dd class="font-titulo text-6xl font-bold text-oro-400">{site.cifras.departamentosConPersonal}</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <CtaBanda />
+</Base>

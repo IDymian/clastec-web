@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import Cabecera from '../components/Cabecera.astro';
+import Cotizar from '../components/Cotizar.astro';
+import Pasos from '../components/Pasos.astro';
+
+const pasos = [
+  { t: 'Completas el formulario', d: 'Solo 5 datos. Si armaste una lista en el catálogo, se envía junto.' },
+  { t: 'Lo envías', d: 'Por WhatsApp o por correo, como prefieras.' },
+  { t: 'Te contactamos', d: 'Un asesor te responde en menos de 24 horas hábiles con una propuesta.' },
+];
+---
+
+<Base title="Solicitar cotización | CLASTEC" description="Pide una cotización de servicios o productos en 1 minuto. Respondemos en menos de 24 horas hábiles.">
+  <Cabecera
+    titulo="Solicitar cotización"
+    bajada="Sin compromiso. Te respondemos en menos de 24 horas hábiles."
+    migas={[{ texto: 'Solicitar cotización' }]}
+  />
+  <section class="contenedor pt-12" aria-labelledby="como-funciona">
+    <h2 id="como-funciona" class="text-3xl font-bold text-marca-900">Cómo funciona</h2>
+    <div class="mt-6"><Pasos pasos={pasos} /></div>
+  </section>
+  <Cotizar titulo="Tus datos" />
+</Base>
