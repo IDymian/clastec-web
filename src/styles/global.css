@@ -26,21 +26,26 @@
 }
 
 @layer base {
-  html { scroll-behavior: smooth; }
+  /* Pensado para personas mayores: letra base de 18 px y ampliable desde la barra superior. */
+  html { font-size: 112.5%; scroll-behavior: smooth; }
+  html.texto-grande { font-size: 125%; }
+  html.texto-muy-grande { font-size: 140%; }
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     *, *::before, *::after { animation: none !important; transition: none !important; }
   }
-  h1, h2, h3 { font-family: var(--font-titulo); letter-spacing: 0.01em; }
-  :focus-visible { outline: 3px solid var(--color-oro-500); outline-offset: 2px; }
-  [id] { scroll-margin-top: 6rem; }
+  body { line-height: 1.65; color: var(--color-slate-900); }
+  h1, h2, h3 { font-family: var(--font-titulo); letter-spacing: 0.01em; line-height: 1.2; }
+  main a:not([class*="btn"]) { text-decoration-thickness: 2px; text-underline-offset: 4px; }
+  :focus-visible { outline: 4px solid var(--color-oro-500); outline-offset: 3px; }
+  [id] { scroll-margin-top: 2rem; }
 }
 
 @utility btn {
-  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-5 py-3 text-base font-semibold transition-colors;
+  @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-xl px-6 py-3 text-lg font-bold transition-colors;
 }
 @utility btn-primario {
-  @apply btn bg-oro-500 text-marca-950 hover:bg-oro-400;
+  @apply btn bg-oro-500 text-marca-950 shadow-sm ring-2 ring-oro-500 hover:bg-oro-400;
 }
 @utility btn-secundario {
   @apply btn border-2 border-marca-800 text-marca-800 hover:bg-marca-50;
@@ -52,5 +57,8 @@
   @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
 }
 @utility eyebrow {
-  @apply text-sm font-bold uppercase tracking-wider text-oro-700;
+  @apply text-base font-bold uppercase tracking-wider text-oro-700;
+}
+@utility enlace {
+  @apply font-semibold text-marca-800 underline decoration-2 underline-offset-4 hover:text-marca-600;
 }

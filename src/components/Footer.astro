@@ -4,47 +4,61 @@ import { servicios } from '../content/servicios';
 const anio = new Date().getFullYear();
 const empresa = [
   { href: '/nosotros/', t: 'Nosotros' },
+  { href: '/clientes/', t: 'Clientes y testimonios' },
+  { href: '/como-trabajamos/', t: 'Cómo trabajamos' },
   { href: '/sector-publico/', t: 'Sector público' },
-  { href: '/catalogo/', t: 'Catálogo' },
-  { href: '/preguntas-frecuentes/', t: 'Preguntas frecuentes' },
-  { href: '/contacto/', t: 'Contacto' },
+  { href: '/trabaja-con-nosotros/', t: 'Trabaja con nosotros' },
 ];
+const ayuda = [
+  { href: '/catalogo/', t: 'Catálogo de productos' },
+  { href: '/cotizar/', t: 'Solicitar cotización' },
+  { href: '/contacto/', t: 'Contacto' },
+  { href: '/preguntas-frecuentes/', t: 'Preguntas frecuentes' },
+  { href: '/guias/comprar-o-alquilar/', t: 'Guía: ¿comprar o alquilar?' },
+  { href: '/mapa-del-sitio/', t: 'Mapa del sitio' },
+];
+const enlace = 'inline-flex min-h-11 items-center underline decoration-1 underline-offset-4 hover:text-white';
 ---
 
-<footer class="bg-marca-950 text-slate-300">
-  <div class="contenedor grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-5">
-    <div class="lg:col-span-2">
+<footer class="bg-marca-950 text-lg text-slate-200">
+  <div class="contenedor grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
+    <div>
       <p class="font-titulo text-3xl font-bold text-white">CLASTEC</p>
-      <p class="mt-2 max-w-sm text-sm">Outsourcing de impresión y servicios de TI para empresas y entidades públicas desde {site.fundacion.anio}. Partner Platinum de Xerox.</p>
-      <ul class="mt-5 space-y-2 text-sm">
-        {site.telefonos.map((t) => <li><a class="hover:text-white hover:underline" href={`tel:${t.numero}`}>{t.visible}</a></li>)}
-        <li><a class="hover:text-white hover:underline" href={`mailto:${site.correoVentas}`}>{site.correoVentas}</a></li>
+      <p class="mt-2">Impresión y servicios de TI desde {site.fundacion.anio}. Partner Platinum de Xerox.</p>
+      <ul class="mt-5">
+        {site.telefonos.map((t) => <li><a class={`${enlace} font-bold text-oro-400`} href={`tel:${t.numero}`}>{t.visible}</a></li>)}
+        <li><a class={enlace} href={`mailto:${site.correoVentas}`}>{site.correoVentas}</a></li>
         <li>{site.horario}</li>
         <li>{site.direccion ?? site.ubicacion}</li>
       </ul>
     </div>
-    <div>
-      <h2 class="font-titulo text-lg font-bold text-white">Servicios</h2>
-      <ul class="mt-3 space-y-2 text-sm">
-        {servicios.map((s) => <li><a class="hover:text-white hover:underline" href={`/servicios/${s.id}/`}>{s.titulo}</a></li>)}
+    <nav aria-label="Servicios">
+      <h2 class="font-titulo text-2xl font-bold text-white">Servicios</h2>
+      <ul class="mt-3">
+        {servicios.map((s) => <li><a class={enlace} href={`/servicios/${s.id}/`}>{s.titulo}</a></li>)}
       </ul>
-    </div>
-    <div>
-      <h2 class="font-titulo text-lg font-bold text-white">Empresa</h2>
-      <ul class="mt-3 space-y-2 text-sm">
-        {empresa.map((e) => <li><a class="hover:text-white hover:underline" href={e.href}>{e.t}</a></li>)}
+    </nav>
+    <nav aria-label="Empresa">
+      <h2 class="font-titulo text-2xl font-bold text-white">Empresa</h2>
+      <ul class="mt-3">
+        {empresa.map((e) => <li><a class={enlace} href={e.href}>{e.t}</a></li>)}
       </ul>
-    </div>
-    <div>
-      <h2 class="font-titulo text-lg font-bold text-white">Legal</h2>
-      <ul class="mt-3 space-y-2 text-sm">
-        <li><a class="hover:text-white hover:underline" href="/privacidad/">Política de privacidad</a></li>
-        <li><a class="hover:text-white hover:underline" href="/libro-de-reclamaciones/">Libro de Reclamaciones</a></li>
-        <li><a class="hover:text-white hover:underline" href={site.redes.facebook} rel="noopener noreferrer">Facebook</a></li>
+    </nav>
+    <nav aria-label="Ayuda">
+      <h2 class="font-titulo text-2xl font-bold text-white">Ayuda</h2>
+      <ul class="mt-3">
+        {ayuda.map((e) => <li><a class={enlace} href={e.href}>{e.t}</a></li>)}
       </ul>
-    </div>
+    </nav>
   </div>
-  <div class="border-t border-white/10">
-    <p class="contenedor py-5 pb-24 text-xs sm:pb-5">© {anio} {site.razonSocial} · RUC {site.ruc}</p>
+  <div class="border-t border-white/15">
+    <div class="contenedor flex flex-wrap items-center justify-between gap-4 py-6 text-base">
+      <p>© {anio} {site.razonSocial} · RUC {site.ruc}</p>
+      <ul class="flex flex-wrap gap-x-6">
+        <li><a class={enlace} href="/privacidad/">Política de privacidad</a></li>
+        <li><a class={enlace} href="/libro-de-reclamaciones/">Libro de Reclamaciones</a></li>
+        <li><a class={enlace} href={site.redes.facebook} rel="noopener noreferrer">Facebook</a></li>
+      </ul>
+    </div>
   </div>
 </footer>

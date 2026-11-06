@@ -1,0 +1,28 @@
+---
+/** Barra fija inferior en celulares: botones grandes con icono y texto, como en una app. */
+import { site } from '../config/site';
+import { barraInferior, esActivo } from '../config/navegacion';
+import Icono from './Icono.astro';
+const ruta = Astro.url.pathname;
+---
+
+<nav aria-label="Accesos rápidos" class="fixed inset-x-0 bottom-0 z-50 border-t-2 border-oro-500 bg-marca-950 text-white md:hidden">
+  <ul class="grid grid-cols-5">
+    {barraInferior.map((e) => (
+      <li>
+        <a
+          href={e.href}
+          aria-current={esActivo(ruta, e.href) ? 'page' : undefined}
+          class="flex min-h-16 flex-col items-center justify-center gap-1 px-1 text-sm font-semibold aria-[current=page]:bg-white aria-[current=page]:text-marca-950"
+        >
+          <Icono nombre={e.icono} class="h-6 w-6" />{e.texto}
+        </a>
+      </li>
+    ))}
+    <li>
+      <a href={`tel:${site.telefonos[0]?.numero}`} class="flex min-h-16 flex-col items-center justify-center gap-1 bg-oro-500 px-1 text-sm font-bold text-marca-950">
+        <Icono nombre="telefono" class="h-6 w-6" />Llamar
+      </a>
+    </li>
+  </ul>
+</nav>

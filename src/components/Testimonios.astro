@@ -13,10 +13,10 @@ const { limite = testimonios.length } = Astro.props;
         <li>
           <figure class="flex h-full flex-col rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
             <span class="font-titulo text-5xl leading-none text-oro-500" aria-hidden="true">“</span>
-            <blockquote class="mt-1 flex-1 text-slate-700">{t.texto}</blockquote>
-            <figcaption class="mt-5 border-t border-slate-200 pt-4 text-sm">
+            <blockquote class="mt-1 flex-1 text-lg text-slate-800">{t.texto}</blockquote>
+            <figcaption class="mt-5 border-t border-slate-200 pt-4 text-base">
               <span class="block font-semibold text-marca-900">{t.autor}</span>
-              <span class="text-slate-600">{t.cargo} · {t.entidad}</span>
+              <span class="text-slate-700">{t.cargo} · {t.entidad}</span>
             </figcaption>
           </figure>
         </li>
