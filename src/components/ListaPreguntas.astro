@@ -1,0 +1,17 @@
+---
+/**
+ * Preguntas con la respuesta siempre visible (sin acordeones):
+ * más fácil para personas mayores, que no tienen que descubrir que hay que hacer clic.
+ */
+interface Props { preguntas: readonly { p: string; r: string }[] }
+const { preguntas } = Astro.props;
+---
+
+<dl class="divide-y-2 divide-slate-200 rounded-2xl border-2 border-slate-200 bg-white">
+  {preguntas.map((q) => (
+    <div class="p-6">
+      <dt class="text-xl font-bold text-marca-900">{q.p}</dt>
+      <dd class="mt-2 text-lg text-slate-800">{q.r}</dd>
+    </div>
+  ))}
+</dl>

@@ -5,6 +5,7 @@ import PrototipoBanner from '../components/PrototipoBanner.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import WhatsAppFlotante from '../components/WhatsAppFlotante.astro';
+import BarraInferior from '../components/BarraInferior.astro';
 
 interface Props {
   title: string;
@@ -36,6 +37,8 @@ const datosEstructurados = [organizacion, ...jsonLd];
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Tamaño de letra elegido por el usuario (archivo externo, compatible con la CSP). -->
+    <script is:inline src="/js/preferencias.js"></script>
     <title>{title}</title>
     <meta name="description" content={description} />
     <!-- Prototipo: no indexar para no competir con el sitio oficial. -->
@@ -43,7 +46,7 @@ const datosEstructurados = [organizacion, ...jsonLd];
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <meta name="theme-color" content="#0a2540" />
+    <meta name="theme-color" content="#0c244f" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="es_PE" />
     <meta property="og:title" content={title} />
@@ -51,8 +54,8 @@ const datosEstructurados = [organizacion, ...jsonLd];
     <meta property="og:url" content={canonical} />
     {datosEstructurados.map((d) => <script type="application/ld+json" set:html={JSON.stringify(d).replaceAll('<', String.raw`\u003c`)} />)}
   </head>
-  <body class="bg-white font-sans text-slate-800 antialiased">
-    <a href="#contenido" class="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50 focus:rounded focus:bg-white focus:px-4 focus:py-2">
+  <body class="bg-white pb-16 font-sans text-slate-900 antialiased md:pb-0">
+    <a href="#contenido" class="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50 focus:rounded focus:bg-white focus:px-4 focus:py-3 focus:text-lg focus:font-bold">
       Saltar al contenido
     </a>
     <PrototipoBanner />
@@ -62,5 +65,6 @@ const datosEstructurados = [organizacion, ...jsonLd];
     </main>
     <Footer />
     <WhatsAppFlotante />
+    <BarraInferior />
   </body>
 </html>

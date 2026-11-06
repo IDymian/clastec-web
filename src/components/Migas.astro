@@ -19,7 +19,7 @@ const ld = {
     {todos.map((m, i) => (
       <li class="flex items-center gap-1">
         {i > 0 && <span aria-hidden="true" class="opacity-60">/</span>}
-        {m.href && i < todos.length - 1 ? <a class="underline-offset-4 hover:underline" href={m.href}>{m.texto}</a> : <span aria-current="page" class="font-semibold">{m.texto}</span>}
+        {m.href && i < todos.length - 1 ? <a class="inline-flex min-h-11 items-center underline underline-offset-4" href={m.href}>{m.texto}</a> : <span aria-current="page" class="font-semibold">{m.texto}</span>}
       </li>
     ))}
   </ol>

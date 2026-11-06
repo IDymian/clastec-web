@@ -1,6 +1,7 @@
 ---
-/** Cabecera de páginas internas: migas, título (único h1), bajada y acciones. */
+/** Cabecera de páginas internas: botón "Volver", migas, título (único h1), bajada y acciones. */
 import Migas from './Migas.astro';
+import Icono from './Icono.astro';
 
 interface Props {
   titulo: string;
@@ -9,14 +10,21 @@ interface Props {
   migas: readonly { texto: string; href?: string }[];
 }
 const { titulo, bajada, eyebrow, migas } = Astro.props;
+const anteriores = migas.filter((m) => m.href);
+const padre = anteriores.at(-1) ?? { texto: 'Inicio', href: '/' };
 ---
 
 <section class="bg-marca-900 text-white">
-  <div class="contenedor py-12 sm:py-16">
-    <div class="text-slate-200"><Migas items={migas} /></div>
-    {eyebrow && <p class="mt-6 text-sm font-bold uppercase tracking-wider text-oro-400">{eyebrow}</p>}
-    <h1 class="mt-2 max-w-3xl text-4xl font-bold leading-tight sm:text-5xl">{titulo}</h1>
-    {bajada && <p class="mt-4 max-w-2xl text-lg text-slate-200">{bajada}</p>}
+  <div class="contenedor py-10 sm:py-14">
+    <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-slate-200">
+      <a href={padre.href} class="inline-flex min-h-12 items-center gap-2 rounded-xl border-2 border-white/40 px-4 font-semibold text-white hover:bg-white/10">
+        <Icono nombre="volver" class="h-5 w-5" />Volver a {padre.texto}
+      </a>
+      <Migas items={migas} />
+    </div>
+    {eyebrow && <p class="mt-8 text-base font-bold uppercase tracking-wider text-oro-400">{eyebrow}</p>}
+    <h1 class:list={['max-w-3xl text-4xl font-bold sm:text-5xl', eyebrow ? 'mt-2' : 'mt-8']}>{titulo}</h1>
+    {bajada && <p class="mt-4 max-w-3xl text-xl text-slate-100">{bajada}</p>}
     <div class="mt-8 flex flex-wrap gap-3"><slot /></div>
   </div>
 </section>
