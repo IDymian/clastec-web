@@ -35,7 +35,7 @@ const etapas = [
   </Cabecera>
 
   <section class="contenedor py-16" aria-labelledby="entidades-titulo">
-    <h2 id="entidades-titulo" class="text-3xl font-bold text-marca-900">Entidades que han confiado en nosotros</h2>
+    <h2 id="entidades-titulo" class="text-3xl font-bold text-marca-900 sm:text-4xl">Entidades que han confiado en nosotros</h2>
     <ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {entidadesPublicas.map((e) => (
         <li class="flex min-h-24 items-center gap-3 rounded-xl border border-slate-200 p-5 font-semibold text-marca-900">
@@ -47,12 +47,12 @@ const etapas = [
 
   <section class="bg-slate-50" aria-labelledby="ventajas-titulo">
     <div class="contenedor py-16">
-      <h2 id="ventajas-titulo" class="text-3xl font-bold text-marca-900">Por qué somos un proveedor confiable</h2>
+      <h2 id="ventajas-titulo" class="text-3xl font-bold text-marca-900 sm:text-4xl">Por qué somos un proveedor confiable</h2>
       <ul class="mt-8 grid gap-6 md:grid-cols-2">
         {ventajas.map((v) => (
           <li class="flex gap-4 rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
             <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-marca-900 text-oro-400"><Icono nombre={v.icono} /></span>
-            <div><h3 class="text-xl font-bold text-marca-900">{v.t}</h3><p class="mt-1 text-lg text-slate-800">{v.d}</p></div>
+            <div><h3 class="text-xl font-bold text-marca-900">{v.t}</h3><p class="mt-1 text-slate-600">{v.d}</p></div>
           </li>
         ))}
       </ul>
@@ -60,7 +60,7 @@ const etapas = [
   </section>
 
   <section class="contenedor py-16" aria-labelledby="etapas-titulo">
-    <h2 id="etapas-titulo" class="text-3xl font-bold text-marca-900">Te acompañamos en cada etapa</h2>
+    <h2 id="etapas-titulo" class="text-3xl font-bold text-marca-900 sm:text-4xl">Te acompañamos en cada etapa</h2>
     <div class="mt-8"><Pasos pasos={etapas} etiqueta="Etapa" /></div>
   </section>
 

@@ -32,35 +32,35 @@ const soporte = [
     migas={[{ texto: 'Cómo trabajamos' }]}
   />
 
-  <section class="contenedor py-14" aria-labelledby="pasos">
-    <h2 id="pasos" class="text-3xl font-bold text-marca-900">Paso a paso</h2>
+  <section class="contenedor py-16 sm:py-20" aria-labelledby="pasos">
+    <h2 id="pasos" class="text-3xl font-bold text-marca-900 sm:text-4xl">Paso a paso</h2>
     <div class="mt-8"><Pasos pasos={pasos} /></div>
   </section>
 
-  <section class="bg-slate-100" aria-labelledby="sla">
-    <div class="contenedor py-14">
-      <h2 id="sla" class="text-3xl font-bold text-marca-900">Tiempos de atención garantizados</h2>
-      <p class="mt-3 max-w-3xl text-xl text-slate-800">
+  <section class="bg-slate-50" aria-labelledby="sla">
+    <div class="contenedor py-16 sm:py-20">
+      <h2 id="sla" class="text-3xl font-bold text-marca-900 sm:text-4xl">Tiempos de atención garantizados</h2>
+      <p class="mt-3 max-w-3xl text-lg text-slate-600">
         En cada contrato fijamos por escrito los <strong>acuerdos de nivel de servicio (SLA)</strong>: tres tiempos que nos comprometemos a cumplir.
       </p>
       <div class="mt-8"><Pasos pasos={sla} etiqueta="Compromiso" /></div>
     </div>
   </section>
 
-  <section class="contenedor py-14" aria-labelledby="soporte">
-    <h2 id="soporte" class="text-3xl font-bold text-marca-900">Cuando algo falla</h2>
+  <section class="contenedor py-16 sm:py-20" aria-labelledby="soporte">
+    <h2 id="soporte" class="text-3xl font-bold text-marca-900 sm:text-4xl">Cuando algo falla</h2>
     <ul class="mt-8 grid gap-6 md:grid-cols-2">
       {soporte.map((s) => (
-        <li class="flex gap-5 rounded-2xl border-2 border-slate-200 p-6">
+        <li class="flex gap-5 rounded-3xl border border-slate-200 p-6">
           <span class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-marca-900 text-oro-400"><Icono nombre={s.icono} class="h-7 w-7" /></span>
-          <div><h3 class="text-2xl font-bold text-marca-900">{s.t}</h3><p class="mt-1 text-lg text-slate-800">{s.d}</p></div>
+          <div><h3 class="text-2xl font-bold text-marca-900">{s.t}</h3><p class="mt-1 text-slate-600">{s.d}</p></div>
         </li>
       ))}
     </ul>
   </section>
 
   <section class="bg-marca-900 text-white" aria-labelledby="cobertura">
-    <div class="contenedor grid items-center gap-8 py-14 md:grid-cols-2">
+    <div class="contenedor grid items-center gap-8 py-16 sm:py-20 md:grid-cols-2">
       <div>
         <h2 id="cobertura" class="text-3xl font-bold">Cobertura nacional</h2>
         <p class="mt-3 text-xl text-slate-100">
@@ -68,8 +68,8 @@ const soporte = [
         </p>
       </div>
       <dl class="grid grid-cols-2 gap-4 text-center">
-        <div class="flex flex-col-reverse rounded-2xl bg-white/10 p-6"><dt class="text-lg">departamentos atendidos</dt><dd class="font-titulo text-6xl font-bold text-oro-400">{site.cifras.departamentos}</dd></div>
-        <div class="flex flex-col-reverse rounded-2xl bg-white/10 p-6"><dt class="text-lg">con personal propio</dt><dd class="font-titulo text-6xl font-bold text-oro-400">{site.cifras.departamentosConPersonal}</dd></div>
+        <div class="flex flex-col-reverse rounded-3xl bg-white/10 p-6"><dt class="text-lg">departamentos atendidos</dt><dd class="font-titulo text-6xl font-bold text-oro-400">{site.cifras.departamentos}</dd></div>
+        <div class="flex flex-col-reverse rounded-3xl bg-white/10 p-6"><dt class="text-lg">con personal propio</dt><dd class="font-titulo text-6xl font-bold text-oro-400">{site.cifras.departamentosConPersonal}</dd></div>
       </dl>
     </div>
   </section>
