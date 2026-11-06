@@ -6,87 +6,73 @@ import Icono from './Icono.astro';
 const ruta = Astro.url.pathname;
 ---
 
-<!-- Barra de ayuda: teléfono visible y control de tamaño de letra -->
-<div class="bg-marca-950 text-white">
-  <div class="contenedor flex flex-wrap items-center justify-between gap-x-6 gap-y-2 py-2">
-    <p class="flex flex-wrap items-center gap-x-2">
-      <span>¿Necesitas ayuda? Llámanos:</span>
-      <a class="inline-flex min-h-11 items-center gap-2 font-bold text-oro-400 underline underline-offset-4" href={`tel:${site.telefonos[0]?.numero}`}>
-        <Icono nombre="telefono" class="h-5 w-5" />{site.telefonos[0]?.visible}
-      </a>
+<!-- Barra de contacto: datos clave siempre a la vista en escritorio -->
+<div class="hidden bg-marca-950 text-sm text-slate-200 md:block">
+  <div class="contenedor flex items-center justify-between gap-6 py-2">
+    <ul class="flex items-center gap-6">
+      <li>
+        <a class="inline-flex items-center gap-2 hover:text-white" href={`tel:${site.telefonos[0]?.numero}`}>
+          <Icono nombre="telefono" class="h-4 w-4 text-oro-400" />{site.telefonos[0]?.visible}
+        </a>
+      </li>
+      <li>
+        <a class="inline-flex items-center gap-2 hover:text-white" href={`mailto:${site.correoVentas}`}>
+          <Icono nombre="correo" class="h-4 w-4 text-oro-400" />{site.correoVentas}
+        </a>
+      </li>
+      <li class="hidden items-center gap-2 lg:inline-flex"><Icono nombre="reloj" class="h-4 w-4 text-oro-400" />{site.horario}</li>
+    </ul>
+    <p class="inline-flex items-center gap-2 font-semibold text-oro-400">
+      <Icono nombre="escudo" class="h-4 w-4" />Partner Platinum de Xerox
     </p>
-    <div class="flex items-center gap-2" role="group" aria-label="Tamaño de letra">
-      <span id="tamano-etiqueta">Tamaño de letra:</span>
-      <button type="button" data-tamano="" aria-describedby="tamano-etiqueta" class="min-h-11 min-w-11 rounded-lg border-2 border-white/40 px-2 font-bold aria-pressed:border-oro-400 aria-pressed:bg-white aria-pressed:text-marca-950" aria-label="Letra normal">A</button>
-      <button type="button" data-tamano="texto-grande" aria-describedby="tamano-etiqueta" class="min-h-11 min-w-11 rounded-lg border-2 border-white/40 px-2 text-lg font-bold aria-pressed:border-oro-400 aria-pressed:bg-white aria-pressed:text-marca-950" aria-label="Letra grande">A+</button>
-      <button type="button" data-tamano="texto-muy-grande" aria-describedby="tamano-etiqueta" class="min-h-11 min-w-11 rounded-lg border-2 border-white/40 px-2 text-xl font-bold aria-pressed:border-oro-400 aria-pressed:bg-white aria-pressed:text-marca-950" aria-label="Letra muy grande">A++</button>
-    </div>
   </div>
 </div>
 
-<header class="bg-marca-900 text-white">
-  <div class="contenedor flex flex-wrap items-center justify-between gap-4 py-4">
-    <a href="/" class="flex items-center gap-3" aria-label="CLASTEC, ir a la página de inicio">
-      <span class="grid h-11 w-11 grid-cols-2 gap-0.5" aria-hidden="true">
-        <span class="rounded-sm bg-oro-500"></span><span class="rounded-sm bg-oro-400"></span>
-        <span class="rounded-sm bg-oro-400"></span><span class="rounded-sm bg-oro-500"></span>
+<header class="sticky top-0 z-40 border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur">
+  <div class="contenedor flex flex-wrap items-center justify-between gap-x-4 gap-y-2 py-3 xl:flex-nowrap">
+    <a href="/" class="flex shrink-0 items-center gap-3" aria-label="CLASTEC, ir a la página de inicio">
+      <span class="grid h-10 w-10 grid-cols-2 gap-0.5" aria-hidden="true">
+        <span class="rounded-sm bg-marca-900"></span><span class="rounded-sm bg-oro-500"></span>
+        <span class="rounded-sm bg-oro-500"></span><span class="rounded-sm bg-marca-900"></span>
       </span>
       <span>
-        <span class="block font-titulo text-3xl font-bold leading-none tracking-wide">CLASTEC</span>
-        <span class="block text-sm text-slate-300">Impresión y servicios de TI</span>
+        <span class="block font-titulo text-2xl font-bold leading-none tracking-wide text-marca-900">CLASTEC</span>
+        <span class="block text-xs font-medium uppercase tracking-wider text-slate-600">Impresión y servicios de TI</span>
       </span>
     </a>
-    <div class="flex flex-wrap items-center gap-3">
-      <a href="/cotizar/#lista" class="inline-flex min-h-12 items-center gap-2 rounded-xl border-2 border-white/40 px-4 font-semibold hover:bg-white/10">
-        <Icono nombre="carrito" />
-        <span>Mi cotización</span>
-        <span data-contador-lista class="rounded-full bg-oro-500 px-2 text-base font-bold text-marca-950">0</span>
+
+    <!-- Menú principal: todas las secciones a la vista, sin desplegables -->
+    <nav aria-label="Menú principal" class="order-last w-full xl:order-none xl:w-auto">
+      <ul class="-mx-4 flex gap-1 overflow-x-auto px-4 pb-1 sm:-mx-6 sm:px-6 xl:mx-0 xl:overflow-visible xl:px-0 xl:pb-0">
+        {menuPrincipal.map((e) => {
+          const activo = esActivo(ruta, e.href);
+          return (
+            <li class="shrink-0">
+              <a
+                href={e.href}
+                aria-current={activo ? 'page' : undefined}
+                class="inline-flex min-h-11 items-center rounded-full px-4 text-[0.95rem] xl:px-3 font-semibold text-slate-700 hover:bg-marca-50 hover:text-marca-900 aria-[current=page]:bg-marca-900 aria-[current=page]:text-white"
+              >
+                {e.texto}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+
+    <div class="flex shrink-0 items-center gap-2">
+      <a href="/cotizar/#lista" class="relative inline-flex h-11 w-11 items-center justify-center rounded-full text-marca-900 hover:bg-marca-50" aria-label="Mi lista de cotización">
+        <Icono nombre="carrito" class="h-6 w-6" />
+        <span data-contador-lista class="absolute -right-0.5 -top-0.5 min-w-5 rounded-full bg-oro-500 px-1 text-center text-xs font-bold leading-5 text-marca-950">0</span>
       </a>
-      <a href="/cotizar/" class="btn-primario hidden sm:inline-flex">Solicitar cotización</a>
+      <a href="/cotizar/" class="btn-primario hidden sm:inline-flex">Cotizar ahora</a>
     </div>
   </div>
-
-  <!-- Menú principal: todas las secciones a la vista, sin desplegables -->
-  <nav aria-label="Menú principal" class="border-t border-white/15 bg-marca-800">
-    <ul class="contenedor grid grid-cols-2 gap-1 py-2 sm:grid-cols-4 lg:flex lg:justify-between lg:gap-0">
-      {menuPrincipal.map((e) => {
-        const activo = esActivo(ruta, e.href);
-        return (
-          <li>
-            <a
-              href={e.href}
-              aria-current={activo ? 'page' : undefined}
-              class="flex min-h-12 items-center gap-2 rounded-lg px-3 py-2 font-semibold hover:bg-white/10 aria-[current=page]:bg-white aria-[current=page]:text-marca-950"
-            >
-              <Icono nombre={e.icono} class="h-5 w-5 shrink-0" />
-              {e.texto}
-            </a>
-          </li>
-        );
-      })}
-    </ul>
-  </nav>
 </header>
 
 <script>
   import { contarLista, LISTA_EVENTO } from '../lib/lista.ts';
-
-  // Tamaño de letra (se recuerda en este navegador).
-  const CLAVE = 'clastec:tamano-letra';
-  const clases = ['texto-grande', 'texto-muy-grande'];
-  const botones = document.querySelectorAll<HTMLButtonElement>('[data-tamano]');
-  const marcar = (actual: string) => botones.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset['tamano'] === actual)));
-  const actual = clases.find((c) => document.documentElement.classList.contains(c)) ?? '';
-  marcar(actual);
-  botones.forEach((b) =>
-    b.addEventListener('click', () => {
-      const elegido = b.dataset['tamano'] ?? '';
-      document.documentElement.classList.remove(...clases);
-      if (elegido) document.documentElement.classList.add(elegido);
-      try { localStorage.setItem(CLAVE, elegido); } catch { /* sin almacenamiento */ }
-      marcar(elegido);
-    }),
-  );
 
   // Contador de la lista de cotización.
   const contadores = document.querySelectorAll<HTMLElement>('[data-contador-lista]');

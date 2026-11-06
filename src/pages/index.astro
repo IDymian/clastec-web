@@ -1,88 +1,291 @@
 ---
 /**
- * Inicio: página corta que funciona como "recepción". Responde qué hace CLASTEC y lleva a cada
- * sección con tarjetas grandes. El detalle vive en páginas propias (no todo en una sola vista).
+ * Inicio: landing comercial. Responde en segundos qué hace CLASTEC, por qué confiar y cómo cotizar.
+ * El detalle vive en páginas propias; aquí cada bloque lleva a su sección.
  */
 import Base from '../layouts/Base.astro';
 import Icono from '../components/Icono.astro';
-import Mosaico from '../components/Mosaico.astro';
-import { alianzas, site } from '../config/site';
+import Testimonios from '../components/Testimonios.astro';
+import { alianzas, certificaciones, entidadesPublicas, preguntas, site } from '../config/site';
 import { servicios } from '../content/servicios';
+import { CATEGORIAS, RUTA_IMAGENES, conteoPorCategoria, destacados } from '../lib/catalogo';
+import type { NombreIcono } from '../lib/iconos';
 
 const fmt = new Intl.NumberFormat('es-PE');
 const cifras = [
-  { valor: `${site.aniosExperiencia}`, texto: 'años de experiencia' },
-  { valor: `+${site.cifras.clientes}`, texto: 'clientes' },
+  { valor: `${site.aniosExperiencia}`, texto: 'años en el mercado peruano' },
+  { valor: `+${site.cifras.clientes}`, texto: 'empresas y entidades atendidas' },
   { valor: `+${fmt.format(site.cifras.equiposAdministrados)}`, texto: 'equipos administrados' },
-  { valor: `${site.cifras.departamentos}`, texto: 'departamentos del Perú' },
+  { valor: `${site.cifras.departamentos}`, texto: 'departamentos con cobertura' },
 ];
-const conoceMas = [
-  { href: '/catalogo/', icono: 'buscar', t: 'Catálogo de productos', d: 'Impresoras, laptops, escáneres, repuestos y suministros.', a: 'Ver el catálogo' },
-  { href: '/sector-publico/', icono: 'escudo', t: 'Sector público', d: 'Experiencia con Cortes de Justicia, ministerios y licitaciones.', a: 'Ver experiencia' },
-  { href: '/clientes/', icono: 'usuarios', t: 'Clientes y testimonios', d: 'Lo que dicen las entidades y empresas que atendemos.', a: 'Leer testimonios' },
-  { href: '/como-trabajamos/', icono: 'reloj', t: 'Cómo trabajamos', d: 'Los pasos, los tiempos de atención y la cobertura nacional.', a: 'Ver cómo trabajamos' },
-  { href: '/guias/comprar-o-alquilar/', icono: 'grafico', t: '¿Comprar o alquilar?', d: 'Una guía sencilla para decidir qué te conviene.', a: 'Leer la guía' },
-  { href: '/preguntas-frecuentes/', icono: 'pregunta', t: 'Preguntas frecuentes', d: 'Pagos, entregas, alquiler y soporte técnico.', a: 'Ver preguntas' },
-] as const;
+
+const [principal, ...otros] = servicios;
+const enHero = destacados(3);
+const vitrina = destacados(8);
+const totalProductos = conteoPorCategoria().reduce((a, c) => a + c.cantidad, 0);
+
+const ventajas: { icono: NombreIcono; t: string; d: string }[] = [
+  { icono: 'escudo', t: 'Respaldo de fábrica', d: 'Partner Platinum de Xerox y centro autorizado de servicio: repuestos originales y técnicos certificados.' },
+  { icono: 'mapa', t: 'Cobertura nacional', d: `Personal propio en ${site.cifras.departamentosConPersonal} departamentos y atención en ${site.cifras.departamentos}. No dependemos de terceros.` },
+  { icono: 'reloj', t: 'Tiempos de atención pactados', d: 'Niveles de servicio por contrato, mantenimiento preventivo y reemplazo de equipos si hace falta.' },
+  { icono: 'grafico', t: 'Costo por página claro', d: 'Pagas lo que imprimes. Equipos, tóner y soporte incluidos en una sola tarifa mensual.' },
+];
+
+const pasos = [
+  { t: 'Nos cuentas tu necesidad', d: 'Por formulario, WhatsApp o teléfono. Te respondemos en menos de 24 horas hábiles.' },
+  { t: 'Evaluamos sin costo', d: 'Revisamos tu volumen de impresión y equipos actuales para proponer lo justo.' },
+  { t: 'Instalamos y capacitamos', d: 'Llevamos los equipos, los configuramos en tu red y enseñamos a tu equipo.' },
+  { t: 'Te acompañamos', d: 'Soporte, tóner y mantenimiento continuos, con reportes de uso mensuales.' },
+];
+
+const imagen = (archivo?: string) => (archivo ? `${RUTA_IMAGENES}${archivo}` : undefined);
 ---
 
 <Base
   title="CLASTEC | Outsourcing de impresión y servicios de TI en Perú"
   description={`Outsourcing de impresión, alquiler de equipos, mantenimiento, digitalización y mesa de ayuda TI. Partner Platinum de Xerox con ${site.aniosExperiencia} años en el Perú.`}
 >
-  <section class="bg-marca-900 text-white">
-    <div class="contenedor grid items-center gap-10 py-14 lg:grid-cols-12 lg:py-20">
-      <div class="lg:col-span-8">
-        <p class="text-lg font-bold uppercase tracking-wider text-oro-400">Partner Platinum de Xerox · {site.aniosExperiencia} años en el Perú</p>
-        <h1 class="mt-3 text-4xl font-bold sm:text-6xl">Impresoras y equipos de TI que funcionan, sin preocupaciones</h1>
-        <p class="mt-5 max-w-2xl text-xl text-slate-100">
-          Ponemos los equipos, el tóner y el soporte técnico para empresas y entidades públicas en {site.cifras.departamentos} departamentos del país.
+  <!-- HERO -->
+  <section class="relative overflow-hidden bg-marca-950 text-white">
+    <div class="hero-fondo absolute inset-0" aria-hidden="true"></div>
+    <div class="contenedor relative grid items-center gap-12 py-16 lg:grid-cols-2 lg:py-24">
+      <div>
+        <p class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-sm font-semibold text-oro-400 ring-1 ring-white/15">
+          <Icono nombre="escudo" class="h-4 w-4" />Partner Platinum de Xerox · desde {site.fundacion.anio}
         </p>
-        <div class="mt-8 flex flex-wrap gap-4">
-          <a href="/cotizar/" class="btn-primario">Solicitar cotización</a>
-          <a href={`tel:${site.telefonos[0]?.numero}`} class="btn-claro"><Icono nombre="telefono" class="h-6 w-6" />Llamar al {site.telefonos[0]?.visible}</a>
+        <h1 class="mt-6 text-4xl font-bold leading-[1.05] sm:text-5xl lg:text-6xl">
+          Imprime más, <span class="text-oro-400">gasta menos</span> y olvídate del soporte.
+        </h1>
+        <p class="mt-6 max-w-xl text-lg text-slate-300">
+          Outsourcing de impresión, alquiler de equipos y soporte TI para empresas y entidades públicas.
+          Nosotros ponemos los equipos, el tóner y los técnicos; tú pagas solo lo que usas.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="/cotizar/" class="btn-primario">Solicitar cotización gratis<Icono nombre="flecha" class="h-5 w-5" /></a>
+          <a href={`https://wa.me/${site.whatsapp}`} rel="noopener noreferrer" target="_blank" class="btn-claro"><Icono nombre="whatsapp" class="h-5 w-5" />Escríbenos por WhatsApp</a>
+        </div>
+        <ul class="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-300">
+          {['Respuesta en menos de 24 h', 'Evaluación sin costo', 'Técnicos certificados'].map((t) => (
+            <li class="inline-flex items-center gap-2"><Icono nombre="check" class="h-5 w-5 text-oro-400" />{t}</li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="relative mx-auto hidden w-full max-w-lg lg:block" aria-hidden="true">
+        <div class="grid grid-cols-2 gap-4">
+          {enHero.map((p, i) => (
+            <div class:list={['rounded-3xl bg-white p-4 shadow-2xl shadow-black/40', i === 0 && 'col-span-2 mx-auto w-3/4']}>
+              <img src={imagen(p.img)} alt="" width="288" height="288" class="mx-auto aspect-square w-full object-contain" loading={i === 0 ? 'eager' : 'lazy'} />
+              <p class="mt-2 truncate text-center text-xs font-semibold text-slate-600">{p.m} · {p.n}</p>
+            </div>
+          ))}
+        </div>
+        <div class="absolute -left-4 top-6 hidden rounded-2xl bg-oro-500 px-5 py-3 text-marca-950 shadow-xl sm:block">
+          <p class="font-titulo text-3xl font-bold leading-none">+{fmt.format(site.cifras.equiposAdministrados)}</p>
+          <p class="text-xs font-semibold">equipos administrados</p>
+        </div>
+        <div class="absolute -right-3 bottom-24 hidden rounded-2xl bg-white px-5 py-3 text-marca-900 shadow-xl sm:block">
+          <p class="font-titulo text-3xl font-bold leading-none">{site.cifras.contratosActivos}</p>
+          <p class="text-xs font-semibold text-slate-600">contratos activos</p>
         </div>
       </div>
-      <dl class="grid grid-cols-2 gap-4 lg:col-span-4">
-        {cifras.map((c) => (
-          <div class="flex flex-col-reverse rounded-2xl bg-white/10 p-5 text-center ring-1 ring-white/20">
-            <dt class="text-base text-slate-100">{c.texto}</dt>
-            <dd class="font-titulo text-5xl font-bold text-oro-400">{c.valor}</dd>
+    </div>
+  </section>
+
+  <!-- CONFIANZA -->
+  <section class="border-b border-slate-200 bg-white" aria-labelledby="confian">
+    <div class="contenedor py-8">
+      <h2 id="confian" class="text-center text-sm font-semibold uppercase tracking-widest text-slate-500">Confían en nosotros entidades como</h2>
+      <ul class="mt-5 flex flex-wrap items-center justify-center gap-x-10 gap-y-3">
+        {entidadesPublicas.map((e) => <li class="font-titulo text-xl font-bold text-slate-400">{e}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <!-- SERVICIOS -->
+  <section class="bg-slate-50" aria-labelledby="servicios">
+    <div class="contenedor py-20">
+      <div class="max-w-2xl">
+        <p class="eyebrow">Soluciones</p>
+        <h2 id="servicios" class="mt-2 text-3xl font-bold text-marca-900 sm:text-5xl">Todo lo que tu oficina necesita, con un solo proveedor</h2>
+        <p class="mt-4 text-lg text-slate-600">Desde una impresora hasta la mesa de ayuda de toda tu organización.</p>
+      </div>
+
+      <div class="mt-12 grid gap-6 lg:grid-cols-3">
+        {principal && (
+          <a href={`/servicios/${principal.id}/`} class="group relative flex flex-col overflow-hidden rounded-3xl bg-marca-900 p-8 text-white lg:row-span-2">
+            <span class="w-fit rounded-full bg-oro-500 px-3 py-1 text-xs font-bold uppercase tracking-wider text-marca-950">Más solicitado</span>
+            <span class="mt-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 text-oro-400"><Icono nombre={principal.icono} class="h-7 w-7" /></span>
+            <h3 class="mt-5 text-3xl font-bold">{principal.titulo}</h3>
+            <p class="mt-3 text-slate-300">{principal.resumen}</p>
+            <ul class="mt-6 space-y-3">
+              {principal.incluye.slice(0, 4).map((x) => (
+                <li class="flex gap-3"><Icono nombre="check" class="mt-0.5 h-5 w-5 shrink-0 text-oro-400" /><span>{x.t}</span></li>
+              ))}
+            </ul>
+            <span class="mt-auto inline-flex items-center gap-2 pt-8 font-bold text-oro-400 group-hover:gap-3">Conocer el servicio<Icono nombre="flecha" class="h-5 w-5" /></span>
+          </a>
+        )}
+        {otros.map((s) => (
+          <a href={`/servicios/${s.id}/`} class="group flex flex-col rounded-3xl border border-slate-200 bg-white p-7 transition hover:-translate-y-1 hover:border-marca-600 hover:shadow-xl">
+            <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-marca-50 text-marca-800 group-hover:bg-marca-900 group-hover:text-oro-400"><Icono nombre={s.icono} class="h-6 w-6" /></span>
+            <h3 class="mt-5 text-2xl font-bold text-marca-900">{s.titulo}</h3>
+            <p class="mt-2 text-slate-600">{s.resumen}</p>
+            <span class="mt-auto inline-flex items-center gap-2 pt-6 font-bold text-marca-800 group-hover:gap-3">Ver detalle<Icono nombre="flecha" class="h-5 w-5" /></span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CIFRAS -->
+  <section class="bg-white" aria-label="CLASTEC en cifras">
+    <dl class="contenedor grid grid-cols-2 gap-px overflow-hidden py-16 lg:grid-cols-4">
+      {cifras.map((c) => (
+        <div class="flex flex-col-reverse items-center px-4 py-4 text-center">
+          <dt class="mt-1 text-slate-600">{c.texto}</dt>
+          <dd class="font-titulo text-5xl font-bold text-marca-900 sm:text-6xl">{c.valor}</dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+
+  <!-- POR QUÉ CLASTEC -->
+  <section class="bg-marca-950 text-white" aria-labelledby="porque">
+    <div class="contenedor grid gap-12 py-20 lg:grid-cols-5">
+      <div class="lg:col-span-2">
+        <p class="text-base font-bold uppercase tracking-wider text-oro-400">Por qué CLASTEC</p>
+        <h2 id="porque" class="mt-2 text-3xl font-bold sm:text-5xl">No vendemos impresoras: garantizamos que funcionen</h2>
+        <p class="mt-4 text-lg text-slate-300">
+          {site.aniosOutsourcing} años administrando parques de impresión de entidades donde detenerse no es una opción.
+        </p>
+        <ul class="mt-8 flex flex-wrap gap-2">
+          {alianzas.map((a) => (
+            <li class="rounded-full bg-white/10 px-4 py-2 text-sm ring-1 ring-white/15"><strong class="text-white">{a.nombre}</strong> <span class="text-slate-300">{a.nivel}</span></li>
+          ))}
+        </ul>
+      </div>
+      <ul class="grid gap-6 sm:grid-cols-2 lg:col-span-3">
+        {ventajas.map((v) => (
+          <li class="rounded-3xl bg-white/5 p-7 ring-1 ring-white/10">
+            <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-oro-500 text-marca-950"><Icono nombre={v.icono} class="h-6 w-6" /></span>
+            <h3 class="mt-5 text-xl font-bold">{v.t}</h3>
+            <p class="mt-2 text-slate-300">{v.d}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- CATÁLOGO -->
+  <section class="bg-white" aria-labelledby="catalogo">
+    <div class="contenedor py-20">
+      <div class="flex flex-wrap items-end justify-between gap-6">
+        <div class="max-w-2xl">
+          <p class="eyebrow">Catálogo</p>
+          <h2 id="catalogo" class="mt-2 text-3xl font-bold text-marca-900 sm:text-5xl">Más de {fmt.format(Math.floor(totalProductos / 100) * 100)} productos para cotizar</h2>
+          <p class="mt-4 text-lg text-slate-600">Equipos, repuestos y suministros originales. Arma tu lista y recibe precio en el día.</p>
+        </div>
+        <a href="/catalogo/" class="btn-secundario">Ver todo el catálogo<Icono nombre="flecha" class="h-5 w-5" /></a>
+      </div>
+
+      <ul class="mt-10 flex flex-wrap gap-2">
+        {CATEGORIAS.map((c) => (
+          <li><a href={`/catalogo/${c.slug}/`} class="inline-flex min-h-11 items-center gap-2 rounded-full border border-slate-300 px-4 font-semibold text-slate-700 hover:border-marca-800 hover:text-marca-900"><Icono nombre={c.icono} class="h-4 w-4" />{c.nombre}</a></li>
+        ))}
+      </ul>
+
+      <ul class="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4">
+        {vitrina.map((p) => (
+          <li>
+            <a href={`/catalogo/equipo/${p.s}/`} class="group flex h-full flex-col rounded-2xl border border-slate-200 p-4 transition hover:border-marca-600 hover:shadow-lg">
+              <span class="block rounded-xl bg-slate-50 p-3">
+                <img src={imagen(p.img)} alt={p.n} width="288" height="288" loading="lazy" class="mx-auto aspect-square w-full object-contain transition group-hover:scale-105" />
+              </span>
+              <span class="mt-3 text-xs font-bold uppercase tracking-wider text-oro-700">{p.m}</span>
+              <span class="mt-1 line-clamp-2 font-semibold text-marca-900">{p.n}</span>
+              <span class="mt-auto pt-3 text-sm font-bold text-marca-800">Cotizar →</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- CÓMO TRABAJAMOS -->
+  <section class="bg-slate-50" aria-labelledby="proceso">
+    <div class="contenedor py-20">
+      <div class="mx-auto max-w-2xl text-center">
+        <p class="eyebrow">Cómo trabajamos</p>
+        <h2 id="proceso" class="mt-2 text-3xl font-bold text-marca-900 sm:text-5xl">De la cotización a la operación en 4 pasos</h2>
+      </div>
+      <ol class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {pasos.map((p, i) => (
+          <li class="relative rounded-3xl bg-white p-7 shadow-sm ring-1 ring-slate-200">
+            <span class="font-titulo text-5xl font-bold text-oro-500" aria-hidden="true">0{i + 1}</span>
+            <h3 class="mt-3 text-xl font-bold text-marca-900"><span class="sr-only">Paso {i + 1}: </span>{p.t}</h3>
+            <p class="mt-2 text-slate-600">{p.d}</p>
+          </li>
+        ))}
+      </ol>
+      <p class="mt-10 text-center"><a href="/como-trabajamos/" class="enlace">Ver tiempos de atención y cobertura</a></p>
+    </div>
+  </section>
+
+  <!-- SECTOR PÚBLICO -->
+  <section class="bg-white" aria-labelledby="publico">
+    <div class="contenedor py-20">
+      <div class="grid items-center gap-10 overflow-hidden rounded-[2rem] bg-gradient-to-br from-marca-800 to-marca-950 p-8 text-white sm:p-12 lg:grid-cols-2">
+        <div>
+          <p class="text-base font-bold uppercase tracking-wider text-oro-400">Sector público</p>
+          <h2 id="publico" class="mt-2 text-3xl font-bold sm:text-4xl">Experiencia comprobada en licitaciones del Estado</h2>
+          <p class="mt-4 text-lg text-slate-300">
+            Cortes Superiores de Justicia, ministerios y organismos autónomos confían su operación documental en nosotros.
+            Cumplimos los requisitos técnicos y administrativos de cada proceso.
+          </p>
+          <a href="/sector-publico/" class="btn-primario mt-8">Ver experiencia en el sector público<Icono nombre="flecha" class="h-5 w-5" /></a>
+        </div>
+        <ul class="grid grid-cols-2 gap-3 text-sm">
+          {certificaciones.map((c) => (
+            <li class="flex items-center gap-3 rounded-2xl bg-white/10 p-4 ring-1 ring-white/15"><Icono nombre="check" class="h-5 w-5 text-oro-400" /><span class="font-semibold">{c}</span></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <Testimonios limite={2} />
+
+  <!-- PREGUNTAS -->
+  <section class="bg-white" aria-labelledby="faq">
+    <div class="contenedor grid gap-10 py-20 lg:grid-cols-3">
+      <div>
+        <p class="eyebrow">Preguntas frecuentes</p>
+        <h2 id="faq" class="mt-2 text-3xl font-bold text-marca-900 sm:text-4xl">Resolvemos tus dudas</h2>
+        <a href="/preguntas-frecuentes/" class="enlace mt-6 inline-block">Ver todas las preguntas</a>
+      </div>
+      <dl class="divide-y divide-slate-200 lg:col-span-2">
+        {preguntas.slice(0, 4).map((q) => (
+          <div class="py-5 first:pt-0">
+            <dt class="text-lg font-bold text-marca-900">{q.p}</dt>
+            <dd class="mt-2 text-slate-600">{q.r}</dd>
           </div>
         ))}
       </dl>
     </div>
   </section>
 
-  <section class="contenedor py-14" aria-labelledby="necesitas">
-    <h2 id="necesitas" class="text-3xl font-bold text-marca-900 sm:text-4xl">¿Qué necesitas?</h2>
-    <p class="mt-2 text-xl text-slate-800">Elige una opción para ver el detalle.</p>
-    <ul class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {servicios.map((s) => (
-        <li><Mosaico href={`/servicios/${s.id}/`} titulo={s.titulo} texto={s.resumen} icono={s.icono} accion="Ver este servicio" /></li>
-      ))}
-      <li><Mosaico href="/cotizar/" titulo="No estoy seguro" texto="Cuéntanos tu caso y te recomendamos la mejor opción." icono="pregunta" accion="Pedir asesoría" oscuro /></li>
-    </ul>
-  </section>
-
-  <section class="bg-slate-100" aria-labelledby="conoce">
-    <div class="contenedor py-14">
-      <h2 id="conoce" class="text-3xl font-bold text-marca-900 sm:text-4xl">Conoce más</h2>
-      <ul class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {conoceMas.map((m) => <li><Mosaico href={m.href} titulo={m.t} texto={m.d} icono={m.icono} accion={m.a} /></li>)}
-      </ul>
+  <!-- CIERRE -->
+  <section class="relative overflow-hidden bg-oro-500" aria-labelledby="cierre">
+    <div class="contenedor flex flex-col items-start justify-between gap-8 py-16 lg:flex-row lg:items-center">
+      <div class="max-w-2xl">
+        <h2 id="cierre" class="text-3xl font-bold text-marca-950 sm:text-5xl">¿Cuánto podrías ahorrar en impresión?</h2>
+        <p class="mt-3 text-lg text-marca-900">Cuéntanos cuántos equipos y páginas usas al mes. Te enviamos una propuesta sin compromiso.</p>
+      </div>
+      <div class="flex flex-wrap gap-3">
+        <a href="/cotizar/" class="btn bg-marca-950 text-white hover:bg-marca-800">Solicitar cotización<Icono nombre="flecha" class="h-5 w-5" /></a>
+        <a href={`tel:${site.telefonos[0]?.numero}`} class="btn border-2 border-marca-950 text-marca-950 hover:bg-white/30"><Icono nombre="telefono" class="h-5 w-5" />{site.telefonos[0]?.visible}</a>
+      </div>
     </div>
-  </section>
-
-  <section class="contenedor py-12" aria-labelledby="respaldo">
-    <h2 id="respaldo" class="text-center text-2xl font-bold text-marca-900">Con el respaldo de las marcas líderes</h2>
-    <ul class="mt-6 grid gap-4 sm:grid-cols-3">
-      {alianzas.map((a) => (
-        <li class="rounded-2xl border-2 border-slate-200 p-5 text-center">
-          <span class="block font-titulo text-3xl font-bold text-marca-900">{a.nombre}</span>
-          <span class="text-lg text-slate-800">{a.nivel}</span>
-        </li>
-      ))}
-    </ul>
   </section>
 </Base>
