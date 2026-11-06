@@ -26,13 +26,16 @@ type ProductoSnapshot = {
 
 /** Nombres que entiende un jefe de compras (el sitio actual usa "Laptops/Notebooks/Portátiles"). */
 export const CATEGORIAS = [
-  { slug: 'multifuncionales-impresoras', nombre: 'Impresoras y multifuncionales', grupo: 'Equipos' },
-  { slug: 'laptops-notebooks-portatiles', nombre: 'Laptops', grupo: 'Equipos' },
-  { slug: 'escaneres', nombre: 'Escáneres', grupo: 'Equipos' },
-  { slug: 'impresoras-de-etiquetas', nombre: 'Impresoras de etiquetas', grupo: 'Equipos' },
-  { slug: 'suministros', nombre: 'Suministros (tóner, drum, developer)', grupo: 'Repuestos y suministros' },
-  { slug: 'repuestos', nombre: 'Repuestos', grupo: 'Repuestos y suministros' },
+  { slug: 'multifuncionales-impresoras', nombre: 'Impresoras y multifuncionales', grupo: 'Equipos', icono: 'impresora', descripcion: 'Equipos Xerox, HP, Epson y más para imprimir, copiar y escanear.' },
+  { slug: 'laptops-notebooks-portatiles', nombre: 'Laptops', grupo: 'Equipos', icono: 'laptop', descripcion: 'Laptops HP, Lenovo, Dell y otras marcas para trabajo y proyectos.' },
+  { slug: 'escaneres', nombre: 'Escáneres', grupo: 'Equipos', icono: 'documento', descripcion: 'Escáneres para digitalizar documentos en oficina o producción.' },
+  { slug: 'impresoras-de-etiquetas', nombre: 'Impresoras de etiquetas', grupo: 'Equipos', icono: 'impresora', descripcion: 'Impresoras Epson ColorWorks para etiquetas a color.' },
+  { slug: 'suministros', nombre: 'Suministros (tóner, drum, developer)', grupo: 'Repuestos y suministros', icono: 'check', descripcion: 'Tóner, drum, developer y otros consumibles por número de parte.' },
+  { slug: 'repuestos', nombre: 'Repuestos', grupo: 'Repuestos y suministros', icono: 'herramienta', descripcion: 'Rodillos, fusores, kits de mantenimiento y más, por número de parte.' },
 ] as const;
+
+export type Categoria = (typeof CATEGORIAS)[number];
+export const categoriaPorSlug = (slug: string) => CATEGORIAS.find((c) => c.slug === slug);
 
 /** Elemento del índice. Claves cortas para reducir el tamaño del JSON. */
 export type ItemIndice = {
@@ -43,6 +46,7 @@ export type ItemIndice = {
   p?: string; // número de parte
   f?: string[]; // características (solo equipos)
   img?: string; // archivo WebP local en RUTA_IMAGENES
+  s?: string; // slug de la página de detalle (solo equipos)
 };
 
 const productos = (snapshot as { productos: ProductoSnapshot[] }).productos;
@@ -83,13 +87,14 @@ export function indice(): ItemIndice[] {
       }
       const img = p.imagen ? imagenesLocales[p.imagen] : undefined;
       if (img) item.img = img;
+      if (esEquipo) item.s = p.slug;
       return item;
     })
     .filter((x): x is ItemIndice => x !== null)
     .sort((a, b) => a.c - b.c || a.n.localeCompare(b.n, 'es'));
 }
 
-export function conteoPorCategoria(): { slug: string; nombre: string; grupo: string; cantidad: number }[] {
+export function conteoPorCategoria(): (Categoria & { cantidad: number })[] {
   const idx = indice();
   return CATEGORIAS.map((cat, c) => ({ ...cat, cantidad: idx.filter((p) => p.c === c).length }));
 }
@@ -102,4 +107,25 @@ export function destacados(limite = 8): ItemIndice[] {
   return indice()
     .filter((p) => p.c <= 1 && p.img && p.m && ['Xerox', 'HP', 'Lenovo', 'Epson'].includes(p.m))
     .slice(0, limite);
+}
+
+/** Producto completo para las páginas de detalle de equipos. */
+export type Equipo = ProductoSnapshot & { categoriaNombre: string; categoriaSlug: string; img?: string; parte?: string };
+
+export function equipos(): Equipo[] {
+  return productos
+    .filter((p) => CATEGORIAS.some((c) => c.slug === p.categoria && c.grupo === 'Equipos'))
+    .map((p) => {
+      const cat = categoriaPorSlug(p.categoria);
+      const img = p.imagen ? imagenesLocales[p.imagen] : undefined;
+      const parte = numeroParte(p);
+      return {
+        ...p,
+        marca: p.marca ? (MARCAS[p.marca] ?? p.marca) : undefined,
+        categoriaNombre: cat?.nombre ?? '',
+        categoriaSlug: p.categoria,
+        ...(img ? { img } : {}),
+        ...(parte ? { parte } : {}),
+      } as Equipo;
+    });
 }
