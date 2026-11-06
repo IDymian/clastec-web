@@ -7,6 +7,7 @@ Guía para quien continúe o reemplace este prototipo. Estado al **6 de noviembr
 - **Prototipo** del nuevo sitio de CLASTEC S.A.C. No es el sitio oficial (<https://clastec.com>, en WordPress).
 - 125 páginas estáticas (Astro 7 + Tailwind 4), catálogo de 1,952 productos sin precios y formulario de
   cotización que abre WhatsApp o el correo. **No hay backend ni base de datos.**
+- Código público en <https://github.com/IDymian/clastec-web>.
 - Publicado en Vercel, **protegido con usuario y contraseña**: <https://clastec-prototipo.vercel.app>.
 - Datos de la empresa sin confirmar con el dueño (ver "Pendiente de confirmar" en el [README](../README.md)).
 
