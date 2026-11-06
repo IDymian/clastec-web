@@ -1,0 +1,53 @@
+---
+import Base from '../layouts/Base.astro';
+import Cabecera from '../components/Cabecera.astro';
+import { servicios, equiposAlquiler } from '../content/servicios';
+import { CATEGORIAS } from '../lib/catalogo';
+
+const secciones = [
+  {
+    titulo: 'Principal',
+    enlaces: [
+      { href: '/', t: 'Inicio' },
+      { href: '/cotizar/', t: 'Solicitar cotización' },
+      { href: '/contacto/', t: 'Contacto' },
+    ],
+  },
+  { titulo: 'Servicios', enlaces: [{ href: '/servicios/', t: 'Todos los servicios' }, ...servicios.map((s) => ({ href: `/servicios/${s.id}/`, t: s.titulo }))] },
+  { titulo: 'Alquiler de equipos', enlaces: equiposAlquiler.map((e) => ({ href: `/servicios/alquiler-de-equipos/${e.id}/`, t: e.t })) },
+  { titulo: 'Catálogo', enlaces: [{ href: '/catalogo/', t: 'Todo el catálogo' }, ...CATEGORIAS.map((c) => ({ href: `/catalogo/${c.slug}/`, t: c.nombre }))] },
+  {
+    titulo: 'Empresa',
+    enlaces: [
+      { href: '/nosotros/', t: 'Nosotros' },
+      { href: '/clientes/', t: 'Clientes y testimonios' },
+      { href: '/como-trabajamos/', t: 'Cómo trabajamos' },
+      { href: '/sector-publico/', t: 'Sector público' },
+      { href: '/trabaja-con-nosotros/', t: 'Trabaja con nosotros' },
+    ],
+  },
+  {
+    titulo: 'Ayuda',
+    enlaces: [
+      { href: '/preguntas-frecuentes/', t: 'Preguntas frecuentes' },
+      { href: '/guias/comprar-o-alquilar/', t: 'Guía: ¿comprar o alquilar?' },
+      { href: '/privacidad/', t: 'Política de privacidad' },
+      { href: '/libro-de-reclamaciones/', t: 'Libro de Reclamaciones' },
+    ],
+  },
+];
+---
+
+<Base title="Mapa del sitio | CLASTEC" description="Todas las páginas del sitio de CLASTEC en un solo lugar.">
+  <Cabecera titulo="Mapa del sitio" bajada="Todas las páginas en un solo lugar. Haz clic en la que necesites." migas={[{ texto: 'Mapa del sitio' }]} />
+  <div class="contenedor grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-3">
+    {secciones.map((s) => (
+      <section>
+        <h2 class="text-2xl font-bold text-marca-900">{s.titulo}</h2>
+        <ul class="mt-4 space-y-2">
+          {s.enlaces.map((e) => <li><a class="enlace inline-block py-1 text-xl" href={e.href}>{e.t}</a></li>)}
+        </ul>
+      </section>
+    ))}
+  </div>
+</Base>

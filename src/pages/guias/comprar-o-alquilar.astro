@@ -1,0 +1,88 @@
+---
+import Base from '../../layouts/Base.astro';
+import Cabecera from '../../components/Cabecera.astro';
+import Icono from '../../components/Icono.astro';
+import CtaBanda from '../../components/CtaBanda.astro';
+
+const comparacion = [
+  { aspecto: 'Pago inicial', comprar: 'Alto: pagas el equipo completo', alquilar: 'Ninguno: pagas una cuota mensual' },
+  { aspecto: 'Mantenimiento', comprar: 'Lo pagas aparte', alquilar: 'Incluido' },
+  { aspecto: 'Si el equipo falla', comprar: 'Esperas la reparación', alquilar: 'Te damos un equipo de respaldo' },
+  { aspecto: 'Tecnología', comprar: 'Envejece con los años', alquilar: 'Se renueva al terminar el contrato' },
+  { aspecto: 'Flexibilidad', comprar: 'Te quedas con los equipos', alquilar: 'Aumentas o reduces según tu necesidad' },
+  { aspecto: 'Propiedad', comprar: 'El equipo es tuyo', alquilar: 'El equipo es de CLASTEC' },
+];
+const alquilarSi = [
+  'Tienes un proyecto con fecha de inicio y fin.',
+  'No quieres gastar mucho dinero de una sola vez.',
+  'Necesitas que los equipos funcionen siempre, sin preocuparte por reparaciones.',
+  'Quieres renovar tus equipos cada cierto tiempo.',
+];
+const comprarSi = [
+  'Usarás el equipo muchos años y con poco uso.',
+  'Tienes personal propio para darle mantenimiento.',
+  'Tu presupuesto permite una inversión inicial.',
+];
+---
+
+<Base title="Guía: ¿comprar o alquilar equipos? | CLASTEC" description="Una guía sencilla para decidir si te conviene comprar o alquilar impresoras, laptops y otros equipos de TI.">
+  <Cabecera
+    titulo="¿Comprar o alquilar equipos?"
+    bajada="Una guía sencilla para decidir qué te conviene. Lectura de 3 minutos."
+    eyebrow="Guía"
+    migas={[{ texto: 'Guía: comprar o alquilar' }]}
+  />
+
+  <section class="contenedor py-14" aria-labelledby="comparacion">
+    <h2 id="comparacion" class="text-3xl font-bold text-marca-900">Comparación rápida</h2>
+    <div class="mt-8 overflow-x-auto rounded-2xl border-2 border-slate-200">
+      <table class="w-full min-w-[40rem] text-left text-lg">
+        <caption class="sr-only">Diferencias entre comprar y alquilar equipos</caption>
+        <thead class="bg-marca-900 text-white">
+          <tr><th scope="col" class="p-4">Aspecto</th><th scope="col" class="p-4">Comprar</th><th scope="col" class="p-4">Alquilar</th></tr>
+        </thead>
+        <tbody class="divide-y-2 divide-slate-200">
+          {comparacion.map((f) => (
+            <tr>
+              <th scope="row" class="p-4 font-bold text-marca-900">{f.aspecto}</th>
+              <td class="p-4">{f.comprar}</td>
+              <td class="bg-oro-100 p-4 font-semibold">{f.alquilar}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="bg-slate-100" aria-labelledby="decidir">
+    <div class="contenedor grid gap-6 py-14 md:grid-cols-2">
+      <div class="rounded-2xl bg-white p-6 ring-2 ring-oro-500">
+        <h2 id="decidir" class="text-2xl font-bold text-marca-900">Te conviene alquilar si…</h2>
+        <ul class="mt-4 space-y-3">
+          {alquilarSi.map((t) => <li class="flex gap-3 text-xl"><span class="mt-1 text-oro-700"><Icono nombre="check" class="h-6 w-6" /></span>{t}</li>)}
+        </ul>
+        <a href="/servicios/alquiler-de-equipos/" class="btn-primario mt-6">Ver alquiler de equipos</a>
+      </div>
+      <div class="rounded-2xl bg-white p-6 ring-2 ring-slate-200">
+        <h2 class="text-2xl font-bold text-marca-900">Te conviene comprar si…</h2>
+        <ul class="mt-4 space-y-3">
+          {comprarSi.map((t) => <li class="flex gap-3 text-xl"><span class="mt-1 text-marca-600"><Icono nombre="check" class="h-6 w-6" /></span>{t}</li>)}
+        </ul>
+        <a href="/catalogo/" class="btn-secundario mt-6">Ver el catálogo</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="contenedor py-14">
+    <div class="rounded-2xl bg-marca-50 p-6">
+      <h2 class="text-2xl font-bold text-marca-900">¿Y para impresoras?</h2>
+      <p class="mt-2 text-xl text-slate-800">
+        Si tu empresa imprime mucho, existe una tercera opción: el <strong>outsourcing de impresión</strong>. Pagas solo por las páginas que imprimes
+        y nosotros ponemos los equipos, el tóner y el soporte.
+      </p>
+      <a href="/servicios/outsourcing-de-impresion/" class="btn-secundario mt-6">Conocer el outsourcing de impresión</a>
+    </div>
+  </section>
+
+  <CtaBanda titulo="¿Aún tienes dudas?" texto="Te ayudamos a comparar con tus números reales, sin compromiso." />
+</Base>

@@ -1,15 +1,73 @@
 ---
 import Base from '../layouts/Base.astro';
 import Cabecera from '../components/Cabecera.astro';
-import Cotizar from '../components/Cotizar.astro';
+import Icono from '../components/Icono.astro';
 import { site } from '../config/site';
+
+const textoWhatsApp = encodeURIComponent('Hola CLASTEC, quisiera información sobre sus servicios.');
+const tarjeta = 'flex h-full flex-col rounded-2xl border-2 border-slate-300 p-6';
 ---
 
-<Base title="Contacto y cotizaciones | CLASTEC" description={`Solicita una cotización de outsourcing de impresión, alquiler, mantenimiento o productos. Llámanos al ${site.telefonos[0]?.visible} o escríbenos a ${site.correoVentas}.`}>
+<Base title="Contacto | CLASTEC" description={`Llámanos al ${site.telefonos[0]?.visible}, escríbenos por WhatsApp o a ${site.correoVentas}. Atención de ${site.horario.toLowerCase()}.`}>
   <Cabecera
-    titulo="Solicita tu cotización"
-    bajada="Completa el formulario, escríbenos por WhatsApp o llámanos. Respondemos en menos de 24 horas hábiles."
+    titulo="Contáctanos"
+    bajada="Elige la forma que te resulte más cómoda. Un asesor te atenderá personalmente."
     migas={[{ texto: 'Contacto' }]}
   />
-  <Cotizar titulo="Cuéntanos qué necesitas" />
+
+  <section class="contenedor py-14" aria-labelledby="formas">
+    <h2 id="formas" class="text-3xl font-bold text-marca-900">Formas de contacto</h2>
+    <ul class="mt-8 grid gap-6 md:grid-cols-2">
+      <li class={tarjeta}>
+        <span class="flex h-14 w-14 items-center justify-center rounded-xl bg-marca-900 text-oro-400"><Icono nombre="telefono" class="h-7 w-7" /></span>
+        <h3 class="mt-4 text-2xl font-bold text-marca-900">Por teléfono</h3>
+        <p class="mt-1 text-lg text-slate-800">La forma más rápida. {site.horario}.</p>
+        <div class="mt-auto flex flex-col gap-3 pt-5">
+          {site.telefonos.map((t) => <a href={`tel:${t.numero}`} class="btn-primario w-full text-xl">Llamar al {t.visible}</a>)}
+        </div>
+      </li>
+      <li class={tarjeta}>
+        <span class="flex h-14 w-14 items-center justify-center rounded-xl bg-[#1a7f3c] text-white"><Icono nombre="whatsapp" class="h-7 w-7" /></span>
+        <h3 class="mt-4 text-2xl font-bold text-marca-900">Por WhatsApp</h3>
+        <p class="mt-1 text-lg text-slate-800">Escríbenos y te respondemos en horario de atención.</p>
+        <div class="mt-auto pt-5">
+          <a href={`https://wa.me/${site.whatsapp}?text=${textoWhatsApp}`} target="_blank" rel="noopener noreferrer" class="btn w-full bg-[#1a7f3c] text-xl text-white hover:bg-[#146a31]">
+            Abrir WhatsApp<span class="sr-only"> (se abre en una pestaña nueva)</span>
+          </a>
+        </div>
+      </li>
+      <li class={tarjeta}>
+        <span class="flex h-14 w-14 items-center justify-center rounded-xl bg-marca-900 text-oro-400"><Icono nombre="correo" class="h-7 w-7" /></span>
+        <h3 class="mt-4 text-2xl font-bold text-marca-900">Por correo</h3>
+        <p class="mt-1 text-lg text-slate-800">Ideal para enviar documentos o bases de una licitación.</p>
+        <p class="mt-3 break-all text-xl font-bold text-marca-900">{site.correoVentas}</p>
+        <div class="mt-auto pt-5">
+          <a href={`mailto:${site.correoVentas}`} class="btn-secundario w-full text-xl">Escribir un correo</a>
+        </div>
+      </li>
+      <li class={tarjeta}>
+        <span class="flex h-14 w-14 items-center justify-center rounded-xl bg-marca-900 text-oro-400"><Icono nombre="documento" class="h-7 w-7" /></span>
+        <h3 class="mt-4 text-2xl font-bold text-marca-900">Con un formulario</h3>
+        <p class="mt-1 text-lg text-slate-800">Completa 5 datos y recibe una propuesta en menos de 24 horas hábiles.</p>
+        <div class="mt-auto pt-5">
+          <a href="/cotizar/" class="btn-secundario w-full text-xl">Ir al formulario</a>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <section class="bg-slate-100" aria-labelledby="horario">
+    <div class="contenedor grid gap-6 py-14 md:grid-cols-2">
+      <div class="rounded-2xl bg-white p-6">
+        <h2 id="horario" class="flex items-center gap-3 text-2xl font-bold text-marca-900"><Icono nombre="reloj" class="h-7 w-7" />Horario de atención</h2>
+        <p class="mt-3 text-xl">{site.horario}</p>
+        <p class="mt-1 text-lg text-slate-800">Fuera de horario, déjanos un mensaje y te llamamos al día siguiente hábil.</p>
+      </div>
+      <div class="rounded-2xl bg-white p-6">
+        <h2 class="flex items-center gap-3 text-2xl font-bold text-marca-900"><Icono nombre="mapa" class="h-7 w-7" />Dónde estamos</h2>
+        <p class="mt-3 text-xl">{site.direccion ?? site.ubicacion}</p>
+        <p class="mt-1 text-lg text-slate-800">Atendemos en todo el país: {site.cifras.departamentos} departamentos, {site.cifras.departamentosConPersonal} con personal propio.</p>
+      </div>
+    </div>
+  </section>
 </Base>

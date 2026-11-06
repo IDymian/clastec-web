@@ -1,3 +1,5 @@
+import type { NombreIcono } from '../lib/iconos';
+
 /**
  * Contenido de los servicios. Reescrito a partir del sitio actual (clastec.com) con lenguaje
  * orientado al cliente. Cifras y datos de contacto viven en src/config/site.ts.
@@ -5,7 +7,7 @@
 
 export type Item = { t: string; d: string };
 export type Pregunta = { p: string; r: string };
-export type IconoNombre = 'impresora' | 'laptop' | 'herramienta' | 'documento' | 'auriculares';
+export type IconoNombre = NombreIcono;
 
 export type Servicio = {
   id: string;
@@ -257,15 +259,69 @@ export const servicios: readonly Servicio[] = [
 ] as const;
 
 /** Tipos de equipos en alquiler (secciones de la página de alquiler). */
-export const equiposAlquiler = [
-  { id: 'laptops', t: 'Laptops y notebooks', d: 'Modelos recientes para equipos de trabajo, proyectos y capacitaciones.' },
-  { id: 'pcs', t: 'PCs y computadoras', d: 'Estaciones de trabajo configuradas según tus aplicaciones.' },
-  { id: 'impresoras', t: 'Impresoras y multifuncionales', d: 'Láser y LED, monocromáticas o a color, y matriciales. Con suministros.' },
-  { id: 'escaneres', t: 'Escáneres', d: 'Departamentales y de producción para digitalización.' },
-  { id: 'servidores', t: 'Servidores', d: 'Capacidad de procesamiento para proyectos y contingencias.' },
-  { id: 'switches', t: 'Switches', d: 'Conectividad de red para sedes, oficinas temporales y eventos.' },
-  { id: 'ups', t: 'UPS', d: 'Protección eléctrica para tus equipos críticos.' },
-  { id: 'proyectores', t: 'Proyectores', d: 'Para presentaciones, capacitaciones y eventos.' },
+export type EquipoAlquiler = {
+  id: string;
+  t: string;
+  d: string;
+  icono: IconoNombre;
+  usos: readonly string[];
+  opciones: readonly string[];
+  /** Categoría del catálogo con modelos de referencia, si existe. */
+  catalogo?: string;
+};
+
+export const equiposAlquiler: readonly EquipoAlquiler[] = [
+  {
+    id: 'laptops', t: 'Laptops y notebooks', icono: 'laptop',
+    d: 'Modelos recientes para equipos de trabajo, proyectos y capacitaciones.',
+    usos: ['Personal que trabaja en campo o en obra', 'Proyectos con fecha de inicio y fin', 'Capacitaciones y eventos', 'Reemplazo temporal mientras se repara un equipo'],
+    opciones: ['Procesadores Intel Core i5 e i7', 'Memoria y disco según tus programas', 'Sistema operativo y software de oficina', 'Marcas HP, Lenovo, Dell y otras'],
+    catalogo: 'laptops-notebooks-portatiles',
+  },
+  {
+    id: 'pcs', t: 'PCs y computadoras', icono: 'laptop',
+    d: 'Computadoras de escritorio configuradas según tus aplicaciones.',
+    usos: ['Oficinas nuevas o temporales', 'Áreas de atención al público', 'Picos de trabajo por campañas', 'Laboratorios y salas de capacitación'],
+    opciones: ['Monitor, teclado y mouse incluidos', 'Configuración según tus programas', 'Instalación en tu sede', 'Mantenimiento durante el alquiler'],
+  },
+  {
+    id: 'impresoras', t: 'Impresoras y multifuncionales', icono: 'impresora',
+    d: 'Láser y LED, en blanco y negro o a color, y matriciales. Con suministros.',
+    usos: ['Oficinas con alto volumen de impresión', 'Eventos y ferias', 'Sedes temporales o en provincia', 'Impresión de formularios con matriciales'],
+    opciones: ['Imprimen, copian y escanean', 'Tóner y repuestos incluidos según contrato', 'Escaneo a correo, carpeta o nube', 'Marcas Xerox, HP y otras'],
+    catalogo: 'multifuncionales-impresoras',
+  },
+  {
+    id: 'escaneres', t: 'Escáneres', icono: 'documento',
+    d: 'Departamentales y de producción para digitalizar documentos.',
+    usos: ['Proyectos de digitalización de archivo', 'Mesas de partes y trámite documentario', 'Áreas legales y contables'],
+    opciones: ['Escaneo a doble cara', 'Alimentador automático de hojas', 'Reconocimiento de texto (OCR)'],
+    catalogo: 'escaneres',
+  },
+  {
+    id: 'servidores', t: 'Servidores', icono: 'grafico',
+    d: 'Capacidad de procesamiento para proyectos y contingencias.',
+    usos: ['Proyectos que necesitan más capacidad por un tiempo', 'Respaldo ante fallas de tu servidor', 'Pruebas antes de comprar'],
+    opciones: ['Configuración según tu necesidad', 'Instalación y puesta en marcha', 'Soporte técnico especializado'],
+  },
+  {
+    id: 'switches', t: 'Switches', icono: 'mapaSitio',
+    d: 'Conectividad de red para sedes, oficinas temporales y eventos.',
+    usos: ['Oficinas temporales', 'Eventos con muchos equipos conectados', 'Ampliaciones de red'],
+    opciones: ['Distintas cantidades de puertos', 'Instalación y configuración', 'Soporte técnico'],
+  },
+  {
+    id: 'ups', t: 'UPS', icono: 'escudo',
+    d: 'Protección eléctrica para que tus equipos no se apaguen ni se dañen.',
+    usos: ['Servidores y equipos críticos', 'Zonas con cortes de luz frecuentes', 'Eventos'],
+    opciones: ['Distintas capacidades', 'Instalación', 'Revisión de baterías'],
+  },
+  {
+    id: 'proyectores', t: 'Proyectores', icono: 'usuarios',
+    d: 'Para presentaciones, capacitaciones y eventos.',
+    usos: ['Capacitaciones', 'Reuniones y presentaciones', 'Ferias y eventos'],
+    opciones: ['Entrega e instalación', 'Cables y accesorios', 'Alquiler por días'],
+  },
 ] as const;
 
 export const servicioPorId = (id: string) => servicios.find((s) => s.id === id);
